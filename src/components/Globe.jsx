@@ -6,6 +6,7 @@ import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
 import { Canvas, useThree, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import { useTheme } from "../context/ThemeContext";
 
 extend({ ThreeGlobe });
 
@@ -421,6 +422,8 @@ function genRandomNumbers(min, max, count) {
 }
 
 export function GlobeDemo() {
+  const { colors } = useTheme();
+
   const globeConfig = {
     pointSize: 4,
     globeColor: "#062056",
@@ -445,7 +448,7 @@ export function GlobeDemo() {
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-zinc-900 relative w-full">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 relative w-full" style={{ backgroundColor: 'var(--bg-color)' }}>
       <div className="max-w-7xl mx-auto w-full relative overflow-hidden">
         <motion.div
           initial={{

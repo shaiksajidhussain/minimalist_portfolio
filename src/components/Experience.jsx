@@ -2,8 +2,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { useTheme } from '../context/ThemeContext';
 
 const Experience = () => {
+  const { colors } = useTheme();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [expandedItems, setExpandedItems] = useState([]);
@@ -131,7 +133,7 @@ const Experience = () => {
   };
 
   return (
-    <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-zinc-900">
+    <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: 'var(--bg-color)' }}>
       <div className="max-w-4xl mx-auto">
         <motion.div
           ref={ref}
@@ -208,7 +210,11 @@ const Experience = () => {
                               {exp.projects.map((project, projectIndex) => (
                                 <span
                                   key={projectIndex}
-                                  className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium"
+                                  className="px-3 py-1 rounded-full text-sm font-medium"
+                                  style={{
+                                    backgroundColor: colors.primary + '20',
+                                    color: colors.primary
+                                  }}
                                 >
                                   {project}
                                 </span>

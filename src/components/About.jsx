@@ -2,8 +2,10 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { TextGenerateEffect } from './ui/text-generate-effect';
+import { useTheme } from '../context/ThemeContext';
 
 const About = () => {
+  const { colors } = useTheme();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -29,7 +31,7 @@ const About = () => {
   };
 
   return (
-    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-zinc-900">
+    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: 'var(--bg-color)' }}>
       <div className="max-w-4xl mx-auto">
         <motion.div
           ref={ref}

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import {
   SiReact,
   SiNextdotjs,
@@ -28,6 +29,7 @@ import {
 } from 'react-icons/si';
 
 const Skills = () => {
+  const { colors } = useTheme();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [hoveredSkill, setHoveredSkill] = useState(null);
@@ -78,7 +80,7 @@ const Skills = () => {
   };
 
   return (
-    <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-zinc-900">
+    <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: 'var(--bg-color)' }}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           ref={ref}
@@ -107,7 +109,10 @@ const Skills = () => {
                   <div className="relative">
                     <Icon
                       size={48}
-                      className="text-gray-700 dark:text-gray-300 transition-all duration-300 group-hover:scale-110 group-hover:text-gray-900 dark:group-hover:text-white"
+                      className="transition-all duration-300 group-hover:scale-110"
+                      style={{
+                        color: hoveredSkill === index ? colors.primary : 'currentColor',
+                      }}
                     />
                     {hoveredSkill === index && (
                       <motion.div
@@ -115,9 +120,15 @@ const Skills = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="absolute -bottom-8 left-1/2 -translate-x-1/2 z-10"
                       >
-                        <div className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap shadow-lg">
+                        <div 
+                          className="text-white px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap shadow-lg"
+                          style={{ backgroundColor: colors.primary }}
+                        >
                           {skill.name}
-                          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-white rotate-45"></div>
+                          <div 
+                            className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45"
+                            style={{ backgroundColor: colors.primary }}
+                          ></div>
                         </div>
                       </motion.div>
                     )}

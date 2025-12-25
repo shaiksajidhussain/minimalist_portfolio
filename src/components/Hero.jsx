@@ -212,69 +212,100 @@ const Hero = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-6xl mx-auto text-center w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <BlurText
-            text="SHAIK SAJID HUSSAIN"
-            delay={100}
-            animateBy="words"
-            direction="top"
-            className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight uppercase"
-            style={{ 
-              textShadow: '0 0 40px rgba(0, 0, 0, 0.3)',
-              letterSpacing: '0.05em'
-            }}
-          />
-          
-          <BlurText
-            text="FREELANCE FULL-STACK DEVELOPER"
-            delay={80}
-            animateBy="words"
-            direction="top"
-            className="text-xl sm:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300 mb-8 uppercase tracking-wider font-medium"
-          />
-
-          <SplitText
-            text="I build fast, scalable, and modern web applications for startups and businesses."
-            className="text-base sm:text-lg text-gray-500 dark:text-gray-400 mb-8 max-w-3xl mx-auto"
-            delay={50}
-            duration={0.6}
-            ease="power3.out"
-            splitType="chars"
-            from={{ opacity: 0, y: 40 }}
-            to={{ opacity: 1, y: 0 }}
-            threshold={0.1}
-            rootMargin="-100px"
-            textAlign="center"
-            tag="p"
-          />
-
-          {/* View Count */}
+      <div className="relative z-10 max-w-6xl mx-auto w-full">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
+          {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-            className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-12"
+            transition={{ duration: 0.8 }}
+            className="flex-1 text-center lg:text-left"
           >
-            <FiEye size={16} />
-            <span>
-              <CountUp
-                from={0}
-                to={2700}
-                separator=","
-                direction="up"
-                duration={2}
-                className="font-semibold text-gray-600 dark:text-gray-300"
-              />
-              {' '}views
-            </span>
+            <BlurText
+              text="SHAIK SAJID HUSSAIN"
+              delay={100}
+              animateBy="words"
+              direction="top"
+              className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight uppercase whitespace-nowrap"
+              style={{ 
+                textShadow: '0 0 40px rgba(0, 0, 0, 0.3)',
+                letterSpacing: '0.05em'
+              }}
+            />
+            
+            <BlurText
+              text="FREELANCE FULL-STACK DEVELOPER"
+              delay={80}
+              animateBy="words"
+              direction="top"
+              className="text-xl sm:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300 mb-8 uppercase tracking-wider font-medium"
+            />
+
+            <SplitText
+              text="I build fast, scalable, and modern web applications for startups and businesses."
+              className="text-base sm:text-lg text-gray-500 dark:text-gray-400 mb-8 max-w-3xl"
+              delay={50}
+              duration={0.6}
+              ease="power3.out"
+              splitType="chars"
+              from={{ opacity: 0, y: 40 }}
+              to={{ opacity: 1, y: 0 }}
+              threshold={0.1}
+              rootMargin="-100px"
+              textAlign="left"
+              tag="p"
+            />
+
+            {/* View Count */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-12"
+            >
+              <FiEye size={16} />
+              <span>
+                <CountUp
+                  from={0}
+                  to={2700}
+                  separator=","
+                  direction="up"
+                  duration={2}
+                  className="font-semibold text-gray-600 dark:text-gray-300"
+                />
+                {' '}views
+              </span>
+            </motion.div>
           </motion.div>
 
+          {/* Image Section */}
           <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="flex-1 flex items-center justify-center"
+          >
+            <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
+              {/* Image Border/Frame */}
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-orange-500/10 rounded-2xl p-1">
+                <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-800 dark:from-zinc-800 dark:to-zinc-900 rounded-xl flex items-center justify-center overflow-hidden border border-orange-500/20">
+                  {/* Placeholder for Image - Replace with actual image */}
+                  <img
+                    src="https://res.cloudinary.com/dgus6y6lm/image/upload/v1766677763/Sajid_Professional_vncuym.png"
+                    alt="Profile"
+                    className="w-full h-full object-cover object-top rounded-xl"
+                  />
+                </div>
+              </div>
+              
+              {/* Decorative Elements */}
+              <div className="absolute -top-4 -right-4 w-20 h-20 bg-orange-500/10 rounded-full blur-xl"></div>
+              <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-orange-500/5 rounded-full blur-xl"></div>
+            </div>
+          </motion.div>
+        </div>
+
+        <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.8 }}
@@ -300,7 +331,7 @@ const Hero = () => {
               <span className="relative z-10">View Projects</span>
             </button>
           </motion.div>
-        </motion.div>
+     
       </div>
 
       {/* Scroll Indicator */}

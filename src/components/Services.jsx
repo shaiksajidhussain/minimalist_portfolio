@@ -20,13 +20,13 @@ const Services = () => {
   // Random image placeholder using Unsplash or Placeholder service
   const getRandomImage = (index) => {
     const images = [
-      `https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop`,
-      `https://images.unsplash.com/photo-1516534775068-bb6f3b1401a1?w=400&h=300&fit=crop`,
-      `https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&h=300&fit=crop`,
-      `https://images.unsplash.com/photo-1537432376769-274cc332105d?w=400&h=300&fit=crop`,
-      `https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop`,
-      `https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop`,
-      `https://images.unsplash.com/photo-1516534775068-bb6f3b1401a1?w=400&h=300&fit=crop`,
+      `https://www.keenesystems.com/hubfs/blog-images/ux-ui.jpg`,
+      `https://lh7-rt.googleusercontent.com/docsz/AD_4nXfpH5jkmDQ7HelQcaPh5lMKwfW2Bx6I0hDhlg3mrNwXlLXO1lmwofaYS_1a8211DPJqhb-z5cLtDYfFkjA1EUKfNOEfTJCSWUKXSIY4pams0g4xGBWrqYMLC_yy1izmQgj1SwM6vg?key=8Icro23PLHSLRmHd-kIQoO0c`,
+      `https://www.addwebsolution.com/wp-content/uploads/2024/03/SaaS-Product-Development.jpg`,
+      `https://cdn.prod.website-files.com/6448bf6f064020ce1b2ca19d/6448bf6f0640204bbb2ca41c_shawayo%20odd%20pages%20(4).png`,
+      `https://media.geeksforgeeks.org/wp-content/uploads/20240618105133/User-Interface-Design-Stages-1.webp`,
+      `https://www.advancedtech.com/wp-content/uploads/2023/11/What-is-Asset-Performance-Optimization_Image-1_1200x628.jpg`,
+      `https://www.prorealtech.com/wp-content/uploads/2024/09/bug-fixing.jpg`,
     ];
     return images[index % images.length];
   };
@@ -44,7 +44,7 @@ const Services = () => {
 
   const items = [
     {
-      title: 'Web App Development',
+      title: ' UI/UX Design & Development ',
       description: 'React / Next.js applications with modern UI/UX',
       header: <Skeleton imageUrl={getRandomImage(0)} />,
       icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,

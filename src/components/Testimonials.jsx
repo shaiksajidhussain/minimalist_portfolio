@@ -2,8 +2,10 @@
 
 import React from "react";
 import { InfiniteMovingCards } from "./ui/infinite-moving-cards";
+import { useTheme } from "../context/ThemeContext";
 
 const Testimonials = () => {
+  const { colors } = useTheme();
   const testimonials = [
     {
       quote:
@@ -44,7 +46,7 @@ const Testimonials = () => {
   ];
 
   return (
-    <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-zinc-900">
+    <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: 'var(--bg-color)' }}>
       <div className="max-w-7xl mx-auto">
         <div className="mb-12 text-center">
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">

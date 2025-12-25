@@ -15,6 +15,12 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectDetail from './components/ProjectDetail';
 import BlobCursor from './components/BlobCursor';
+import WhoIWorkWith from './components/WhoIWorkWith';
+import HowIWork from './components/HowIWork';
+import PricingEngagement from './components/PricingEngagement';
+import WhyChooseMe from './components/WhyChooseMe';
+import Availability from './components/Availability';
+import CTAStrip from './components/CTAStrip';
 
 const App = () => {
   const [selectedProject, setSelectedProject] = useState(null);
@@ -148,7 +154,12 @@ const App = () => {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-zinc-900 transition-colors relative">
+      <div 
+        className="min-h-screen transition-colors relative"
+        style={{
+          backgroundColor: 'var(--bg-color)',
+        }}
+      >
         <BlobCursor
           blobType="circle"
           fillColor="#5227FF"
@@ -171,14 +182,19 @@ const App = () => {
         <Hero />
         <Skills />
         <Services />
+        <WhoIWorkWith />
         <Expertise />
         <Projects onProjectClick={handleProjectClick} projects={allProjects} />
         <About />
-    
+        <HowIWork />
+        <WhyChooseMe />
+        <PricingEngagement />
         <Experience />
+        <Availability />
+        <CTAStrip />
         <Testimonials />
         <Globe />
-        <HireMe />
+      
         <Contact />
         <Footer />
       </div>

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import { FiMoon, FiSun, FiMenu, FiX } from 'react-icons/fi';
 import GooeyNav from './GooeyNav';
+import ColorThemeSelector from './ColorThemeSelector';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -60,7 +61,7 @@ const Navbar = () => {
           </motion.div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center gap-4">
             <div className="text-gray-700 dark:text-gray-300">
               <GooeyNav
                 items={gooeyNavItems}
@@ -76,16 +77,20 @@ const Navbar = () => {
                 }}
               />
             </div>
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors"
-            >
-              {theme === 'light' ? <FiMoon size={20} /> : <FiSun size={20} />}
-            </button>
+            <div className="flex items-center gap-2">
+              <ColorThemeSelector />
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors"
+              >
+                {theme === 'light' ? <FiMoon size={20} /> : <FiSun size={20} />}
+              </button>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
+            <ColorThemeSelector />
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300"

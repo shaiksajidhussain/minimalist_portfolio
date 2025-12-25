@@ -9,7 +9,7 @@ import { useTheme } from '../context/ThemeContext';
 const Expertise = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const { theme } = useTheme();
+  const { theme, colors } = useTheme();
 
   const expertise = [
     {
@@ -117,16 +117,12 @@ const Expertise = () => {
   };
 
   const getUnderlineClass = (color) => {
-    const colors = {
-      pink: 'bg-pink-500',
-      blue: 'bg-blue-500',
-      orange: 'bg-orange-500',
-    };
-    return colors[color] || colors.pink;
+    // Return the primary theme color instead of hardcoded colors
+    return colors.primary;
   };
 
   return (
-    <section id="expertise" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-[#1A191D] relative overflow-hidden">
+    <section id="expertise" className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ backgroundColor: 'var(--bg-color)' }}>
       {/* Code Preview Background - Only visible in dark mode */}
       {theme === 'dark' && (
         <div className="absolute inset-0 opacity-20 pointer-events-none">
@@ -233,8 +229,11 @@ export default Expertise;`}
                         <span className="relative inline-block">
                           {item.title.split(' ')[0]}
                           <span 
-                            className={`absolute bottom-0 left-0 right-0 h-0.5 ${getUnderlineClass(item.underlineColor)}`}
-                            style={{ height: '2px' }}
+                            className="absolute bottom-0 left-0 right-0 h-0.5"
+                            style={{ 
+                              height: '2px',
+                              backgroundColor: colors.primary,
+                            }}
                           />
                         </span>
                         {item.title.split(' ').slice(1).join(' ') && (
