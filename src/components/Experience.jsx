@@ -1,22 +1,13 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { useRef } from 'react';
+import { Timeline } from './ui/timeline';
 import { useTheme } from '../context/ThemeContext';
 
 const Experience = () => {
   const { colors } = useTheme();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const [expandedItems, setExpandedItems] = useState([]);
-
-  const toggleExpand = (index) => {
-    setExpandedItems(prev =>
-      prev.includes(index)
-        ? prev.filter(i => i !== index)
-        : [...prev, index]
-    );
-  };
 
   const experiences = [
     {
@@ -80,18 +71,7 @@ const Experience = () => {
       ],
       technologies: ['Next.js', 'JavaScript', 'React', 'REST API', 'HTML', 'CSS', 'Express.js', 'MongoDB', 'Mongoose', 'Jira', 'BitBucket', 'VS Code'],
     },
-    {
-      company: 'Marolix Technology Solutions Pvt Ltd',
-      role: 'Java FullStack Developer',
-      duration: '2022 – 2023',
-      points: [
-        'Crafted Tidy Tangle—a user-friendly app for seamless home services',
-        'Designed intuitive interfaces connecting electricians and plumbers to the Spring backend via REST APIs',
-        'Collaborated with the agile backend team to deliver a robust, scalable platform for flawless home services',
-        'Developed full-stack solutions using Java and Spring Boot for backend and Angular for frontend',
-      ],
-      technologies: ['Java', 'Spring Boot', 'REST API', 'HTML', 'CSS', 'JavaScript', 'Angular'],
-    },
+
     {
       company: 'SRIC',
       role: 'Frontend Developer Intern',
@@ -117,135 +97,29 @@ const Experience = () => {
     },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 },
-  };
-
   return (
     <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: 'var(--bg-color)' }}>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           ref={ref}
-          variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1 },
+            },
+          }}
         >
           <motion.h2
-            variants={itemVariants}
-            className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-12 text-center"
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-16 text-center"
           >
             Work Experience
           </motion.h2>
 
-          <div className="space-y-8">
-            {experiences.map((exp, index) => {
-              const isExpanded = expandedItems.includes(index);
-              return (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className="bg-white dark:bg-zinc-800 p-6 rounded-lg border border-gray-200 dark:border-zinc-700"
-                >
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                    <div className="flex items-start gap-3 flex-1">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                          {exp.role}
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-400">{exp.company}</p>
-                      </div>
-                      <button
-                        onClick={() => toggleExpand(index)}
-                        className="mt-1 p-2 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-lg transition-colors flex-shrink-0"
-                        aria-label={isExpanded ? 'Collapse' : 'Expand'}
-                      >
-                        {isExpanded ? (
-                          <FiChevronUp className="text-gray-600 dark:text-gray-400" size={20} />
-                        ) : (
-                          <FiChevronDown className="text-gray-600 dark:text-gray-400" size={20} />
-                        )}
-                      </button>
-                    </div>
-                    <p className="text-gray-500 dark:text-gray-500 text-sm mt-2 md:mt-0 md:ml-4">
-                      {exp.duration}
-                    </p>
-                  </div>
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="overflow-hidden"
-                      >
-                        <ul className="space-y-2 mb-4">
-                          {exp.points.map((point, pointIndex) => (
-                            <li
-                              key={pointIndex}
-                              className="text-gray-600 dark:text-gray-400 flex items-start"
-                            >
-                              <span className="mr-2">•</span>
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        {exp.projects && (
-                          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-zinc-700">
-                            <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                              Key Projects
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                              {exp.projects.map((project, projectIndex) => (
-                                <span
-                                  key={projectIndex}
-                                  className="px-3 py-1 rounded-full text-sm font-medium"
-                                  style={{
-                                    backgroundColor: colors.primary + '20',
-                                    color: colors.primary
-                                  }}
-                                >
-                                  {project}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        {exp.technologies && (
-                          <div className={`mt-4 pt-4 border-t border-gray-200 dark:border-zinc-700 ${exp.projects ? '' : 'mt-4'}`}>
-                            <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                              Technologies
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                              {exp.technologies.map((tech, techIndex) => (
-                                <span
-                                  key={techIndex}
-                                  className="px-3 py-1 bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
-                                >
-                                  {tech}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              );
-            })}
-          </div>
+          <Timeline data={experiences} primaryColor={colors.primary} secondaryColor={colors.secondary} />
         </motion.div>
       </div>
     </section>

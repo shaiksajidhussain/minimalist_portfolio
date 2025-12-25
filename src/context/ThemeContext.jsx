@@ -201,6 +201,13 @@ export const COLOR_THEMES = {
     dark: '#001f3f',
     bg: '#e0e7ff',
   },
+  white: {
+    name: 'White',
+    primary: '#ffffff',
+    light: '#ffffff',
+    dark: '#f5f5f5',
+    bg: '#ffffff',
+  },
 };
 
 export const useTheme = () => {

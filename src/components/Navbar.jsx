@@ -57,7 +57,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             className="text-xl font-bold text-gray-900 dark:text-white"
           >
-            Portfolio
+            Shaik Sajid Hussain
           </motion.div>
 
           {/* Desktop Menu */}

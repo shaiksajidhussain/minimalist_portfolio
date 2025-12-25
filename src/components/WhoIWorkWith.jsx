@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { FiTarget, FiUsers, FiTrendingUp, FiAward } from 'react-icons/fi';
+import { HoverEffect } from './ui/card-hover-effect';
 import { useTheme } from '../context/ThemeContext';
 
 const WhoIWorkWith = () => {
@@ -11,54 +11,55 @@ const WhoIWorkWith = () => {
 
   const clients = [
     {
-      icon: FiTarget,
       title: 'Startups & Founders',
-      description: 'MVP development with fast execution and scalable architecture'
+      description: 'MVP development with fast execution and scalable architecture for your next big idea.',
+      link: '#',
     },
     {
-      icon: FiUsers,
       title: 'Small-Medium Businesses',
-      description: 'Custom solutions to streamline operations and growth'
+      description: 'Custom solutions to streamline operations, improve efficiency, and drive sustainable growth.',
+      link: '#',
     },
     {
-      icon: FiTrendingUp,
       title: 'SaaS Companies',
-      description: 'Production-grade applications with performance optimization'
+      description: 'Production-grade applications with performance optimization and enterprise-level reliability.',
+      link: '#',
     },
     {
-      icon: FiAward,
       title: 'Agencies',
-      description: 'White-label support and extended team capabilities'
+      description: 'White-label support and extended team capabilities to scale your project delivery.',
+      link: '#',
+    },
+    {
+      title: 'E-Commerce Businesses',
+      description: 'Full-stack e-commerce solutions with payment integration and inventory management.',
+      link: '#',
+    },
+    {
+      title: 'Digital Agencies',
+      description: 'Web development and design implementation for your agency\'s client projects.',
+      link: '#',
     }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
-
   return (
-    <section id="who-i-work-with" className="py-20 px-4 sm:px-6 lg:px-8 relative">
-      <div className="max-w-5xl mx-auto">
+    <section id="who-i-work-with" className="py-20 px-4 sm:px-6 lg:px-8 relative" style={{ backgroundColor: 'var(--bg-color)' }}>
+      <div className="max-w-6xl mx-auto">
         <motion.div
           ref={ref}
-          variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1 },
+            },
+          }}
         >
           <motion.div
-            variants={itemVariants}
-            className="text-center mb-16"
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            className="text-center mb-12"
           >
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               Who I Work With
@@ -68,44 +69,7 @@ const WhoIWorkWith = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {clients.map((client, index) => {
-              const Icon = client.icon;
-              return (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className="bg-white dark:bg-zinc-800 rounded-lg p-8 border hover:shadow-lg dark:hover:shadow-lg/20 transition-shadow"
-                  style={{
-                    borderColor: `${colors.primary}40`,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = `${colors.primary}80`;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = `${colors.primary}40`;
-                  }}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">
-                      <Icon 
-                        className="w-8 h-8 mt-1"
-                        style={{ color: colors.primary }}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                        {client.title}
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        {client.description}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+          <HoverEffect items={clients} />
         </motion.div>
       </div>
     </section>

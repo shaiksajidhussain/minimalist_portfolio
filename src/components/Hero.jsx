@@ -223,7 +223,7 @@ const Hero = () => {
           >
             <BlurText
               text="SHAIK SAJID HUSSAIN"
-              delay={100}
+              delay={120}
               animateBy="words"
               direction="top"
               className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight uppercase whitespace-nowrap"
@@ -235,26 +235,20 @@ const Hero = () => {
             
             <BlurText
               text="FREELANCE FULL-STACK DEVELOPER"
-              delay={80}
+              delay={100}
               animateBy="words"
               direction="top"
               className="text-xl sm:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300 mb-8 uppercase tracking-wider font-medium"
             />
-
-            <SplitText
-              text="I build fast, scalable, and modern web applications for startups and businesses."
-              className="text-base sm:text-lg text-gray-500 dark:text-gray-400 mb-8 max-w-3xl"
-              delay={50}
-              duration={0.6}
-              ease="power3.out"
-              splitType="chars"
-              from={{ opacity: 0, y: 40 }}
-              to={{ opacity: 1, y: 0 }}
-              threshold={0.1}
-              rootMargin="-100px"
-              textAlign="left"
-              tag="p"
+                    <BlurText
+      text="I build fast, scalable, and modern web applications for startups and businesses."
+              delay={120}
+              animateBy="words"
+              direction="top"
+              className="text-sm sm:text-2xl lg:text-sm text-gray-600 dark:text-gray-300 mb-8  tracking-wider font-medium"
             />
+
+   
 
             {/* View Count */}
             <motion.div
@@ -294,6 +288,9 @@ const Hero = () => {
                     src="https://res.cloudinary.com/dgus6y6lm/image/upload/v1766677763/Sajid_Professional_vncuym.png"
                     alt="Profile"
                     className="w-full h-full object-cover object-top rounded-xl"
+                    loading="eager"
+                    decoding="async"
+                    style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
                   />
                 </div>
               </div>

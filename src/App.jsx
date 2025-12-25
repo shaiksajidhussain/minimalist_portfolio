@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
+import { SmoothCursor } from './components/ui/smooth-cursor';
+import { ScrollProgress } from './components/ui/scroll-progress';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -160,6 +162,7 @@ const App = () => {
           backgroundColor: 'var(--bg-color)',
         }}
       >
+        <SmoothCursor />
         <BlobCursor
           blobType="circle"
           fillColor="#5227FF"
@@ -178,6 +181,7 @@ const App = () => {
           slowDuration={0.5}
           zIndex={100}
         />
+        <ScrollProgress />
         <Navbar />
         <Hero />
         <Skills />
@@ -188,11 +192,11 @@ const App = () => {
         <About />
         <HowIWork />
         <WhyChooseMe />
-        <PricingEngagement />
+        {/* <PricingEngagement /> */}
         <Experience />
         <Availability />
         <CTAStrip />
-        <Testimonials />
+        <Testimonials  />
         <Globe />
       
         <Contact />

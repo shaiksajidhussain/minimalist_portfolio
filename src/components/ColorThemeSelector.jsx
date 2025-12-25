@@ -16,13 +16,13 @@ const ColorThemeSelector = () => {
           title="Change theme color"
         >
           <FiDroplet size={18} />
-          <span className="text-xs font-medium hidden sm:inline">Color</span>
+          <span className="text-xs font-medium hidden sm:inline">Choose Theme</span>
         </button>
 
         {isOpen && (
           <div className="absolute right-0 top-12 bg-white dark:bg-zinc-800 rounded-lg shadow-2xl border border-gray-200 dark:border-zinc-700 p-4 z-50 min-w-max">
             <div className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3 uppercase tracking-wider">
-              Pick Color
+              Choose theme
             </div>
             <div className="grid grid-cols-5 gap-2">
               {Object.entries(COLOR_THEMES).map(([key, value]) => (

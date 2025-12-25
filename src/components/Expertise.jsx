@@ -191,12 +191,12 @@ export default Expertise;`}
         >
           <motion.h2
             variants={itemVariants}
-            className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-16 text-center"
+            className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-12 text-center"
           >
             My Expertise
           </motion.h2>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-5">
             {expertise.map((item, index) => {
               const Icon = item.icon;
               const [isHovered, setIsHovered] = useState(false);
@@ -204,7 +204,7 @@ export default Expertise;`}
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="group w-full cursor-pointer overflow-hidden relative card rounded-lg shadow-lg mx-auto flex flex-col justify-end p-8 border border-gray-200 dark:border-zinc-700 min-h-[400px] transition-all duration-500 hover:shadow-2xl"
+                  className="group w-full cursor-pointer overflow-hidden relative card rounded-lg shadow-lg mx-auto flex flex-col justify-end p-5 border border-gray-200 dark:border-zinc-700 min-h-[300px] transition-all duration-500 hover:shadow-2xl"
                   style={{
                     backgroundImage: `url(${isHovered ? item.hoverBg : item.bgImage})`,
                     backgroundSize: 'cover',
@@ -217,15 +217,15 @@ export default Expertise;`}
                   <div className="absolute inset-0 bg-black/40 z-10 transition-opacity duration-500" />
                   
                   <div className="text relative z-20">
-                    <div className="mb-6 flex justify-center">
+                    <div className="mb-4 flex justify-center">
                       <Icon 
-                        size={48} 
+                        size={40} 
                         className={`transition-colors duration-500 ${isHovered ? 'text-white' : 'text-gray-700 dark:text-white'}`}
                       />
                     </div>
                     
-                    <div className="mb-4 w-full text-center">
-                      <h3 className={`text-2xl font-bold mb-2 transition-colors duration-500 ${isHovered ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                    <div className="mb-3 w-full text-center">
+                      <h3 className={`text-lg font-bold mb-1 transition-colors duration-500 ${isHovered ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
                         <span className="relative inline-block">
                           {item.title.split(' ')[0]}
                           <span 
@@ -240,12 +240,12 @@ export default Expertise;`}
                           <span> {item.title.split(' ').slice(1).join(' ')}</span>
                         )}
                       </h3>
-                      <p className={`text-lg font-medium mt-1 transition-colors duration-500 ${isHovered ? 'text-gray-100' : 'text-gray-600 dark:text-gray-400'}`}>
+                      <p className={`text-base font-medium mt-0.5 transition-colors duration-500 ${isHovered ? 'text-gray-100' : 'text-gray-600 dark:text-gray-400'}`}>
                         {item.subtitle}
                       </p>
                     </div>
 
-                    <p className={`text-sm leading-relaxed transition-colors duration-500 ${isHovered ? 'text-gray-100' : 'text-gray-600 dark:text-gray-400'}`}>
+                    <p className={`text-xs leading-relaxed transition-colors duration-500 ${isHovered ? 'text-gray-100' : 'text-gray-600 dark:text-gray-400'}`}>
                       {item.description}
                     </p>
                   </div>

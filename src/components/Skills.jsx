@@ -111,7 +111,7 @@ const Skills = () => {
                       size={48}
                       className="transition-all duration-300 group-hover:scale-110"
                       style={{
-                        color: hoveredSkill === index ? colors.primary : 'currentColor',
+                        color: hoveredSkill === index ? colors.primary : colors.primary + '60',
                       }}
                     />
                     {hoveredSkill === index && (
