@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { FiExternalLink, FiGithub } from 'react-icons/fi';
+import { FocusCards } from './ui/focus-cards';
 
 const Projects = ({ onProjectClick, projects: projectsProp }) => {
   const ref = useRef(null);
@@ -145,72 +146,17 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
             </div>
           </motion.div>
 
-          {/* Masonry Grid */}
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-6">
-            {filteredProjects.map((project, index) => {
-              const getImageHeight = () => {
-                switch (project.size) {
-                  case 'large':
-                    return 'h-[500px]';
-                  case 'medium':
-                    return 'h-[350px]';
-                  case 'small':
-                    return 'h-[250px]';
-                  default:
-                    return 'h-[300px]';
-                }
-              };
-
-              return (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className="break-inside-avoid mb-6 bg-white dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 overflow-hidden hover:shadow-xl transition-all group cursor-pointer"
-                  onClick={() => onProjectClick && onProjectClick(project)}
-                >
-                  <div className={`relative overflow-hidden ${getImageHeight()}`}>
-                    <img
-                      src={project.image}
-                      alt={project.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {project.liveLink && (
-                        <a
-                          href={project.liveLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm rounded-lg hover:bg-white dark:hover:bg-zinc-900 transition-colors"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <FiExternalLink size={18} className="text-gray-900 dark:text-white" />
-                        </a>
-                      )}
-                      {project.githubLink && (
-                        <a
-                          href={project.githubLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm rounded-lg hover:bg-white dark:hover:bg-zinc-900 transition-colors"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <FiGithub size={18} className="text-gray-900 dark:text-white" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                      {project.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {project.category}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+          {/* Focus Cards Grid */}
+          <FocusCards
+            cards={filteredProjects.map((project) => ({
+              title: project.name,
+              src: project.image,
+              description: project.category,
+              project: project, // Keep original project data for click handling
+            }))}
+            className="mb-8"
+            onCardClick={onProjectClick}
+          />
         </motion.div>
       </div>
     </section>

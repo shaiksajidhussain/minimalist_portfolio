@@ -9,10 +9,12 @@ import About from './components/About';
 import Skills from './components/Skills';
 import Experience from './components/Experience';
 import Testimonials from './components/Testimonials';
+import Globe from './components/Globe';
 import HireMe from './components/HireMe';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectDetail from './components/ProjectDetail';
+import BlobCursor from './components/BlobCursor';
 
 const App = () => {
   const [selectedProject, setSelectedProject] = useState(null);
@@ -113,20 +115,58 @@ const App = () => {
   if (selectedProject) {
     return (
       <ThemeProvider>
-        <ProjectDetail
-          project={selectedProject}
-          allProjects={allProjects}
-          onClose={handleCloseProject}
-          onNext={handleNextProject}
-          onPrevious={handlePreviousProject}
-        />
+        <div className="min-h-screen bg-white dark:bg-zinc-900 transition-colors relative">
+          <BlobCursor
+            blobType="circle"
+            fillColor="#5227FF"
+            trailCount={3}
+            sizes={[25, 50, 35]}
+            innerSizes={[10, 18, 12]}
+            innerColor="rgba(255,255,255,0.8)"
+            opacities={[0.6, 0.6, 0.6]}
+            shadowColor="rgba(0,0,0,0.75)"
+            shadowBlur={4}
+            shadowOffsetX={6}
+            shadowOffsetY={6}
+            filterStdDeviation={20}
+            useFilter={true}
+            fastDuration={0.1}
+            slowDuration={0.5}
+            zIndex={100}
+          />
+          <ProjectDetail
+            project={selectedProject}
+            allProjects={allProjects}
+            onClose={handleCloseProject}
+            onNext={handleNextProject}
+            onPrevious={handlePreviousProject}
+          />
+        </div>
       </ThemeProvider>
     );
   }
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-zinc-900 transition-colors">
+      <div className="min-h-screen bg-white dark:bg-zinc-900 transition-colors relative">
+        <BlobCursor
+          blobType="circle"
+          fillColor="#5227FF"
+          trailCount={3}
+          sizes={[15, 30, 20]}
+          innerSizes={[6, 10, 8]}
+          innerColor="rgba(255,255,255,0.8)"
+          opacities={[0.6, 0.6, 0.6]}
+          shadowColor="rgba(0,0,0,0.75)"
+          shadowBlur={3}
+          shadowOffsetX={5}
+          shadowOffsetY={5}
+          filterStdDeviation={15}
+          useFilter={true}
+          fastDuration={0.1}
+          slowDuration={0.5}
+          zIndex={100}
+        />
         <Navbar />
         <Hero />
         <Skills />
@@ -137,6 +177,7 @@ const App = () => {
     
         <Experience />
         <Testimonials />
+        <Globe />
         <HireMe />
         <Contact />
         <Footer />

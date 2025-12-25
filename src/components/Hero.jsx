@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { FiArrowRight, FiChevronDown, FiEye } from 'react-icons/fi';
 import BlurText from './BlurText';
 import CountUp from './CountUp';
+import SplitText from './SplitText';
 
 const Hero = () => {
   const scrollToSection = (href) => {
@@ -237,14 +238,20 @@ const Hero = () => {
             className="text-xl sm:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300 mb-8 uppercase tracking-wider font-medium"
           />
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
+          <SplitText
+            text="I build fast, scalable, and modern web applications for startups and businesses."
             className="text-base sm:text-lg text-gray-500 dark:text-gray-400 mb-8 max-w-3xl mx-auto"
-          >
-            I build fast, scalable, and modern web applications for startups and businesses.
-          </motion.p>
+            delay={50}
+            duration={0.6}
+            ease="power3.out"
+            splitType="chars"
+            from={{ opacity: 0, y: 40 }}
+            to={{ opacity: 1, y: 0 }}
+            threshold={0.1}
+            rootMargin="-100px"
+            textAlign="center"
+            tag="p"
+          />
 
           {/* View Count */}
           <motion.div
@@ -275,16 +282,22 @@ const Hero = () => {
           >
             <button
               onClick={() => scrollToSection('#contact')}
-              className="px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all flex items-center gap-2 group"
+              className="px-8 py-3 rounded-full font-semibold transition-all flex items-center gap-2 group relative overflow-hidden backdrop-blur-md bg-gray-900/80 dark:bg-white/20 border border-gray-800/50 dark:border-white/30 text-white dark:text-white shadow-lg hover:bg-gray-800/90 dark:hover:bg-white/30 hover:shadow-xl hover:scale-105 active:scale-95"
+              style={{
+                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.1)'
+              }}
             >
-              Hire Me
-              <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+              <span className="relative z-10">Hire Me</span>
+              <FiArrowRight className="group-hover:translate-x-1 transition-transform relative z-10" />
             </button>
             <button
               onClick={() => scrollToSection('#projects')}
-              className="px-8 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg font-semibold hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-gray-900 transition-all flex items-center gap-2"
+              className="px-8 py-3 rounded-full font-semibold transition-all flex items-center gap-2 relative overflow-hidden backdrop-blur-md bg-white/20 dark:bg-black/20 border-2 border-gray-300/50 dark:border-white/40 text-gray-900 dark:text-white shadow-lg hover:bg-white/30 dark:hover:bg-white/25 hover:border-gray-400/70 dark:hover:border-white/60 hover:scale-105 active:scale-95"
+              style={{
+                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(0, 0, 0, 0.1)'
+              }}
             >
-              View Projects
+              <span className="relative z-10">View Projects</span>
             </button>
           </motion.div>
         </motion.div>
