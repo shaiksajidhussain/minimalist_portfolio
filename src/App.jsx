@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { SmoothCursor } from './components/ui/smooth-cursor';
 import { ScrollProgress } from './components/ui/scroll-progress';
@@ -23,85 +23,47 @@ import PricingEngagement from './components/PricingEngagement';
 import WhyChooseMe from './components/WhyChooseMe';
 import Availability from './components/Availability';
 import CTAStrip from './components/CTAStrip';
+import config from './config/api';
 
 const App = () => {
   const [selectedProject, setSelectedProject] = useState(null);
-  const [allProjects] = useState([
-    {
-      name: 'SaaS Application',
-      category: 'SaaS',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      size: 'large',
-      description: 'A comprehensive SaaS platform with subscription management, user authentication, and payment integration. Built for scalability and performance.',
-      client: 'Confidential',
-      tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    },
-    {
-      name: 'LMS Platform',
-      category: 'Web Development',
-      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      size: 'small',
-      description: 'A learning management system for educational institutions with course management, student progress tracking, and assessment features.',
-      client: 'Educational Institution',
-      tech: ['Next.js', 'PostgreSQL', 'Prisma', 'AWS'],
-    },
-    {
-      name: 'School Management System',
-      category: 'Full-Stack',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      size: 'medium',
-      description: 'A comprehensive school management solution with student management, fee collection, attendance tracking, and report generation capabilities.',
-      client: 'School District',
-      tech: ['React', 'Express.js', 'MySQL', 'Razorpay'],
-    },
-    {
-      name: 'Corporate Website',
-      category: 'Web Development',
-      image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      size: 'small',
-      description: 'A modern, responsive corporate website with smooth animations, SEO optimization, and fast loading times.',
-      client: 'Corporate Client',
-      tech: ['React', 'Tailwind CSS', 'Framer Motion'],
-    },
-    {
-      name: 'E-Commerce Platform',
-      category: 'Full-Stack',
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      size: 'large',
-      description: 'A full-featured e-commerce platform with product management, shopping cart, payment processing, and order tracking.',
-      client: 'E-Commerce Client',
-      tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    },
-    {
-      name: 'Dashboard Analytics',
-      category: 'Web Development',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      size: 'medium',
-      description: 'An analytics dashboard with real-time data visualization, charts, and comprehensive reporting features.',
-      client: 'Analytics Company',
-      tech: ['React', 'Chart.js', 'Node.js', 'PostgreSQL'],
-    },
-  ]);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [allProjects, setAllProjects] = useState([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(`${config.baseUrl}/projects`);
+        const data = await response.json();
+        setAllProjects(data || []);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        setAllProjects([]);
+      } finally {
+        setLoadingProjects(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   const handleProjectClick = (project) => {
+    setScrollPosition(window.scrollY);
     setSelectedProject(project);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCloseProject = () => {
     setSelectedProject(null);
+    // Restore scroll position immediately after render
+    setTimeout(() => {
+      window.scrollTo({ top: scrollPosition, behavior: 'auto' });
+      // Then smooth scroll to show the transition
+      setTimeout(() => {
+        window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+      }, 10);
+    }, 0);
   };
 
   const handleNextProject = () => {

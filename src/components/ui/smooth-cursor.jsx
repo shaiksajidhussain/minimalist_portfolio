@@ -39,7 +39,7 @@ export const SmoothCursor = ({
   }, [cursorX, cursorY]);
 
   return (
-    <>
+    <>  
       <style>{`
         * {
           cursor: none !important;

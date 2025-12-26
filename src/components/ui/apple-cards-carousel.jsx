@@ -11,7 +11,10 @@ export const Carousel = ({ items }) => {
 
   return (
     <div className="w-full py-10 md:py-20">
-      <div className="flex gap-4 overflow-x-auto pb-4 px-4 md:px-0 justify-center md:justify-start">
+      <div
+        className="flex gap-4 overflow-x-auto pb-4 px-4 md:px-0 justify-center md:justify-start hide-scrollbar"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
         {items.map((item, index) => (
           <motion.div
             key={index}
@@ -31,6 +34,15 @@ export const Carousel = ({ items }) => {
           </motion.div>
         ))}
       </div>
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
 
       <AnimatePresence>
         {expanded !== null && (

@@ -3,8 +3,35 @@ import { FiArrowRight, FiChevronDown, FiEye } from 'react-icons/fi';
 import BlurText from './BlurText';
 import CountUp from './CountUp';
 import SplitText from './SplitText';
+import { Pointer } from './ui/pointer';
+import { useEffect, useState } from 'react';
+import config from '../config/api';
 
 const Hero = () => {
+  const [viewCount, setViewCount] = useState(0);
+
+  useEffect(() => {
+    const fetchAndIncrementViews = async () => {
+      try {
+        // Increment views
+        const response = await fetch(`${config.views}/hero`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        setViewCount(data.count);
+      } catch (error) {
+        console.error('Error fetching views:', error);
+        // Fallback to a default value
+        setViewCount(2700);
+      }
+    };
+
+    fetchAndIncrementViews();
+  }, []);
+
   const scrollToSection = (href) => {
     const element = document.querySelector(href);
     if (element) {
@@ -261,7 +288,7 @@ const Hero = () => {
               <span>
                 <CountUp
                   from={0}
-                  to={2700}
+                  to={viewCount}
                   separator=","
                   direction="up"
                   duration={2}
@@ -280,20 +307,22 @@ const Hero = () => {
             className="flex-1 flex items-center justify-center"
           >
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
-              {/* Image Border/Frame */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-orange-500/10 rounded-2xl p-1">
-                <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-800 dark:from-zinc-800 dark:to-zinc-900 rounded-xl flex items-center justify-center overflow-hidden border border-orange-500/20">
-                  {/* Placeholder for Image - Replace with actual image */}
-                  <img
-                    src="https://res.cloudinary.com/dgus6y6lm/image/upload/v1766677763/Sajid_Professional_vncuym.png"
-                    alt="Profile"
-                    className="w-full h-full object-cover object-top rounded-xl"
-                    loading="eager"
-                    decoding="async"
-                    style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
-                  />
+              <Pointer>
+                {/* Image Border/Frame */}
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-orange-500/10 rounded-2xl p-1">
+                  <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-800 dark:from-zinc-800 dark:to-zinc-900 rounded-xl flex items-center justify-center overflow-hidden border border-orange-500/20">
+                    {/* Placeholder for Image - Replace with actual image */}
+                    <img
+                      src="https://res.cloudinary.com/dgus6y6lm/image/upload/v1766677763/Sajid_Professional_vncuym.png"
+                      alt="Profile"
+                      className="w-full h-full object-cover object-top rounded-xl"
+                      loading="eager"
+                      decoding="async"
+                      style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
+                    />
+                  </div>
                 </div>
-              </div>
+              </Pointer>
               
               {/* Decorative Elements */}
               <div className="absolute -top-4 -right-4 w-20 h-20 bg-orange-500/10 rounded-full blur-xl"></div>
@@ -325,7 +354,7 @@ const Hero = () => {
                 boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(0, 0, 0, 0.1)'
               }}
             >
-              <span className="relative z-10">View Projects</span>
+              <span className="relative z-10">View Resume</span>
             </button>
           </motion.div>
      
