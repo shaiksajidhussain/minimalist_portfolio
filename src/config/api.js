@@ -5,8 +5,8 @@ const API_CONFIG = {
     views: 'http://localhost:8089/api/views',
   },
   prod: {
-    baseUrl: 'https://portfolio-backend-six-ruby.vercel.app/api',
-    views: 'https://portfolio-backend-six-ruby.vercel.app/api/views',
+    baseUrl: 'https://portfolio-backend-ten-inky.vercel.app/api',
+    views: 'https://portfolio-backend-ten-inky.vercel.app/api/views',
   },
 };
 
