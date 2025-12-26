@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
-import { FiMoon, FiSun, FiMenu, FiX } from 'react-icons/fi';
+import { FiMoon, FiSun, FiMenu, FiX, FiSettings } from 'react-icons/fi';
 import GooeyNav from './GooeyNav';
 import ColorThemeSelector from './ColorThemeSelector';
 
@@ -85,6 +86,13 @@ const Navbar = () => {
               >
                 {theme === 'light' ? <FiMoon size={20} /> : <FiSun size={20} />}
               </button>
+              <Link
+                to="/admin/login"
+                className="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
+                title="Admin Panel"
+              >
+                <FiSettings size={20} />
+              </Link>
             </div>
           </div>
 

@@ -8,7 +8,7 @@ import config from '../config/api';
 const Projects = ({ onProjectClick, projects: projectsProp }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const { theme } = useTheme();
+  const { theme, colors } = useTheme();
   const [activeFilter, setActiveFilter] = useState('All');
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -128,7 +128,11 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
 
   const filteredProjects = activeFilter === 'All' 
     ? projectsToDisplay 
-    : projectsToDisplay.filter(project => project.category === activeFilter);
+    : projectsToDisplay.filter(project => {
+        // Handle category matching with case-insensitivity
+        const projectCategory = project.category || '';
+        return projectCategory.toLowerCase() === activeFilter.toLowerCase();
+      });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -146,11 +150,27 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
   };
 
   return (
-    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section 
+      id="projects" 
+      className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-300"
+      style={{
+        backgroundColor: theme === 'dark' ? '#18181b' : colors.light,
+      }}
+    >
       {/* Background gradient blobs */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div 
+          className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl"
+          style={{
+            backgroundColor: `${colors.primary}15`,
+          }}
+        ></div>
+        <div 
+          className="absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl"
+          style={{
+            backgroundColor: `${colors.primary}10`,
+          }}
+        ></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative">
@@ -162,7 +182,12 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
         >
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent mb-4">
+            <h2 
+              className="text-5xl sm:text-6xl font-bold mb-4"
+              style={{
+                color: theme === 'dark' ? '#ffffff' : '#000000',
+              }}
+            >
               Featured Projects
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -183,9 +208,15 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
                 whileTap={{ scale: 0.95 }}
                 className={`px-6 py-2 rounded-full font-medium transition-all ${
                   activeFilter === filter
-                    ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/50'
-                    : `${theme === 'dark' ? 'bg-white/10 border border-white/20 text-white hover:bg-white/20' : 'bg-gray-100 border border-gray-200 text-gray-700 hover:bg-gray-200'}`
+                    ? 'text-white shadow-lg'
+                    : theme === 'dark' 
+                      ? 'bg-white/10 border border-white/20 text-white hover:bg-white/20 dark:bg-zinc-800/50 dark:border-zinc-700 dark:hover:bg-zinc-700/50' 
+                      : 'bg-gray-100 border border-gray-200 text-gray-700 hover:bg-gray-200'
                 }`}
+                style={activeFilter === filter ? {
+                  backgroundImage: `linear-gradient(to right, ${colors.primary}, ${colors.dark})`,
+                  boxShadow: `0 0 20px ${colors.primary}80`,
+                } : {}}
               >
                 {filter}
               </motion.button>
@@ -197,8 +228,13 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
             <div className="flex items-center justify-center py-20">
               <p className="text-gray-600 dark:text-gray-400 text-lg">Loading projects...</p>
             </div>
+          ) : filteredProjects.length === 0 ? (
+            <div className="flex items-center justify-center py-20">
+              <p className="text-gray-600 dark:text-gray-400 text-lg">No projects found in this category.</p>
+            </div>
           ) : (
             <motion.div
+              key={`${activeFilter}-${filteredProjects.length}`}
               className="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-max"
               variants={containerVariants}
               initial="hidden"
@@ -234,7 +270,14 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
                         transition={{ delay: 0.1 }}
                         className="inline-block mb-3"
                       >
-                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 backdrop-blur-sm border border-purple-500/30">
+                        <span 
+                          className="px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm border"
+                          style={{
+                            backgroundColor: `${colors.primary}33`,
+                            color: `${colors.primary}`,
+                            borderColor: `${colors.primary}88`,
+                          }}
+                        >
                           {project.category}
                         </span>
                       </motion.div>
@@ -255,14 +298,6 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
                         <p className="text-sm text-gray-100 line-clamp-2">
                           {project.description}
                         </p>
-                      )}
-
-                      {/* Result/Stats */}
-                      {project.result && (
-                        <div className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-md rounded-lg p-3 border border-white/10">
-                          <p className="text-xs font-semibold text-purple-300 mb-1">RESULTS</p>
-                          <p className="text-sm font-bold text-white">{project.result}</p>
-                        </div>
                       )}
 
                       {/* Testimonial */}

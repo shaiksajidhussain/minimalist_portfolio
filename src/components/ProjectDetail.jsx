@@ -1,11 +1,48 @@
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiArrowRight, FiChevronRight, FiExternalLink } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight, FiChevronRight, FiExternalLink, FiGithub } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
+import { useState, useEffect } from 'react';
+import config from '../config/api';
 
 const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) => {
   const { theme, toggleTheme } = useTheme();
+  const [projectData, setProjectData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
-  if (!project) return null;
+  useEffect(() => {
+    const fetchProjectDetails = async () => {
+      if (!project || !project._id) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        const response = await fetch(`${config.baseUrl}/projects/${project._id}`);
+        const data = await response.json();
+        setProjectData(data);
+        setCurrentImageIndex(0);
+      } catch (error) {
+        console.error('Error fetching project details:', error);
+        // Fallback to passed project data
+        setProjectData(project);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProjectDetails();
+  }, [project]);
+  
+  if (!project || loading) return null;
+  
+  const displayProject = projectData || project;
+  const galleryImages = [
+    displayProject.image1,
+    displayProject.image2,
+    displayProject.image3,
+    displayProject.image4,
+  ].filter(Boolean);
 
   const currentIndex = allProjects.findIndex(p => p.name === project.name);
   const nextProject = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : allProjects[0];
@@ -54,12 +91,12 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
         >
           {/* Category */}
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-            {project.category}.
+            {displayProject.category}
           </p>
 
           {/* Title */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
-            {project.name}
+            {displayProject.name}
           </h1>
 
           {/* Breadcrumbs */}
@@ -72,16 +109,47 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
               Portfolio
             </button>
             <FiChevronRight size={14} />
-            <span className="text-gray-900 dark:text-white">{project.name}</span>
+            <span className="text-gray-900 dark:text-white">{displayProject.name}</span>
           </nav>
 
-          {/* Project Image */}
-          <div className="mb-12 rounded-lg overflow-hidden">
-            <img
-              src={project.image}
-              alt={project.name}
-              className="w-full h-auto object-cover"
-            />
+          {/* Project Images Gallery */}
+          <div className="mb-12">
+            {/* Main Image */}
+            <div className="mb-6 rounded-lg overflow-hidden">
+              <img
+                src={displayProject.image}
+                alt={displayProject.name}
+                className="w-full h-auto object-cover max-h-96"
+              />
+            </div>
+            
+            {/* Gallery Preview */}
+            {galleryImages.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  Project Gallery
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {galleryImages.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`rounded-lg overflow-hidden border-2 transition-all ${
+                        currentImageIndex === index
+                          ? 'border-purple-500'
+                          : 'border-gray-200 dark:border-zinc-700 hover:border-purple-300'
+                      }`}
+                    >
+                      <img
+                        src={image}
+                        alt={`${displayProject.name} - ${index + 1}`}
+                        className="w-full h-40 object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Description */}
@@ -90,41 +158,94 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
               About This Project
             </h2>
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
-              {project.description || `This is a comprehensive ${project.category.toLowerCase()} project that showcases modern web development practices. Built with cutting-edge technologies and a focus on user experience, this project demonstrates expertise in creating scalable and performant applications.`}
+              {displayProject.description}
             </p>
 
-            {/* Project Details */}
+            {/* Project Details Grid */}
             <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                  Client
-                </h3>
-                <p className="text-lg text-gray-900 dark:text-white">
-                  {project.client || 'Confidential'}
-                </p>
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                  Technologies
-                </h3>
-                <p className="text-lg text-gray-900 dark:text-white">
-                  {project.tech ? project.tech.join(', ') : 'React, Node.js, MongoDB'}
-                </p>
-              </div>
+              {displayProject.client && (
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+                    Client
+                  </h3>
+                  <p className="text-lg text-gray-900 dark:text-white">
+                    {displayProject.client}
+                  </p>
+                </div>
+              )}
+              
+              {displayProject.tech && displayProject.tech.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+                    Technologies
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {displayProject.tech.map((tech, index) => (
+                      <span key={index} className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-900 dark:text-purple-100 rounded-full text-sm">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {displayProject.result && (
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+                    Result
+                  </h3>
+                  <p className="text-lg text-green-600 dark:text-green-400 font-semibold">
+                    {displayProject.result}
+                  </p>
+                </div>
+              )}
+              
+              {displayProject.category && (
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+                    Category
+                  </h3>
+                  <p className="text-lg text-gray-900 dark:text-white">
+                    {displayProject.category}
+                  </p>
+                </div>
+              )}
             </div>
 
-            {/* Open Project Button */}
-            {project.liveLink && (
-              <a
-                href={project.liveLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all"
-              >
-                Open Project
-                <FiExternalLink size={18} />
-              </a>
+            {/* Testimonial */}
+            {displayProject.testimonial && (
+              <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6 mb-8">
+                <p className="text-lg text-gray-800 dark:text-gray-200 italic">
+                  "{displayProject.testimonial}"
+                </p>
+              </div>
             )}
+
+            {/* Links */}
+            <div className="flex flex-wrap gap-4">
+              {displayProject.liveLink && (
+                <a
+                  href={displayProject.liveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all"
+                >
+                  View Live
+                  <FiExternalLink size={18} />
+                </a>
+              )}
+              {displayProject.githubLink && (
+                <a
+                  href={displayProject.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gray-200 dark:bg-zinc-700 text-gray-900 dark:text-white rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-zinc-600 transition-all"
+                >
+                  GitHub
+                  <FiGithub size={18} />
+                </a>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>

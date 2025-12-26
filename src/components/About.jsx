@@ -9,9 +9,9 @@ const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-  const words = `I'm a passionate Full Stack Developer with 2.5+ years of experience building scalable web applications and mobile apps. I specialize in React, React Native, Node.js, and modern web technologies that deliver exceptional user experiences across web and mobile platforms.`;
+  const words = `I'm a passionate Full Stack Developer with 4.5+ years of experience building scalable web applications and mobile apps. I specialize in React, React Native, Node.js, and modern web technologies that deliver exceptional user experiences across web and mobile platforms.`;
 
-  const experienceText = `2.5+ years as Full Stack Developer. Worked on SaaS platforms, dashboards, LMS, corporate websites & web applications. React Native mobile app development.`;
+  const experienceText = `4.5+ years as Full Stack Developer. Worked on SaaS platforms, dashboards, LMS, corporate websites & web applications. React Native mobile app development.`;
 
   const workStyleText = `Focus on performance & clean UI with scalable architecture. Cross-platform development for Web & Mobile. Remote & freelance collaboration expertise.`;
 

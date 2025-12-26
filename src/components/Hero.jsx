@@ -9,6 +9,7 @@ import config from '../config/api';
 
 const Hero = () => {
   const [viewCount, setViewCount] = useState(0);
+  const [resumeUrl, setResumeUrl] = useState(null);
 
   useEffect(() => {
     const fetchAndIncrementViews = async () => {
@@ -29,7 +30,20 @@ const Hero = () => {
       }
     };
 
+    const fetchResume = async () => {
+      try {
+        const response = await fetch(`${config.baseUrl}/resumes`);
+        const resumes = await response.json();
+        if (resumes && resumes.length > 0) {
+          setResumeUrl(resumes[0].url);
+        }
+      } catch (error) {
+        console.error('Error fetching resume:', error);
+      }
+    };
+
     fetchAndIncrementViews();
+    fetchResume();
   }, []);
 
   const scrollToSection = (href) => {
@@ -349,7 +363,9 @@ const Hero = () => {
             </button>
             <button
               onClick={() => scrollToSection('#projects')}
-              className="px-8 py-3 rounded-full font-semibold transition-all flex items-center gap-2 relative overflow-hidden backdrop-blur-md bg-white/20 dark:bg-black/20 border-2 border-gray-300/50 dark:border-white/40 text-gray-900 dark:text-white shadow-lg hover:bg-white/30 dark:hover:bg-white/25 hover:border-gray-400/70 dark:hover:border-white/60 hover:scale-105 active:scale-95"
+              className="px-8 py-3 rounded-full font-semibold transition-all flex items-center gap-2 relative overflow-hidden backdrop-blur-md bg-white/20 dark:bg-black/20 border-2 border-gray-300/50 dark:border-white/40 text-gray-900 dark:text-white shadow-lg hover:bg-white/30 dark:hover:bg-white/25 hover:border-gray-400/70 dark:hover:border-white/60 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!resumeUrl}
+              onClick={() => resumeUrl && window.open(resumeUrl, '_blank')}
               style={{
                 boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(0, 0, 0, 0.1)'
               }}

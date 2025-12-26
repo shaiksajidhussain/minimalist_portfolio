@@ -2,8 +2,9 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { FiMail, FiLinkedin, FiGithub, FiSend, FiPhone, FiMapPin } from 'react-icons/fi';
-import { FaXTwitter } from 'react-icons/fa6';
+import { FaXTwitter, FaYoutube } from 'react-icons/fa6';
 import { useTheme } from '../context/ThemeContext';
+import { ComicText } from './ui/comic-text';
 import config from '../config/api';
 
 // Central Theme Configuration
@@ -125,8 +126,9 @@ const Contact = () => {
   ];
 
   const socialLinks = [
-    { icon: FiGithub, href: 'https://github.com', label: 'GitHub' },
-    { icon: FiLinkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+    { icon: FiGithub, href: 'https://github.com/shaiksajidhussain', label: 'GitHub' },
+    { icon: FiLinkedin, href: 'https://www.linkedin.com/in/shaiksajidhussain', label: 'LinkedIn' },
+    { icon: FaYoutube, href: 'https://www.youtube.com/@codewithsanjuu', label: 'YouTube' },
     { icon: FaXTwitter, href: 'https://twitter.com', label: 'Twitter' },
   ];
 
@@ -302,9 +304,12 @@ const Contact = () => {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-4 rounded-lg bg-green-500/20 border border-green-500/50 text-green-700 dark:text-green-300"
+                    className="p-8 rounded-lg bg-green-500/20 border border-green-500/50 flex flex-col items-center justify-center gap-4"
                   >
-                    ✓ Message sent successfully! I'll get back to you soon.
+                    <ComicText fontSize={5}>SUBMITTED!</ComicText>
+                    <p className="text-green-700 dark:text-green-300 text-center">
+                      Message sent successfully! I'll get back to you soon.
+                    </p>
                   </motion.div>
                 )}
 
