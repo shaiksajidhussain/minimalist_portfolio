@@ -12,7 +12,7 @@ const WhyChooseMe = () => {
   const reasons = [
     {
       category: "Experience",
-      title: '4.5+ Years Experience',
+      title: '3+ Years Experience',
       description: 'Real-world SaaS & production experience with proven track record',
     },
     {

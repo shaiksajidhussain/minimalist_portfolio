@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { FiMail, FiLinkedin, FiGithub, FiSend, FiPhone, FiMapPin } from 'react-icons/fi';
@@ -24,42 +24,12 @@ const THEME_COLORS = {
     main: 'cyan-600',
     dark: 'cyan-700',
   },
-  glass: {
-    light: {
-      bg: 'bg-white/40',
-      border: 'border-white/60',
-      hover: 'hover:bg-white/50',
-      shadow: '0 8px 32px 0 rgba(139, 92, 246, 0.15)',
-    },
-    dark: {
-      bg: 'bg-white/10',
-      border: 'border-white/20',
-      hover: 'hover:bg-white/15',
-      shadow: '0 8px 32px 0 rgba(139, 92, 246, 0.1)',
-    },
-  },
-  input: {
-    light: {
-      bg: 'bg-white/30',
-      border: 'border-white/40',
-      text: 'text-gray-900',
-      placeholder: 'placeholder-gray-500',
-      focus: 'focus:ring-purple-600',
-    },
-    dark: {
-      bg: 'bg-white/10',
-      border: 'border-white/20',
-      text: 'text-white',
-      placeholder: 'placeholder-gray-400',
-      focus: 'focus:ring-purple-500',
-    },
-  },
 };
 
 const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const { theme } = useTheme();
+  const { theme, colors } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -68,8 +38,13 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const glassStyle = THEME_COLORS.glass[theme];
-  const inputStyle = THEME_COLORS.input[theme];
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start center', 'end center'],
+  });
+  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -133,45 +108,66 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 dark:bg-purple-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/20 dark:bg-blue-500/10 rounded-full blur-3xl"></div>
-      </div>
-
+    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ backgroundColor: 'var(--bg-color)' }}>
       <div className="max-w-7xl mx-auto">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          style={{
+            scale,
+            opacity,
+            y,
+          }}
         >
           {/* Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent mb-4">
+          <motion.div className="text-center mb-16">
+            <h2
+              className="text-5xl sm:text-6xl font-bold mb-4"
+              style={{
+                color: theme === 'dark' ? '#ffffff' : '#1f2937',
+              }}
+            >
               Let's Connect
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p
+              className="text-lg max-w-2xl mx-auto"
+              style={{
+                color: theme === 'dark' ? '#d1d5db' : '#6b7280',
+              }}
+            >
               Have a project in mind or want to collaborate? I'd love to hear from you!
             </p>
-          </div>
+          </motion.div>
 
           {/* Main Container */}
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             {/* Get in Touch Card */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className={`p-8 rounded-2xl backdrop-blur-xl border ${glassStyle.bg} ${glassStyle.border} ${glassStyle.hover} transition-all duration-300 group`}
-              style={{ boxShadow: glassStyle.shadow }}
+              className="p-8 rounded-2xl transition-all"
+              style={{
+                backgroundColor: theme === 'dark' ? '#27272a' : '#f9fafb',
+                border: `2px solid ${theme === 'dark' ? '#3f3f46' : '#e5e7eb'}`,
+              }}
+              whileHover={{
+                borderColor: colors.primary,
+              }}
             >
               <div className="flex items-center gap-3 mb-8">
-                <div className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-purple-500/20' : 'bg-purple-500/30'}`}>
-                  <FiMail className={`w-6 h-6 text-${THEME_COLORS.primary.main}`} />
+                <div
+                  className="p-3 rounded-xl"
+                  style={{
+                    backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.3)',
+                  }}
+                >
+                  <FiMail className="w-6 h-6" style={{ color: colors.primary }} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h3
+                  className="text-2xl font-bold"
+                  style={{
+                    color: theme === 'dark' ? '#ffffff' : '#1f2937',
+                  }}
+                >
                   Get in Touch
                 </h3>
               </div>
@@ -183,20 +179,34 @@ const Contact = () => {
                     <a
                       key={index}
                       href={info.href}
-                      className={`flex items-center gap-4 p-4 rounded-xl transition-all ${
-                        theme === 'dark'
-                          ? 'bg-purple-500/10 hover:bg-purple-500/20'
-                          : 'bg-purple-500/15 hover:bg-purple-500/25'
-                      }`}
+                      className="flex items-center gap-4 p-4 rounded-xl transition-all"
+                      style={{
+                        backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.15)',
+                      }}
                     >
-                      <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-purple-500/30' : 'bg-purple-500/40'}`}>
-                        <Icon className={`w-5 h-5 text-${THEME_COLORS.primary.main}`} />
+                      <div
+                        className="p-3 rounded-lg"
+                        style={{
+                          backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.3)' : 'rgba(139, 92, 246, 0.4)',
+                        }}
+                      >
+                        <Icon className="w-5 h-5" style={{ color: colors.primary }} />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <p
+                          className="text-xs uppercase tracking-wider"
+                          style={{
+                            color: theme === 'dark' ? '#9ca3af' : '#6b7280',
+                          }}
+                        >
                           {info.label}
                         </p>
-                        <p className="text-gray-900 dark:text-white font-medium">
+                        <p
+                          className="font-medium"
+                          style={{
+                            color: theme === 'dark' ? '#ffffff' : '#1f2937',
+                          }}
+                        >
                           {info.value}
                         </p>
                       </div>
@@ -217,11 +227,10 @@ const Contact = () => {
                       rel="noopener noreferrer"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
-                      className={`w-12 h-12 rounded-full flex items-center justify-center text-white transition-all ${
-                        theme === 'dark'
-                          ? 'bg-white/10 hover:bg-white/20'
-                          : 'bg-white/20 hover:bg-white/30'
-                      }`}
+                      className="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all"
+                      style={{
+                        backgroundColor: colors.primary,
+                      }}
                       title={link.label}
                     >
                       <Icon className="w-5 h-5" />
@@ -233,17 +242,30 @@ const Contact = () => {
 
             {/* Send Message Form Card */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className={`p-8 rounded-2xl backdrop-blur-xl border ${glassStyle.bg} ${glassStyle.border} ${glassStyle.hover} transition-all duration-300`}
-              style={{ boxShadow: glassStyle.shadow }}
+              className="p-8 rounded-2xl transition-all"
+              style={{
+                backgroundColor: theme === 'dark' ? '#27272a' : '#f9fafb',
+                border: `2px solid ${theme === 'dark' ? '#3f3f46' : '#e5e7eb'}`,
+              }}
+              whileHover={{
+                borderColor: colors.primary,
+              }}
             >
               <div className="flex items-center gap-3 mb-8">
-                <div className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-blue-500/20' : 'bg-blue-500/30'}`}>
-                  <FiSend className={`w-6 h-6 text-${THEME_COLORS.secondary.main}`} />
+                <div
+                  className="p-3 rounded-xl"
+                  style={{
+                    backgroundColor: theme === 'dark' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.3)',
+                  }}
+                >
+                  <FiSend className="w-6 h-6" style={{ color: colors.primary }} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h3
+                  className="text-2xl font-bold"
+                  style={{
+                    color: theme === 'dark' ? '#ffffff' : '#1f2937',
+                  }}
+                >
                   Send a Message
                 </h3>
               </div>
@@ -252,7 +274,12 @@ const Contact = () => {
                 <div className="grid sm:grid-cols-2 gap-5">
                   {/* Name Field */}
                   <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    <label
+                      className="text-sm font-medium mb-2 block"
+                      style={{
+                        color: theme === 'dark' ? '#d1d5db' : '#374151',
+                      }}
+                    >
                       Your Name
                     </label>
                     <input
@@ -262,13 +289,23 @@ const Contact = () => {
                       onChange={handleChange}
                       placeholder="John Doe"
                       required
-                      className={`w-full px-4 py-3 rounded-lg backdrop-blur-sm border transition-all focus:outline-none focus:ring-2 ${inputStyle.bg} ${inputStyle.border} ${inputStyle.text} ${inputStyle.placeholder} ${inputStyle.focus}`}
+                      className="w-full px-4 py-3 rounded-lg border transition-all focus:outline-none focus:ring-2"
+                      style={{
+                        backgroundColor: theme === 'dark' ? '#3f3f46' : '#f3f4f6',
+                        borderColor: theme === 'dark' ? '#52525b' : '#e5e7eb',
+                        color: theme === 'dark' ? '#ffffff' : '#1f2937',
+                      }}
                     />
                   </div>
 
                   {/* Email Field */}
                   <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    <label
+                      className="text-sm font-medium mb-2 block"
+                      style={{
+                        color: theme === 'dark' ? '#d1d5db' : '#374151',
+                      }}
+                    >
                       Your Email
                     </label>
                     <input
@@ -278,14 +315,24 @@ const Contact = () => {
                       onChange={handleChange}
                       placeholder="john@example.com"
                       required
-                      className={`w-full px-4 py-3 rounded-lg backdrop-blur-sm border transition-all focus:outline-none focus:ring-2 ${inputStyle.bg} ${inputStyle.border} ${inputStyle.text} ${inputStyle.placeholder} ${inputStyle.focus}`}
+                      className="w-full px-4 py-3 rounded-lg border transition-all focus:outline-none focus:ring-2"
+                      style={{
+                        backgroundColor: theme === 'dark' ? '#3f3f46' : '#f3f4f6',
+                        borderColor: theme === 'dark' ? '#52525b' : '#e5e7eb',
+                        color: theme === 'dark' ? '#ffffff' : '#1f2937',
+                      }}
                     />
                   </div>
                 </div>
 
                 {/* Message Field */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                  <label
+                    className="text-sm font-medium mb-2 block"
+                    style={{
+                      color: theme === 'dark' ? '#d1d5db' : '#374151',
+                    }}
+                  >
                     Your Message
                   </label>
                   <textarea
@@ -295,7 +342,12 @@ const Contact = () => {
                     placeholder="Tell me about your project..."
                     required
                     rows={5}
-                    className={`w-full px-4 py-3 rounded-lg backdrop-blur-sm border transition-all focus:outline-none focus:ring-2 resize-none ${inputStyle.bg} ${inputStyle.border} ${inputStyle.text} ${inputStyle.placeholder} ${inputStyle.focus}`}
+                    className="w-full px-4 py-3 rounded-lg border transition-all focus:outline-none focus:ring-2 resize-none"
+                    style={{
+                      backgroundColor: theme === 'dark' ? '#3f3f46' : '#f3f4f6',
+                      borderColor: theme === 'dark' ? '#52525b' : '#e5e7eb',
+                      color: theme === 'dark' ? '#ffffff' : '#1f2937',
+                    }}
                   />
                 </div>
 
@@ -304,10 +356,19 @@ const Contact = () => {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-8 rounded-lg bg-green-500/20 border border-green-500/50 flex flex-col items-center justify-center gap-4"
+                    className="p-8 rounded-lg border flex flex-col items-center justify-center gap-4"
+                    style={{
+                      backgroundColor: theme === 'dark' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(34, 197, 94, 0.1)',
+                      borderColor: 'rgba(34, 197, 94, 0.5)',
+                    }}
                   >
                     <ComicText fontSize={5}>SUBMITTED!</ComicText>
-                    <p className="text-green-700 dark:text-green-300 text-center">
+                    <p
+                      className="text-center"
+                      style={{
+                        color: theme === 'dark' ? '#86efac' : '#166534',
+                      }}
+                    >
                       Message sent successfully! I'll get back to you soon.
                     </p>
                   </motion.div>
@@ -319,7 +380,11 @@ const Contact = () => {
                   disabled={loading}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full px-6 py-4 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 hover:shadow-lg hover:shadow-purple-500/50"
+                  className="w-full px-6 py-4 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
+                  style={{
+                    backgroundImage: `linear-gradient(to right, ${colors.primary}, ${colors.dark})`,
+                    boxShadow: `0 0 20px ${colors.primary}80`,
+                  }}
                 >
                   {loading ? 'Sending...' : 'Send Message'}
                   {!loading && <FiSend size={20} className="group-hover:translate-x-1 transition-transform" />}

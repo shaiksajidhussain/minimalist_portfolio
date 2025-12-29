@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
@@ -323,8 +323,8 @@ function GlobeComponent({ globeConfig, data }) {
 
     globeRef.current
       .hexPolygonsData(countriesData.features)
-      .hexPolygonResolution(3)
-      .hexPolygonMargin(0.7)
+      .hexPolygonResolution(2)
+      .hexPolygonMargin(0.85)
       .showAtmosphere(defaultProps.showAtmosphere)
       .atmosphereColor(defaultProps.atmosphereColor)
       .atmosphereAltitude(defaultProps.atmosphereAltitude)
@@ -365,7 +365,7 @@ function GlobeComponent({ globeConfig, data }) {
     const interval = setInterval(() => {
       if (!globeRef.current) return;
 
-      const newNumbersOfRings = genRandomNumbers(0, data.length, Math.floor((data.length * 4) / 5));
+      const newNumbersOfRings = genRandomNumbers(0, data.length, Math.floor((data.length * 3) / 5));
       const ringsData = data
         .filter((d, i) => newNumbersOfRings.includes(i))
         .map((d) => ({
@@ -375,7 +375,7 @@ function GlobeComponent({ globeConfig, data }) {
         }));
 
       globeRef.current.ringsData(ringsData);
-    }, 2000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [isInitialized, data]);
@@ -387,7 +387,7 @@ function WebGLRendererConfig() {
   const { gl, size } = useThree();
 
   useEffect(() => {
-    gl.setPixelRatio(window.devicePixelRatio);
+    gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     gl.setSize(size.width, size.height);
     gl.setClearColor(0xffffff, 0);
   }, [gl, size]);
@@ -424,7 +424,7 @@ function genRandomNumbers(min, max, count) {
 export function GlobeDemo() {
   const { colors } = useTheme();
 
-  const globeConfig = {
+  const globeConfig = useMemo(() => ({
     pointSize: 4,
     globeColor: "#062056",
     showAtmosphere: true,
@@ -445,7 +445,7 @@ export function GlobeDemo() {
     initialPosition: { lat: 22.3193, lng: 114.1694 },
     autoRotate: true,
     autoRotateSpeed: 0.5,
-  };
+  }), []);
 
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 relative w-full" style={{ backgroundColor: 'var(--bg-color)' }}>

@@ -4,12 +4,22 @@ import BlurText from './BlurText';
 import CountUp from './CountUp';
 import SplitText from './SplitText';
 import { Pointer } from './ui/pointer';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useScroll, useTransform } from 'framer-motion';
 import config from '../config/api';
 
 const Hero = () => {
   const [viewCount, setViewCount] = useState(0);
   const [resumeUrl, setResumeUrl] = useState(null);
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end center'],
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.75]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.3]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
   useEffect(() => {
     const fetchAndIncrementViews = async () => {
@@ -54,9 +64,15 @@ const Hero = () => {
   };
 
   return (
-    <section 
+    <motion.section 
+      ref={heroRef}
       id="hero"
       className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 overflow-hidden"
+      style={{
+        scale,
+        opacity,
+        y,
+      }}
     >
       {/* 3D Geometric Shapes Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -393,7 +409,7 @@ const Hero = () => {
           <FiChevronDown size={24} />
         </button>
       </motion.div>
-    </section>
+    </motion.section>
   );
 };
 

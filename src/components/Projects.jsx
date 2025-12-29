@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { FiExternalLink, FiGithub, FiArrowRight } from 'react-icons/fi';
@@ -12,6 +12,13 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start center', 'end center'],
+  });
+  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -34,7 +41,7 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
     fetchProjects();
   }, []);
 
-  const filters = ['All', 'Web Development', 'SaaS', 'Full-Stack'];
+  const filters = ['All', 'Web Development', 'App Development', 'Freelancing', 'Personal Projects'];
   
   // Masonry grid layout configuration
   const getMasonryClass = (index) => {
@@ -52,7 +59,7 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
   const defaultProjects = [
     {
       name: 'SaaS Application',
-      category: 'SaaS',
+      category: 'Web Development',
       image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop',
       liveLink: '#',
       githubLink: '#',
@@ -76,7 +83,7 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
     },
     {
       name: 'School Management',
-      category: 'Full-Stack',
+      category: 'Web Development',
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
       liveLink: '#',
       githubLink: '#',
@@ -100,7 +107,7 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
     },
     {
       name: 'E-Commerce Platform',
-      category: 'Full-Stack',
+      category: 'Web Development',
       image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=800&fit=crop',
       liveLink: '#',
       githubLink: '#',
@@ -112,7 +119,7 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
     },
     {
       name: 'Analytics Dashboard',
-      category: 'Web Development',
+      category: 'App Development',
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
       liveLink: '#',
       githubLink: '#',
@@ -152,33 +159,22 @@ const Projects = ({ onProjectClick, projects: projectsProp }) => {
   return (
     <section 
       id="projects" 
-      className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-300"
+      className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
       style={{
-        backgroundColor: theme === 'dark' ? '#18181b' : colors.light,
+        backgroundColor: 'var(--bg-color)',
       }}
     >
-      {/* Background gradient blobs */}
-      <div className="absolute inset-0 -z-10">
-        <div 
-          className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl"
-          style={{
-            backgroundColor: `${colors.primary}15`,
-          }}
-        ></div>
-        <div 
-          className="absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl"
-          style={{
-            backgroundColor: `${colors.primary}10`,
-          }}
-        ></div>
-      </div>
-
       <div className="max-w-7xl mx-auto relative">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           variants={containerVariants}
+          style={{
+            scale,
+            opacity,
+            y,
+          }}
         >
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-16">

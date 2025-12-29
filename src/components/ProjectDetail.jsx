@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiArrowRight, FiChevronRight, FiExternalLink, FiGithub } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight, FiChevronRight, FiExternalLink, FiGithub, FiX, FiMaximize2 } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import { useState, useEffect } from 'react';
 import config from '../config/api';
@@ -9,6 +9,7 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
   const [projectData, setProjectData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [fullscreenImage, setFullscreenImage] = useState(null);
   
   useEffect(() => {
     const fetchProjectDetails = async () => {
@@ -49,6 +50,33 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-900 transition-colors">
+      {/* Fullscreen Image Modal */}
+      {fullscreenImage && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
+          onClick={() => setFullscreenImage(null)}
+        >
+          <button
+            onClick={() => setFullscreenImage(null)}
+            className="absolute top-8 right-8 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+          >
+            <FiX size={28} className="text-white" />
+          </button>
+          
+          <motion.img
+            src={fullscreenImage}
+            alt="Fullscreen view"
+            className="max-w-full max-h-[90vh] object-contain rounded-lg"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </motion.div>
+      )}
+
       {/* Back Button & Theme Toggle */}
       <div className="fixed left-8 top-8 z-50 flex flex-col gap-6">
         <button
@@ -115,13 +143,28 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
           {/* Project Images Gallery */}
           <div className="mb-12">
             {/* Main Image */}
-            <div className="mb-6 rounded-lg overflow-hidden">
+            <motion.div 
+              className="mb-6 rounded-lg overflow-hidden relative group cursor-pointer"
+              onClick={() => setFullscreenImage(displayProject.image)}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
               <img
                 src={displayProject.image}
                 alt={displayProject.name}
                 className="w-full h-auto object-cover max-h-96"
               />
-            </div>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  className="flex flex-col items-center gap-3"
+                >
+                  <FiMaximize2 size={32} className="text-white" />
+                  <span className="text-white font-medium">View Fullscreen</span>
+                </motion.div>
+              </div>
+            </motion.div>
             
             {/* Gallery Preview */}
             {galleryImages.length > 0 && (
@@ -131,21 +174,31 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {galleryImages.map((image, index) => (
-                    <button
+                    <motion.button
                       key={index}
-                      onClick={() => setCurrentImageIndex(index)}
-                      className={`rounded-lg overflow-hidden border-2 transition-all ${
-                        currentImageIndex === index
-                          ? 'border-purple-500'
-                          : 'border-gray-200 dark:border-zinc-700 hover:border-purple-300'
-                      }`}
+                      onClick={() => setFullscreenImage(image)}
+                      className={`rounded-lg overflow-hidden border-2 transition-all relative group`}
+                      whileHover={{ scale: 1.02 }}
+                      style={{
+                        borderColor: currentImageIndex === index ? '#a855f7' : 'rgb(229, 231, 235)'
+                      }}
                     >
                       <img
                         src={image}
                         alt={`${displayProject.name} - ${index + 1}`}
                         className="w-full h-40 object-cover"
                       />
-                    </button>
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 1 }}
+                          className="flex flex-col items-center gap-2"
+                        >
+                          <FiMaximize2 size={24} className="text-white" />
+                          <span className="text-white text-sm font-medium">Fullscreen</span>
+                        </motion.div>
+                      </div>
+                    </motion.button>
                   ))}
                 </div>
               </div>

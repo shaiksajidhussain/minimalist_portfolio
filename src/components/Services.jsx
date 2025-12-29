@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
+import { useInView, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { cn } from "@/lib/utils";
 import { BentoGrid, BentoGridItem } from "./ui/bento-grid";
@@ -16,12 +16,19 @@ import {
 const Services = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start center', 'end center'],
+  });
+  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
   // Random image placeholder using Unsplash or Placeholder service
   const getRandomImage = (index) => {
     const images = [
       `https://www.keenesystems.com/hubfs/blog-images/ux-ui.jpg`,
-      `https://lh7-rt.googleusercontent.com/docsz/AD_4nXfpH5jkmDQ7HelQcaPh5lMKwfW2Bx6I0hDhlg3mrNwXlLXO1lmwofaYS_1a8211DPJqhb-z5cLtDYfFkjA1EUKfNOEfTJCSWUKXSIY4pams0g4xGBWrqYMLC_yy1izmQgj1SwM6vg?key=8Icro23PLHSLRmHd-kIQoO0c`,
+      `https://images.unsplash.com/photo-1624996752380-8ec242e0f85d?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`,
       `https://www.addwebsolution.com/wp-content/uploads/2024/03/SaaS-Product-Development.jpg`,
       `https://cdn.prod.website-files.com/6448bf6f064020ce1b2ca19d/6448bf6f0640204bbb2ca41c_shawayo%20odd%20pages%20(4).png`,
       `https://media.geeksforgeeks.org/wp-content/uploads/20240618105133/User-Interface-Design-Stages-1.webp`,
@@ -110,6 +117,11 @@ const Services = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
+          style={{
+            scale,
+            opacity,
+            y,
+          }}
         >
           <motion.h2
             variants={itemVariants}

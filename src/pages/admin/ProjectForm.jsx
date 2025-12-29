@@ -13,7 +13,8 @@ const ProjectForm = ({ project, mode, onSubmit, onClose }) => {
     image2: '',
     image3: '',
     image4: '',
-    category: 'Web Development',
+    category: 'All',
+    orderNumber: 0,
     client: '',
     result: '',
     testimonial: '',
@@ -36,7 +37,8 @@ const ProjectForm = ({ project, mode, onSubmit, onClose }) => {
         image2: project.image2 || '',
         image3: project.image3 || '',
         image4: project.image4 || '',
-        category: project.category || 'Web Development',
+        category: project.category || 'All',
+        orderNumber: project.orderNumber || 0,
         client: project.client || '',
         result: project.result || '',
         testimonial: project.testimonial || '',
@@ -152,13 +154,27 @@ const ProjectForm = ({ project, mode, onSubmit, onClose }) => {
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
+                <option value="All">All</option>
                 <option value="Web Development">Web Development</option>
-                <option value="SaaS">SaaS</option>
-                <option value="Full-Stack">Full-Stack</option>
-                <option value="Mobile">Mobile</option>
-                <option value="E-Commerce">E-Commerce</option>
+                <option value="App Development">App Development</option>
+                <option value="Freelancing">Freelancing</option>
+                <option value="Personal Projects">Personal Projects</option>
               </select>
             </div>
+          </div>
+
+          {/* Row 2: Order Number */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">Display Order (Lower numbers appear first)</label>
+            <input
+              type="number"
+              name="orderNumber"
+              value={formData.orderNumber}
+              onChange={handleInputChange}
+              min="0"
+              className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="0"
+            />
           </div>
 
           {/* Description */}

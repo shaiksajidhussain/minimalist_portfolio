@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
+import { useInView, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import {
@@ -29,10 +29,17 @@ import {
 } from 'react-icons/si';
 
 const Skills = () => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [hoveredSkill, setHoveredSkill] = useState(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start center', 'end center'],
+  });
+  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
   const skills = [
     // Frontend
@@ -87,10 +94,18 @@ const Skills = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
+          style={{
+            scale,
+            opacity,
+            y,
+          }}
         >
           <motion.h2
             variants={itemVariants}
-            className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-12 text-center"
+            className="text-4xl sm:text-5xl font-bold mb-12 text-center"
+            style={{
+              color: theme === 'light' ? '#1f2937' : '#ffffff'
+            }}
           >
             Tech Stack
           </motion.h2>
@@ -111,7 +126,9 @@ const Skills = () => {
                       size={48}
                       className="transition-all duration-300 group-hover:scale-110"
                       style={{
-                        color: hoveredSkill === index ? colors.primary : colors.primary + '60',
+                        color: hoveredSkill === index 
+                          ? (theme === 'light' ? '#1f2937' : colors.primary)
+                          : (theme === 'light' ? '#4b5563' : colors.primary + '60'),
                       }}
                     />
                     {hoveredSkill === index && (
@@ -121,8 +138,11 @@ const Skills = () => {
                         className="absolute -bottom-8 left-1/2 -translate-x-1/2 z-10"
                       >
                         <div 
-                          className="text-white px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap shadow-lg"
-                          style={{ backgroundColor: colors.primary }}
+                          className="px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap shadow-lg"
+                          style={{ 
+                            backgroundColor: theme === 'light' ? colors.primary : colors.primary,
+                            color: theme === 'light' ? '#ffffff' : '#ffffff'
+                          }}
                         >
                           {skill.name}
                           <div 

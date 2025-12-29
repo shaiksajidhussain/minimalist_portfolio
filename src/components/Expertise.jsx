@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { FiMonitor, FiCode, FiSmartphone } from 'react-icons/fi';
@@ -10,6 +10,13 @@ const Expertise = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const { theme, colors } = useTheme();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start center', 'end center'],
+  });
+  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
   const expertise = [
     {
@@ -188,6 +195,11 @@ export default Expertise;`}
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
+          style={{
+            scale,
+            opacity,
+            y,
+          }}
         >
           <motion.h2
             variants={itemVariants}

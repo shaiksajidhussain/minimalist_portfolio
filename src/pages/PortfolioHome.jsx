@@ -23,6 +23,7 @@ import PricingEngagement from '../components/PricingEngagement';
 import WhyChooseMe from '../components/WhyChooseMe';
 import Availability from '../components/Availability';
 import CTAStrip from '../components/CTAStrip';
+import FAQ from '../components/FAQ';
 import config from '../config/api';
 
 const PortfolioHome = () => {
@@ -160,7 +161,7 @@ const PortfolioHome = () => {
         <CTAStrip />
         <Testimonials  />
         <Globe />
-      
+        <FAQ />
         <Contact />
         <Footer />
       </div>
