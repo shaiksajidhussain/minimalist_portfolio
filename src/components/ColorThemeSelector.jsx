@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTheme, COLOR_THEMES } from '../context/ThemeContext';
 import { FiDroplet } from 'react-icons/fi';
 
@@ -7,9 +7,25 @@ const ColorThemeSelector = () => {
     const theme = useTheme();
     const { colorTheme, changeColorTheme } = theme;
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+      };
+
+      if (isOpen) {
+        document.addEventListener('mousedown', handleClickOutside);
+      }
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [isOpen]);
 
     return (
-      <div className="relative z-40">
+      <div className="relative z-40" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 rounded-lg bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors flex items-center gap-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-zinc-700"

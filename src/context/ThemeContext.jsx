@@ -124,20 +124,6 @@ export const COLOR_THEMES = {
     dark: '#18181b',
     bg: '#fafafa',
   },
-  black: {
-    name: 'Black',
-    primary: '#1a1a1a',
-    light: '#f5f5f5',
-    dark: '#0a0a0a',
-    bg: '#fafafa',
-  },
-  gray: {
-    name: 'Gray',
-    primary: '#6b7280',
-    light: '#f9fafb',
-    dark: '#111827',
-    bg: '#f9fafb',
-  },
   stone: {
     name: 'Stone',
     primary: '#78716c',
@@ -166,13 +152,7 @@ export const COLOR_THEMES = {
     dark: '#0d4f4a',
     bg: '#ccfbf1',
   },
-  orange: {
-    name: 'Orange Dark',
-    primary: '#ea580c',
-    light: '#ffedd5',
-    dark: '#7c2d12',
-    bg: '#ffedd5',
-  },
+
   yellow: {
     name: 'Yellow',
     primary: '#eab308',
@@ -243,55 +223,7 @@ export const COLOR_THEMES = {
     dark: '#f5e6d3',
     bg: '#fef1e4',
   },
-  // Gradient Themes
-  sunset: {
-    name: 'Sunset Gradient',
-    primary: '#ff6b6b',
-    light: '#ffe66d',
-    dark: '#c92a2a',
-    bg: '#ffffff',
-    gradient: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #48dbfb 100%)',
-  },
-  ocean: {
-    name: 'Ocean Gradient',
-    primary: '#0066cc',
-    light: '#00d4ff',
-    dark: '#003d99',
-    bg: '#ffffff',
-    gradient: 'linear-gradient(135deg, #001f3f 0%, #0066cc 50%, #00d4ff 100%)',
-  },
-  forest: {
-    name: 'Forest Gradient',
-    primary: '#065f46',
-    light: '#10b981',
-    dark: '#064e3b',
-    bg: '#ffffff',
-    gradient: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #10b981 100%)',
-  },
-  cosmic: {
-    name: 'Cosmic Gradient',
-    primary: '#8b5cf6',
-    light: '#c4b5fd',
-    dark: '#5b21b6',
-    bg: '#ffffff',
-    gradient: 'linear-gradient(135deg, #5b21b6 0%, #8b5cf6 50%, #ec4899 100%)',
-  },
-  peach: {
-    name: 'Peach Gradient',
-    primary: '#ff9770',
-    light: '#ffd4b4',
-    dark: '#ff7a45',
-    bg: '#ffffff',
-    gradient: 'linear-gradient(135deg, #ff7a45 0%, #ff9770 50%, #ffc6a0 100%)',
-  },
-  aurora: {
-    name: 'Aurora Gradient',
-    primary: '#06b6d4',
-    light: '#67e8f9',
-    dark: '#0e919b',
-    bg: '#ffffff',
-    gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 50%, #14b8a6 100%)',
-  },
+
 };
 
 export const useTheme = () => {
