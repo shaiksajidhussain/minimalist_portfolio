@@ -69,6 +69,7 @@ const About = () => {
             start: 'top top',
             end: () => `+=${Math.round(window.innerHeight * (isMobile ? 0.95 : 1.2))}`,
             pin: true,
+            pinSpacing: true,
             scrub: 0.85,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -117,7 +118,7 @@ const About = () => {
   );
 
   return (
-    <section ref={rootRef} id="about" className="relative overflow-hidden">
+    <section ref={rootRef} id="about" className="relative min-h-screen overflow-hidden bg-[#f4efe6]">
       <div className="relative min-h-screen flex flex-col">
         <div className="pointer-events-none relative h-[32vh] min-h-[150px] lg:h-[36vh] shrink-0 z-[1]">
           <div

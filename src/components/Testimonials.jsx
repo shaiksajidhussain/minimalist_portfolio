@@ -97,6 +97,7 @@ const Testimonials = () => {
             start: 'top top',
             end: '+=180%',
             pin: true,
+            pinSpacing: true,
             scrub: 0.6,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -124,7 +125,7 @@ const Testimonials = () => {
   );
 
   return (
-    <section ref={sectionRef} id="testimonials" className="relative h-screen">
+    <section ref={sectionRef} id="testimonials" className="relative h-screen bg-[#f4efe6]">
       <div className="px-6 sm:px-10 pt-24 sm:pt-28 pb-4 max-w-6xl mx-auto text-center">
         <p
           className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3"

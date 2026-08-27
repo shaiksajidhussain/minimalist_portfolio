@@ -23,6 +23,7 @@ const RailPin = () => {
           start: 'top top',
           end: () => `+=${Math.max(track.scrollWidth, window.innerHeight * 1.8)}`,
           pin: true,
+          pinSpacing: true,
           scrub: 0.8,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -33,7 +34,7 @@ const RailPin = () => {
   );
 
   return (
-    <section ref={sectionRef} className="relative h-screen overflow-hidden">
+    <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[#f4efe6]">
       <div className="px-6 sm:px-10 pt-24 pb-6 max-w-6xl">
         <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3" data-reveal-copy>
           Experience

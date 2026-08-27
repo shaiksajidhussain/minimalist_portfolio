@@ -16,9 +16,26 @@ const LenisGsapBridge = () => {
 
       gsap.ticker.add(onTick);
 
+      const refresh = () => {
+        lenis.resize();
+        ScrollTrigger.refresh();
+      };
+
+      const onLoad = () => refresh();
+      window.addEventListener('load', onLoad);
+      const fontsReady = document.fonts?.ready?.then(refresh);
+      const later = window.setTimeout(refresh, 250);
+      const afterPaint = window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(refresh);
+      });
+
       return () => {
         gsap.ticker.remove(onTick);
         lenis.off('scroll', ScrollTrigger.update);
+        window.removeEventListener('load', onLoad);
+        window.clearTimeout(later);
+        window.cancelAnimationFrame(afterPaint);
+        fontsReady?.catch?.(() => {});
       };
     },
     { dependencies: [lenis] }

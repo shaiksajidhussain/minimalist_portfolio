@@ -10,4 +10,9 @@ gsap.defaults({
   duration: 0.8,
 });
 
+ScrollTrigger.config({
+  ignoreMobileResize: true,
+  autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load',
+});
+
 export { gsap, ScrollTrigger, MotionPathPlugin, useGSAP };

@@ -198,6 +198,24 @@ body {
   background: #fffcf7;
 }
 
+.svc-unfold-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.svc-unfold-body-inner {
+  overflow: hidden;
+}
+
+.svc-unfold-item.is-open .svc-unfold-body {
+  grid-template-rows: 1fr;
+}
+
+.svc-unfold-item.is-open .svc-unfold-kicker {
+  color: #d4af37;
+}
+
 .liquid-rail {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;

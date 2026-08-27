@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { gsap, ScrollTrigger, useGSAP } from '../../lib/gsap';
-import { GOLD, SERVICES } from '../../data/services';
+import { ScrollTrigger, useGSAP } from '../../lib/gsap';
+import { SERVICES } from '../../data/services';
 import { RevealHeading, useTextReveal } from '../../hooks/useTextReveal.jsx';
 
 const UnfoldPin = () => {
@@ -10,25 +10,29 @@ const UnfoldPin = () => {
   useGSAP(
     () => {
       const section = sectionRef.current;
-      const bodies = section?.querySelectorAll('.svc-unfold-body');
-      if (!section || !bodies?.length) return;
+      const items = section?.querySelectorAll('.svc-unfold-item');
+      if (!section || !items?.length) return;
 
-      gsap.set(bodies, { height: 0, autoAlpha: 0 });
-      gsap.set(bodies[0], { height: 'auto', autoAlpha: 1 });
+      items[0]?.classList.add('is-open');
 
       let current = 0;
       ScrollTrigger.create({
         trigger: section,
         start: 'top top',
-        end: () => `+=${SERVICES.length * 240}`,
+        end: () => `+=${Math.max(window.innerHeight * 1.4, SERVICES.length * 280)}`,
         pin: true,
+        pinSpacing: true,
         scrub: 0.6,
         anticipatePin: 1,
+        invalidateOnRefresh: true,
         onUpdate: (self) => {
-          const next = Math.min(SERVICES.length - 1, Math.floor(self.progress * SERVICES.length));
+          const next = Math.min(
+            SERVICES.length - 1,
+            Math.floor(self.progress * SERVICES.length)
+          );
           if (next === current) return;
-          gsap.to(bodies[current], { height: 0, autoAlpha: 0, duration: 0.28, overwrite: 'auto' });
-          gsap.to(bodies[next], { height: 'auto', autoAlpha: 1, duration: 0.32, overwrite: 'auto' });
+          items[current]?.classList.remove('is-open');
+          items[next]?.classList.add('is-open');
           current = next;
         },
       });
@@ -37,7 +41,7 @@ const UnfoldPin = () => {
   );
 
   return (
-    <section ref={sectionRef} className="relative h-screen overflow-hidden">
+    <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[#f4efe6]">
       <div className="max-w-4xl mx-auto px-6 sm:px-10 pt-24 h-full flex flex-col">
         <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3" data-reveal-copy>
           06 — Unfold
@@ -46,15 +50,22 @@ const UnfoldPin = () => {
           Services
         </RevealHeading>
 
-        <div>
-          {SERVICES.map((item) => (
-            <article key={item.title} className="liquid-card px-5 py-4 mb-3">
+        <div className="flex-1 overflow-y-auto pb-8">
+          {SERVICES.map((item, index) => (
+            <article
+              key={item.title}
+              className={`svc-unfold-item liquid-card px-5 py-4 mb-3 ${index === 0 ? 'is-open' : ''}`}
+            >
               <div className="flex items-baseline justify-between gap-4">
                 <h3 className="font-serif text-2xl sm:text-3xl text-[#1c1917]">{item.title}</h3>
-                <span className="font-mono text-[11px]" style={{ color: GOLD }}>{item.kicker}</span>
+                <span className="svc-unfold-kicker font-mono text-[11px] shrink-0 text-stone-400">
+                  {item.kicker}
+                </span>
               </div>
-              <div className="svc-unfold-body overflow-hidden">
-                <p className="pt-3 pb-2 text-zinc-600 leading-relaxed max-w-xl">{item.description}</p>
+              <div className="svc-unfold-body">
+                <div className="svc-unfold-body-inner">
+                  <p className="pt-3 pb-1 text-zinc-600 leading-relaxed max-w-xl">{item.description}</p>
+                </div>
               </div>
             </article>
           ))}

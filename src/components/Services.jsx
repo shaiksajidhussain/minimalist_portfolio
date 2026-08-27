@@ -23,8 +23,12 @@ const Services = () => {
 
   useEffect(() => {
     localStorage.setItem('services-style', styleId);
-    const id = window.requestAnimationFrame(() => ScrollTrigger.refresh());
-    return () => window.cancelAnimationFrame(id);
+    const frame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+    const later = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(later);
+    };
   }, [styleId]);
 
   const Active = STYLES.find((style) => style.id === styleId)?.Component || IndexPin;

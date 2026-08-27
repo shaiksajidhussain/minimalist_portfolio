@@ -43,8 +43,10 @@ const IndexPin = () => {
         start: 'top top',
         end: () => `+=${SERVICES.length * 280}`,
         pin: true,
+        pinSpacing: true,
         scrub: 0.6,
         anticipatePin: 1,
+        invalidateOnRefresh: true,
         onUpdate: (self) => {
           const next = Math.min(SERVICES.length - 1, Math.floor(self.progress * SERVICES.length));
           show(next);
@@ -55,7 +57,7 @@ const IndexPin = () => {
   );
 
   return (
-    <section ref={sectionRef} className="relative h-screen overflow-hidden">
+    <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[#f4efe6]">
       <div className="h-full max-w-6xl mx-auto px-6 sm:px-10 pt-24 pb-10 grid lg:grid-cols-[0.8fr_1.2fr] gap-10">
         <div className="flex flex-col justify-between">
           <div>
