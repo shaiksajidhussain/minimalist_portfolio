@@ -1,6 +1,4 @@
-import { useRef } from 'react';
-import { RevealHeading, useTextReveal } from '../hooks/useTextReveal.jsx';
-import SnapRail from './SnapRail';
+import ScrollRail from './ScrollRail';
 
 const reasons = [
   {
@@ -26,34 +24,21 @@ const reasons = [
 ];
 
 const WhyChooseMe = () => {
-  const sectionRef = useRef(null);
-  useTextReveal(sectionRef);
-
   return (
-    <section ref={sectionRef} id="why-choose-me" className="relative py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <RevealHeading className="text-4xl sm:text-5xl font-semibold text-zinc-900 mb-4">
-            Why Choose Me
-          </RevealHeading>
-          <p className="text-lg text-zinc-500" data-reveal-copy>
-            What sets me apart in the market
+    <ScrollRail id="why-choose-me" kicker="Why me" title="Why Choose Me">
+      {reasons.map((reason, index) => (
+        <article
+          key={reason.title}
+          className="liquid-card w-[min(84vw,380px)] shrink-0 p-7 sm:p-8 min-h-[42vh] flex flex-col"
+        >
+          <p className="font-mono text-[11px] tracking-[0.28em] text-zinc-400 mb-6">
+            {String(index + 1).padStart(2, '0')}
           </p>
-        </div>
-
-        <SnapRail cols="three">
-          {reasons.map((reason) => (
-            <article
-              key={reason.title}
-              className="liquid-card snap-center shrink-0 w-[min(82vw,340px)] min-h-[200px] p-6 md:w-full md:min-w-0 md:shrink md:h-auto"
-            >
-              <h3 className="text-lg font-semibold text-zinc-900 mb-2">{reason.title}</h3>
-              <p className="text-sm text-zinc-500 leading-relaxed">{reason.description}</p>
-            </article>
-          ))}
-        </SnapRail>
-      </div>
-    </section>
+          <h3 className="font-serif text-3xl sm:text-4xl text-[#1c1917] mb-4">{reason.title}</h3>
+          <p className="text-zinc-600 leading-relaxed">{reason.description}</p>
+        </article>
+      ))}
+    </ScrollRail>
   );
 };
 

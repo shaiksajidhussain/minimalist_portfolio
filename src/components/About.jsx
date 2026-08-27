@@ -66,12 +66,9 @@ const About = () => {
             defaults: { ease: 'none' },
             scrollTrigger: {
               trigger: root,
-              start: 'top top',
-              end: () => `+=${Math.round(window.innerHeight * (isMobile ? 0.95 : 1.2))}`,
-              pin: true,
-              pinSpacing: true,
+              start: 'top 70%',
+              end: 'bottom top',
               scrub: 0.85,
-              anticipatePin: 1,
               invalidateOnRefresh: true,
             },
           });

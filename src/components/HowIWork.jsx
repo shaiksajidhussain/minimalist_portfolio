@@ -1,6 +1,4 @@
-import { useRef } from 'react';
-import { RevealHeading, useTextReveal } from '../hooks/useTextReveal.jsx';
-import SnapRail from './SnapRail';
+import ScrollRail from './ScrollRail';
 
 const steps = [
   {
@@ -26,35 +24,19 @@ const steps = [
 ];
 
 const HowIWork = () => {
-  const sectionRef = useRef(null);
-  useTextReveal(sectionRef);
-
   return (
-    <section ref={sectionRef} id="how-i-work" className="relative py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-14">
-          <RevealHeading className="text-4xl sm:text-5xl font-semibold text-zinc-900 mb-4">
-            How I Work
-          </RevealHeading>
-          <p className="text-lg text-zinc-500" data-reveal-copy>
-            A clear, transparent process tailored to your project needs
-          </p>
-        </div>
-
-        <SnapRail cols="four">
-          {steps.map((step) => (
-            <article
-              key={step.number}
-              className="liquid-card snap-center shrink-0 w-[min(82vw,340px)] min-h-[230px] p-6 md:w-full md:min-w-0 md:shrink md:h-auto"
-            >
-              <p className="text-xs tracking-[0.2em] text-zinc-500 mb-4">{step.number}</p>
-              <h3 className="text-xl font-semibold text-zinc-900 mb-2">{step.title}</h3>
-              <p className="text-sm text-zinc-500 leading-relaxed">{step.description}</p>
-            </article>
-          ))}
-        </SnapRail>
-      </div>
-    </section>
+    <ScrollRail id="how-i-work" kicker="Process" title="How I Work">
+      {steps.map((step) => (
+        <article
+          key={step.number}
+          className="liquid-card w-[min(84vw,380px)] shrink-0 p-7 sm:p-8 min-h-[42vh] flex flex-col"
+        >
+          <p className="font-mono text-[11px] tracking-[0.28em] text-zinc-400 mb-6">{step.number}</p>
+          <h3 className="font-serif text-3xl sm:text-4xl text-[#1c1917] mb-4">{step.title}</h3>
+          <p className="text-zinc-600 leading-relaxed">{step.description}</p>
+        </article>
+      ))}
+    </ScrollRail>
   );
 };
 

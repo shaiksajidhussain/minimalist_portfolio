@@ -1,11 +1,9 @@
 import { useRef } from 'react';
 import { ScrollTrigger, onLayoutReady, useGSAP } from '../../lib/gsap';
 import { SERVICES } from '../../data/services';
-import { RevealHeading, useTextReveal } from '../../hooks/useTextReveal.jsx';
 
 const UnfoldPin = () => {
   const sectionRef = useRef(null);
-  useTextReveal(sectionRef);
 
   useGSAP(
     (_, contextSafe) => {
@@ -47,12 +45,12 @@ const UnfoldPin = () => {
   return (
     <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[#f4efe6]">
       <div className="max-w-4xl mx-auto px-6 sm:px-10 pt-24 h-full flex flex-col">
-        <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3" data-reveal-copy>
-          06 — Unfold
-        </p>
-        <RevealHeading className="font-serif text-5xl sm:text-7xl text-[#1c1917] tracking-tight mb-8">
+        <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3">
           Services
-        </RevealHeading>
+        </p>
+        <h2 className="font-serif text-5xl sm:text-7xl text-[#1c1917] tracking-tight mb-8">
+          What I do
+        </h2>
 
         <div className="flex-1 overflow-y-auto pb-8">
           {SERVICES.map((item, index) => (
