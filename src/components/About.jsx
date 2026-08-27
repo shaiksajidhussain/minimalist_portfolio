@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { gsap, onLayoutReady, useGSAP } from '../lib/gsap';
+import { gsap, nodes, onLayoutReady, useGSAP } from '../lib/gsap';
 
 const PATH =
   'M110 95 C 310 360, 700 55, 1040 270 C 1220 390, 880 470, 720 510';
@@ -45,7 +45,7 @@ const About = () => {
 
           if (reduceMotion) {
             parkPlane(1);
-            gsap.set([plane, kicker, note, copy, dot], { autoAlpha: 1, y: 0, scale: 1 });
+            gsap.set(nodes(plane, kicker, note, copy, dot), { autoAlpha: 1, y: 0, scale: 1 });
             if (draw) {
               const len = draw.getTotalLength();
               gsap.set(draw, { strokeDasharray: len, strokeDashoffset: 0 });
@@ -54,8 +54,8 @@ const About = () => {
           }
 
           parkPlane(0);
-          gsap.set(plane, { autoAlpha: 0 });
-          gsap.set(dot, { scale: 0, transformOrigin: '50% 50%' });
+          if (plane) gsap.set(plane, { autoAlpha: 0 });
+          if (dot) gsap.set(dot, { scale: 0, transformOrigin: '50% 50%' });
 
           if (draw) {
             const len = draw.getTotalLength();
@@ -76,32 +76,34 @@ const About = () => {
             },
           });
 
-          tl.to(plane, { autoAlpha: 1, duration: 0.06 }, 0);
+          if (plane) tl.to(plane, { autoAlpha: 1, duration: 0.06 }, 0);
 
           if (draw) {
             tl.to(draw, { strokeDashoffset: 0, duration: 0.62 }, 0);
           }
 
-          tl.to(
-            plane,
-            {
-              motionPath: {
-                path,
-                align: path,
-                alignOrigin: [0.5, 0.5],
-                autoRotate: true,
-                start: 0,
-                end: 1,
+          if (plane && path) {
+            tl.to(
+              plane,
+              {
+                motionPath: {
+                  path,
+                  align: path,
+                  alignOrigin: [0.5, 0.5],
+                  autoRotate: true,
+                  start: 0,
+                  end: 1,
+                },
+                duration: 0.7,
               },
-              duration: 0.7,
-            },
-            0.02
-          );
+              0.02
+            );
+          }
 
-          tl.fromTo(dot, { scale: 0 }, { scale: 1, duration: 0.1, ease: 'back.out(2)' }, 0.58);
-          tl.fromTo(kicker, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.12, ease: 'power2.out' }, 0.6);
-          tl.fromTo(copy, { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.22, ease: 'power3.out' }, 0.64);
-          tl.fromTo(note, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.16, ease: 'power2.out' }, 0.82);
+          if (dot) tl.fromTo(dot, { scale: 0 }, { scale: 1, duration: 0.1, ease: 'back.out(2)' }, 0.58);
+          if (kicker) tl.fromTo(kicker, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.12, ease: 'power2.out' }, 0.6);
+          if (copy) tl.fromTo(copy, { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.22, ease: 'power3.out' }, 0.64);
+          if (note) tl.fromTo(note, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.16, ease: 'power2.out' }, 0.82);
         };
 
         mm.add('(prefers-reduced-motion: reduce)', () => setup(true, false));

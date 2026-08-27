@@ -18,15 +18,14 @@ const LenisGsapBridge = () => {
       const onResize = () => refresh();
       window.addEventListener('resize', onResize);
 
-      if (document.readyState === 'complete') {
-        refresh();
-        window.requestAnimationFrame(refresh);
-      } else {
-        window.addEventListener('load', refresh, { once: true });
-      }
+      const fonts = document.fonts?.ready ?? Promise.resolve();
+      fonts.finally(() => {
+        if (document.readyState === 'complete') refresh();
+        else window.addEventListener('load', refresh, { once: true });
+        window.setTimeout(refresh, 200);
+      });
 
-      document.fonts?.ready?.then(refresh);
-      const later = window.setTimeout(refresh, 500);
+      const later = window.setTimeout(refresh, 1500);
 
       return () => {
         lenis.off('scroll', ScrollTrigger.update);

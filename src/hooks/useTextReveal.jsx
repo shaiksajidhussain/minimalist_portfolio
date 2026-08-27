@@ -1,4 +1,4 @@
-import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap';
+import { gsap, nodes, ScrollTrigger, useGSAP } from '../lib/gsap';
 
 export const RevealHeading = ({ as: Tag = 'h2', children, className = '' }) => {
   const words = String(children).trim().split(/\s+/);
@@ -22,16 +22,15 @@ export const useTextReveal = (scopeRef, deps = []) => {
       if (!root) return;
 
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const headings = root.querySelectorAll('[data-reveal] .reveal-word-inner');
-      const copies = root.querySelectorAll('[data-reveal-copy]');
-      const blocks = root.querySelectorAll('[data-reveal-block]');
-
-      gsap.set([headings, copies, blocks], { clearProps: 'transform,opacity,visibility', autoAlpha: 1, y: 0, yPercent: 0 });
+      const headingEls = nodes(root.querySelectorAll('[data-reveal] .reveal-word-inner'));
+      const copyEls = nodes(root.querySelectorAll('[data-reveal-copy]'));
+      const blockEls = nodes(root.querySelectorAll('[data-reveal-block]'));
 
       if (reduce) return;
 
       root.querySelectorAll('[data-reveal]').forEach((heading) => {
-        const words = heading.querySelectorAll('.reveal-word-inner');
+        const words = nodes(heading.querySelectorAll('.reveal-word-inner'));
+        if (!words.length) return;
         gsap.from(words, {
           yPercent: 110,
           stagger: 0.04,
@@ -47,7 +46,7 @@ export const useTextReveal = (scopeRef, deps = []) => {
         });
       });
 
-      copies.forEach((el) => {
+      copyEls.forEach((el) => {
         gsap.from(el, {
           y: 14,
           autoAlpha: 0,
@@ -63,8 +62,8 @@ export const useTextReveal = (scopeRef, deps = []) => {
         });
       });
 
-      if (blocks.length) {
-        ScrollTrigger.batch(blocks, {
+      if (blockEls.length) {
+        ScrollTrigger.batch(blockEls, {
           start: 'top 92%',
           once: true,
           onEnter: (els) => {

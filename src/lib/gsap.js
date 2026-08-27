@@ -1,9 +1,10 @@
 import gsap from 'gsap';
+import { CSSPlugin } from 'gsap/CSSPlugin';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 import { useGSAP } from '@gsap/react';
 
-gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP);
+gsap.registerPlugin(CSSPlugin, ScrollTrigger, MotionPathPlugin, useGSAP);
 
 gsap.defaults({
   ease: 'power3.out',
@@ -15,35 +16,42 @@ ScrollTrigger.config({
   autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load',
 });
 
+export const nodes = (...vals) =>
+  vals.flatMap((value) => gsap.utils.toArray(value)).filter((el) => el && el.nodeType === 1);
+
 export const onLayoutReady = (fn) => {
-  let called = false;
+  let cancelled = false;
+  let done = false;
   let raf1 = 0;
   let raf2 = 0;
-  let timeout = 0;
 
   const run = () => {
-    if (called) return;
-    called = true;
-    fn();
+    if (cancelled || done) return;
+    done = true;
+    raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => {
+        if (!cancelled) fn();
+      });
+    });
   };
 
-  if (document.readyState === 'complete') {
-    raf1 = window.requestAnimationFrame(() => {
-      raf2 = window.requestAnimationFrame(run);
+  const start = () => {
+    const fonts = document.fonts?.ready ?? Promise.resolve();
+    fonts.finally(() => {
+      if (document.readyState === 'complete') run();
+      else window.addEventListener('load', run, { once: true });
     });
-  } else {
-    window.addEventListener('load', run, { once: true });
-  }
+  };
 
-  timeout = window.setTimeout(run, 400);
-  document.fonts?.ready?.then(run);
+  start();
+  const fallback = window.setTimeout(run, 1500);
 
   return () => {
-    called = true;
+    cancelled = true;
     window.removeEventListener('load', run);
     window.cancelAnimationFrame(raf1);
     window.cancelAnimationFrame(raf2);
-    window.clearTimeout(timeout);
+    window.clearTimeout(fallback);
   };
 };
 
