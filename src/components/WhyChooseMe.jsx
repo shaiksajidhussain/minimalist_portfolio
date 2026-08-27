@@ -41,12 +41,11 @@ const WhyChooseMe = () => {
           </p>
         </div>
 
-        <SnapRail cols="md:grid-cols-2 lg:grid-cols-3">
+        <SnapRail cols="three">
           {reasons.map((reason) => (
             <article
               key={reason.title}
-              className="liquid-card snap-center shrink-0 w-[min(82vw,340px)] min-h-[200px] p-6 md:w-auto md:min-w-0"
-              data-reveal-block
+              className="liquid-card snap-center shrink-0 w-[min(82vw,340px)] min-h-[200px] p-6 md:w-full md:min-w-0 md:shrink md:h-auto"
             >
               <h3 className="text-lg font-semibold text-zinc-900 mb-2">{reason.title}</h3>
               <p className="text-sm text-zinc-500 leading-relaxed">{reason.description}</p>

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { gsap, useGSAP } from '../../lib/gsap';
+import { gsap, onLayoutReady, useGSAP } from '../../lib/gsap';
 import { GOLD } from '../../data/skills';
 import { EXPERIENCE } from '../../data/experience';
 import { RevealHeading, useTextReveal } from '../../hooks/useTextReveal.jsx';
@@ -10,25 +10,29 @@ const RailPin = () => {
   useTextReveal(sectionRef);
 
   useGSAP(
-    () => {
+    (_, contextSafe) => {
       const section = sectionRef.current;
       const track = trackRef.current;
       if (!section || !track) return;
 
-      gsap.to(track, {
-        x: () => -(track.scrollWidth - section.offsetWidth + 48),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: () => `+=${Math.max(track.scrollWidth, window.innerHeight * 1.8)}`,
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.8,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
+      const boot = contextSafe(() => {
+        gsap.to(track, {
+          x: () => -(track.scrollWidth - section.offsetWidth + 48),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: () => `+=${Math.max(track.scrollWidth, window.innerHeight * 1.8)}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.8,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
       });
+
+      return onLayoutReady(boot);
     },
     { scope: sectionRef }
   );

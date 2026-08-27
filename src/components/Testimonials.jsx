@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { gsap, useGSAP } from '../lib/gsap';
+import { gsap, onLayoutReady, useGSAP } from '../lib/gsap';
 import { GOLD } from '../data/skills';
 import { RevealHeading, useTextReveal } from '../hooks/useTextReveal.jsx';
 
@@ -37,89 +37,96 @@ const Testimonials = () => {
   useTextReveal(sectionRef);
 
   useGSAP(
-    () => {
+    (_, contextSafe) => {
       const section = sectionRef.current;
       const stage = stageRef.current;
       const cards = gsap.utils.toArray('.testimonial-card');
       if (!section || !stage || cards.length < 2) return;
 
-      const mid = (cards.length - 1) / 2;
-      const mm = gsap.matchMedia();
+      let mm;
+      const boot = contextSafe(() => {
+        const mid = (cards.length - 1) / 2;
+        mm = gsap.matchMedia();
 
-      const slot = () => cards[0]?.offsetWidth || 300;
+        const slot = () => cards[0]?.offsetWidth || 300;
 
-      const stackedVars = (index) => {
-        const offset = index - mid;
-        return {
-          x: 0,
-          y: Math.abs(offset) * 6,
-          rotate: offset * 1.2,
-          scale: 1 - Math.abs(offset) * 0.02,
-          zIndex: 10 - Math.abs(offset),
-        };
-      };
-
-      const openVars = (index) => {
-        const offset = index - mid;
-        const isMobile = window.innerWidth < 768;
-        const width = slot();
-
-        if (isMobile) {
+        const stackedVars = (index) => {
+          const offset = index - mid;
           return {
-            x: offset * 18,
-            y: offset * (width * 0.72),
-            rotate: offset * 3,
-            scale: 1,
-            zIndex: 10 + index,
+            x: 0,
+            y: Math.abs(offset) * 6,
+            rotate: offset * 1.2,
+            scale: 1 - Math.abs(offset) * 0.02,
+            zIndex: 10 - Math.abs(offset),
           };
-        }
-
-        return {
-          x: offset * width * 0.96,
-          y: Math.abs(offset) * 16,
-          rotate: offset * 4,
-          scale: 1 - Math.abs(offset) * 0.03,
-          zIndex: 10 - Math.abs(offset),
         };
-      };
 
-      mm.add('(prefers-reduced-motion: reduce)', () => {
-        cards.forEach((card, index) => gsap.set(card, openVars(index)));
-      });
+        const openVars = (index) => {
+          const offset = index - mid;
+          const isMobile = window.innerWidth < 768;
+          const width = slot();
 
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
-        cards.forEach((card, index) => gsap.set(card, stackedVars(index)));
+          if (isMobile) {
+            return {
+              x: offset * 18,
+              y: offset * (width * 0.72),
+              rotate: offset * 3,
+              scale: 1,
+              zIndex: 10 + index,
+            };
+          }
 
-        const tl = gsap.timeline({
-          defaults: { ease: 'none' },
-          scrollTrigger: {
-            trigger: section,
-            start: 'top top',
-            end: '+=180%',
-            pin: true,
-            pinSpacing: true,
-            scrub: 0.6,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
+          return {
+            x: offset * width * 0.96,
+            y: Math.abs(offset) * 16,
+            rotate: offset * 4,
+            scale: 1 - Math.abs(offset) * 0.03,
+            zIndex: 10 - Math.abs(offset),
+          };
+        };
+
+        mm.add('(prefers-reduced-motion: reduce)', () => {
+          cards.forEach((card, index) => gsap.set(card, openVars(index)));
         });
 
-        cards.forEach((card, index) => {
-          tl.to(
-            card,
-            {
-              x: () => openVars(index).x,
-              y: () => openVars(index).y,
-              rotate: () => openVars(index).rotate,
-              scale: () => openVars(index).scale,
-              duration: 1,
+        mm.add('(prefers-reduced-motion: no-preference)', () => {
+          cards.forEach((card, index) => gsap.set(card, stackedVars(index)));
+
+          const tl = gsap.timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top',
+              end: '+=180%',
+              pin: true,
+              pinSpacing: true,
+              scrub: 0.6,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
             },
-            0
-          );
+          });
+
+          cards.forEach((card, index) => {
+            tl.to(
+              card,
+              {
+                x: () => openVars(index).x,
+                y: () => openVars(index).y,
+                rotate: () => openVars(index).rotate,
+                scale: () => openVars(index).scale,
+                duration: 1,
+              },
+              0
+            );
+          });
         });
       });
 
-      return () => mm.revert();
+      const stop = onLayoutReady(boot);
+      return () => {
+        stop();
+        mm?.revert();
+      };
     },
     { scope: sectionRef }
   );

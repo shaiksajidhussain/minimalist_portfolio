@@ -41,12 +41,11 @@ const HowIWork = () => {
           </p>
         </div>
 
-        <SnapRail cols="md:grid-cols-2 lg:grid-cols-4">
+        <SnapRail cols="four">
           {steps.map((step) => (
             <article
               key={step.number}
-              className="liquid-card snap-center shrink-0 w-[min(82vw,340px)] min-h-[230px] p-6 md:w-auto md:min-w-0"
-              data-reveal-block
+              className="liquid-card snap-center shrink-0 w-[min(82vw,340px)] min-h-[230px] p-6 md:w-full md:min-w-0 md:shrink md:h-auto"
             >
               <p className="text-xs tracking-[0.2em] text-zinc-500 mb-4">{step.number}</p>
               <h3 className="text-xl font-semibold text-zinc-900 mb-2">{step.title}</h3>

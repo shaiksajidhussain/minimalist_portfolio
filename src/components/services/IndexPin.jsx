@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { gsap, ScrollTrigger, useGSAP } from '../../lib/gsap';
+import { gsap, ScrollTrigger, onLayoutReady, useGSAP } from '../../lib/gsap';
 import { GOLD, SERVICES } from '../../data/services';
 import { RevealHeading, useTextReveal } from '../../hooks/useTextReveal.jsx';
 
@@ -12,46 +12,50 @@ const IndexPin = () => {
   useTextReveal(sectionRef);
 
   useGSAP(
-    () => {
+    (_, contextSafe) => {
       const section = sectionRef.current;
       if (!section) return;
 
-      gsap.set(imageRefs.current, { autoAlpha: 0, scale: 1.08 });
-      gsap.set(imageRefs.current[0], { autoAlpha: 1, scale: 1 });
+      const boot = contextSafe(() => {
+        gsap.set(imageRefs.current, { autoAlpha: 0, scale: 1.08 });
+        gsap.set(imageRefs.current[0], { autoAlpha: 1, scale: 1 });
 
-      let current = 0;
-      const show = (next) => {
-        if (next === current) return;
-        gsap.to(imageRefs.current[current], { autoAlpha: 0, scale: 1.06, duration: 0.4, ease: 'power2.inOut' });
-        gsap.fromTo(
-          imageRefs.current[next],
-          { autoAlpha: 0, scale: 1.08 },
-          { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
-        );
-        const item = SERVICES[next];
-        if (kickerRef.current) kickerRef.current.textContent = item.kicker;
-        if (titleRef.current) titleRef.current.textContent = item.title;
-        if (copyRef.current) copyRef.current.textContent = item.description;
-        section.querySelectorAll('.svc-index-num').forEach((el, i) => {
-          el.style.color = i === next ? GOLD : '#a8a29e';
+        let current = 0;
+        const show = (next) => {
+          if (next === current) return;
+          gsap.to(imageRefs.current[current], { autoAlpha: 0, scale: 1.06, duration: 0.4, ease: 'power2.inOut' });
+          gsap.fromTo(
+            imageRefs.current[next],
+            { autoAlpha: 0, scale: 1.08 },
+            { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
+          );
+          const item = SERVICES[next];
+          if (kickerRef.current) kickerRef.current.textContent = item.kicker;
+          if (titleRef.current) titleRef.current.textContent = item.title;
+          if (copyRef.current) copyRef.current.textContent = item.description;
+          section.querySelectorAll('.svc-index-num').forEach((el, i) => {
+            el.style.color = i === next ? GOLD : '#a8a29e';
+          });
+          current = next;
+        };
+
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${SERVICES.length * 280}`,
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const next = Math.min(SERVICES.length - 1, Math.floor(self.progress * SERVICES.length));
+            show(next);
+          },
         });
-        current = next;
-      };
-
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: () => `+=${SERVICES.length * 280}`,
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.6,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const next = Math.min(SERVICES.length - 1, Math.floor(self.progress * SERVICES.length));
-          show(next);
-        },
       });
+
+      return onLayoutReady(boot);
     },
     { scope: sectionRef }
   );

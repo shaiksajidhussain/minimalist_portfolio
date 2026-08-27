@@ -1,5 +1,5 @@
 import { ReactLenis, useLenis } from 'lenis/react';
-import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap';
+import { ScrollTrigger, useGSAP } from '../lib/gsap';
 
 const LenisGsapBridge = () => {
   const lenis = useLenis();
@@ -10,32 +10,29 @@ const LenisGsapBridge = () => {
 
       lenis.on('scroll', ScrollTrigger.update);
 
-      const onTick = (time) => {
-        lenis.raf(time * 1000);
-      };
-
-      gsap.ticker.add(onTick);
-
       const refresh = () => {
         lenis.resize();
         ScrollTrigger.refresh();
       };
 
-      const onLoad = () => refresh();
-      window.addEventListener('load', onLoad);
-      const fontsReady = document.fonts?.ready?.then(refresh);
-      const later = window.setTimeout(refresh, 250);
-      const afterPaint = window.requestAnimationFrame(() => {
+      const onResize = () => refresh();
+      window.addEventListener('resize', onResize);
+
+      if (document.readyState === 'complete') {
+        refresh();
         window.requestAnimationFrame(refresh);
-      });
+      } else {
+        window.addEventListener('load', refresh, { once: true });
+      }
+
+      document.fonts?.ready?.then(refresh);
+      const later = window.setTimeout(refresh, 500);
 
       return () => {
-        gsap.ticker.remove(onTick);
         lenis.off('scroll', ScrollTrigger.update);
-        window.removeEventListener('load', onLoad);
+        window.removeEventListener('resize', onResize);
+        window.removeEventListener('load', refresh);
         window.clearTimeout(later);
-        window.cancelAnimationFrame(afterPaint);
-        fontsReady?.catch?.(() => {});
       };
     },
     { dependencies: [lenis] }
@@ -49,7 +46,7 @@ const SmoothScroll = ({ children }) => {
     <ReactLenis
       root
       options={{
-        autoRaf: false,
+        autoRaf: true,
         lerp: 0.1,
         duration: 0.9,
         smoothWheel: true,

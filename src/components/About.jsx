@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { gsap, useGSAP } from '../lib/gsap';
+import { gsap, onLayoutReady, useGSAP } from '../lib/gsap';
 
 const PATH =
   'M110 95 C 310 360, 700 55, 1040 270 C 1220 390, 880 470, 720 510';
@@ -8,111 +8,116 @@ const About = () => {
   const rootRef = useRef(null);
 
   useGSAP(
-    () => {
+    (_, contextSafe) => {
       const root = rootRef.current;
       if (!root) return;
 
-      const mm = gsap.matchMedia();
+      let mm;
 
-      const setup = (reduceMotion, isMobile) => {
-        const svg = root.querySelector('.about-path-svg');
-        const path = root.querySelector('#about-plane-guide');
-        const plane = root.querySelector('.about-plane');
-        const draw = root.querySelector('.about-path-draw');
-        const dot = root.querySelector('.about-dot');
-        const kicker = root.querySelector('.about-kicker');
-        const copy = root.querySelector('.about-copy-inner');
-        const note = root.querySelector('.about-note');
+      const boot = contextSafe(() => {
+        mm = gsap.matchMedia();
 
-        svg?.setAttribute('preserveAspectRatio', isMobile ? 'none' : 'xMidYMid slice');
+        const setup = (reduceMotion, isMobile) => {
+          const svg = root.querySelector('.about-path-svg');
+          const path = root.querySelector('#about-plane-guide');
+          const plane = root.querySelector('.about-plane');
+          const draw = root.querySelector('.about-path-draw');
+          const dot = root.querySelector('.about-dot');
+          const kicker = root.querySelector('.about-kicker');
+          const copy = root.querySelector('.about-copy-inner');
+          const note = root.querySelector('.about-note');
 
-        const parkPlane = (end) => {
-          if (!path || !plane) return;
-          gsap.set(plane, {
-            motionPath: {
-              path,
-              align: path,
-              alignOrigin: [0.5, 0.5],
+          svg?.setAttribute('preserveAspectRatio', isMobile ? 'none' : 'xMidYMid slice');
+
+          const parkPlane = (end) => {
+            if (!path || !plane) return;
+            gsap.set(plane, {
+              motionPath: {
+                path,
+                align: path,
+                alignOrigin: [0.5, 0.5],
                 autoRotate: true,
                 start: 0,
                 end: end || 0.001,
               },
-          });
-        };
+            });
+          };
 
-        if (reduceMotion) {
-          parkPlane(1);
-          gsap.set([plane, kicker, note, copy, dot], { autoAlpha: 1, y: 0, scale: 1 });
+          if (reduceMotion) {
+            parkPlane(1);
+            gsap.set([plane, kicker, note, copy, dot], { autoAlpha: 1, y: 0, scale: 1 });
+            if (draw) {
+              const len = draw.getTotalLength();
+              gsap.set(draw, { strokeDasharray: len, strokeDashoffset: 0 });
+            }
+            return;
+          }
+
+          parkPlane(0);
+          gsap.set(plane, { autoAlpha: 0 });
+          gsap.set(dot, { scale: 0, transformOrigin: '50% 50%' });
+
           if (draw) {
             const len = draw.getTotalLength();
-            gsap.set(draw, { strokeDasharray: len, strokeDashoffset: 0 });
+            gsap.set(draw, { strokeDasharray: len, strokeDashoffset: len });
           }
-          return;
-        }
 
-        parkPlane(0);
-        gsap.set(plane, { autoAlpha: 0 });
-        gsap.set(dot, { scale: 0, transformOrigin: '50% 50%' });
-        gsap.set(kicker, { autoAlpha: 0, y: 14 });
-        gsap.set(copy, { autoAlpha: 0, y: 28 });
-        gsap.set(note, { autoAlpha: 0, y: 16 });
-
-        if (draw) {
-          const len = draw.getTotalLength();
-          gsap.set(draw, { strokeDasharray: len, strokeDashoffset: len });
-        }
-
-        const tl = gsap.timeline({
-          defaults: { ease: 'none' },
-          scrollTrigger: {
-            trigger: root,
-            start: 'top top',
-            end: () => `+=${Math.round(window.innerHeight * (isMobile ? 0.95 : 1.2))}`,
-            pin: true,
-            pinSpacing: true,
-            scrub: 0.85,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        tl.to(plane, { autoAlpha: 1, duration: 0.06 }, 0);
-
-        if (draw) {
-          tl.to(draw, { strokeDashoffset: 0, duration: 0.62 }, 0);
-        }
-
-        tl.to(
-          plane,
-          {
-            motionPath: {
-              path,
-              align: path,
-              alignOrigin: [0.5, 0.5],
-              autoRotate: true,
-              start: 0,
-              end: 1,
+          const tl = gsap.timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: {
+              trigger: root,
+              start: 'top top',
+              end: () => `+=${Math.round(window.innerHeight * (isMobile ? 0.95 : 1.2))}`,
+              pin: true,
+              pinSpacing: true,
+              scrub: 0.85,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
             },
-            duration: 0.7,
-          },
-          0.02
+          });
+
+          tl.to(plane, { autoAlpha: 1, duration: 0.06 }, 0);
+
+          if (draw) {
+            tl.to(draw, { strokeDashoffset: 0, duration: 0.62 }, 0);
+          }
+
+          tl.to(
+            plane,
+            {
+              motionPath: {
+                path,
+                align: path,
+                alignOrigin: [0.5, 0.5],
+                autoRotate: true,
+                start: 0,
+                end: 1,
+              },
+              duration: 0.7,
+            },
+            0.02
+          );
+
+          tl.fromTo(dot, { scale: 0 }, { scale: 1, duration: 0.1, ease: 'back.out(2)' }, 0.58);
+          tl.fromTo(kicker, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.12, ease: 'power2.out' }, 0.6);
+          tl.fromTo(copy, { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.22, ease: 'power3.out' }, 0.64);
+          tl.fromTo(note, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.16, ease: 'power2.out' }, 0.82);
+        };
+
+        mm.add('(prefers-reduced-motion: reduce)', () => setup(true, false));
+        mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () =>
+          setup(false, false)
         );
+        mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () =>
+          setup(false, true)
+        );
+      });
 
-        tl.to(dot, { scale: 1, duration: 0.1, ease: 'back.out(2)' }, 0.58);
-        tl.to(kicker, { autoAlpha: 1, y: 0, duration: 0.12, ease: 'power2.out' }, 0.6);
-        tl.to(copy, { autoAlpha: 1, y: 0, duration: 0.22, ease: 'power3.out' }, 0.64);
-        tl.to(note, { autoAlpha: 1, y: 0, duration: 0.16, ease: 'power2.out' }, 0.82);
+      const stop = onLayoutReady(boot);
+      return () => {
+        stop();
+        mm?.revert();
       };
-
-      mm.add('(prefers-reduced-motion: reduce)', () => setup(true, false));
-      mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () =>
-        setup(false, false)
-      );
-      mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () =>
-        setup(false, true)
-      );
-
-      return () => mm.revert();
     },
     { scope: rootRef }
   );
@@ -190,16 +195,16 @@ const About = () => {
         <div className="relative z-10 flex-1 flex flex-col items-center justify-end px-6 pb-12 sm:pb-14 lg:pb-16">
           <h2 className="sr-only">About</h2>
           <div className="w-full max-w-[44rem] text-center liquid-card px-6 py-8 sm:px-10 sm:py-10">
-            <p className="about-kicker font-mono text-[11px] tracking-[0.16em] uppercase text-zinc-500 mb-5 opacity-0">
+            <p className="about-kicker font-mono text-[11px] tracking-[0.16em] uppercase text-zinc-500 mb-5">
               Hello, I&apos;m Shaik Sajid Hussain. A —
             </p>
             <p className="about-copy text-[1.25rem] sm:text-[1.7rem] lg:text-[1.9rem] leading-[1.55] tracking-[-0.01em] text-[#1c1917]">
-              <span className="about-copy-inner block opacity-0">
+              <span className="about-copy-inner block">
                 Three years across product and engineering, building what&apos;s next — from SaaS
                 platforms and learning systems to shipping React Native apps.
               </span>
             </p>
-            <p className="about-note mt-7 sm:mt-8 text-sm sm:text-base text-zinc-500 leading-relaxed max-w-lg mx-auto opacity-0">
+            <p className="about-note mt-7 sm:mt-8 text-sm sm:text-base text-zinc-500 leading-relaxed max-w-lg mx-auto">
               React, React Native, and Node.js — performance, clean UI, and architecture that scales.
             </p>
           </div>

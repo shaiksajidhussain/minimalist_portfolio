@@ -10,7 +10,7 @@ const Projects = ({ onProjectClick, projects: incomingProjects }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const sectionRef = useRef(null);
-  useTextReveal(sectionRef);
+  useTextReveal(sectionRef, [loading]);
 
   const defaultProjects = [
     {
@@ -173,7 +173,6 @@ const Projects = ({ onProjectClick, projects: incomingProjects }) => {
               <div
                 key={`${project.name}-${index}`}
                 className={`group relative overflow-hidden liquid-card cursor-pointer h-80 ${getMasonryClass(index)}`}
-                data-reveal-block
                 onClick={() => onProjectClick(project)}
               >
                 <img

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { ScrollTrigger, useGSAP } from '../../lib/gsap';
+import { ScrollTrigger, onLayoutReady, useGSAP } from '../../lib/gsap';
 import { SERVICES } from '../../data/services';
 import { RevealHeading, useTextReveal } from '../../hooks/useTextReveal.jsx';
 
@@ -8,34 +8,38 @@ const UnfoldPin = () => {
   useTextReveal(sectionRef);
 
   useGSAP(
-    () => {
+    (_, contextSafe) => {
       const section = sectionRef.current;
       const items = section?.querySelectorAll('.svc-unfold-item');
       if (!section || !items?.length) return;
 
-      items[0]?.classList.add('is-open');
+      const boot = contextSafe(() => {
+        items[0]?.classList.add('is-open');
 
-      let current = 0;
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: () => `+=${Math.max(window.innerHeight * 1.4, SERVICES.length * 280)}`,
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.6,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const next = Math.min(
-            SERVICES.length - 1,
-            Math.floor(self.progress * SERVICES.length)
-          );
-          if (next === current) return;
-          items[current]?.classList.remove('is-open');
-          items[next]?.classList.add('is-open');
-          current = next;
-        },
+        let current = 0;
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${Math.max(window.innerHeight * 1.4, SERVICES.length * 280)}`,
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const next = Math.min(
+              SERVICES.length - 1,
+              Math.floor(self.progress * SERVICES.length)
+            );
+            if (next === current) return;
+            items[current]?.classList.remove('is-open');
+            items[next]?.classList.add('is-open');
+            current = next;
+          },
+        });
       });
+
+      return onLayoutReady(boot);
     },
     { scope: sectionRef }
   );

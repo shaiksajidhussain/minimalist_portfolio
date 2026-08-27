@@ -15,7 +15,7 @@ export const RevealHeading = ({ as: Tag = 'h2', children, className = '' }) => {
   );
 };
 
-export const useTextReveal = (scopeRef) => {
+export const useTextReveal = (scopeRef, deps = []) => {
   useGSAP(
     () => {
       const root = scopeRef.current;
@@ -26,10 +26,9 @@ export const useTextReveal = (scopeRef) => {
       const copies = root.querySelectorAll('[data-reveal-copy]');
       const blocks = root.querySelectorAll('[data-reveal-block]');
 
-      if (reduce) {
-        gsap.set([headings, copies, blocks], { clearProps: 'all', autoAlpha: 1, y: 0, yPercent: 0 });
-        return;
-      }
+      gsap.set([headings, copies, blocks], { clearProps: 'transform,opacity,visibility', autoAlpha: 1, y: 0, yPercent: 0 });
+
+      if (reduce) return;
 
       root.querySelectorAll('[data-reveal]').forEach((heading) => {
         const words = heading.querySelectorAll('.reveal-word-inner');
@@ -38,6 +37,7 @@ export const useTextReveal = (scopeRef) => {
           stagger: 0.04,
           duration: 0.55,
           ease: 'power3.out',
+          immediateRender: false,
           scrollTrigger: {
             trigger: heading,
             start: 'top 88%',
@@ -53,6 +53,7 @@ export const useTextReveal = (scopeRef) => {
           autoAlpha: 0,
           duration: 0.5,
           ease: 'power3.out',
+          immediateRender: false,
           scrollTrigger: {
             trigger: el,
             start: 'top 92%',
@@ -63,23 +64,26 @@ export const useTextReveal = (scopeRef) => {
       });
 
       if (blocks.length) {
-        gsap.set(blocks, { y: 24, autoAlpha: 0 });
         ScrollTrigger.batch(blocks, {
           start: 'top 92%',
           once: true,
           onEnter: (els) => {
-            gsap.to(els, {
-              y: 0,
-              autoAlpha: 1,
-              duration: 0.5,
-              stagger: 0.04,
-              ease: 'power3.out',
-              overwrite: true,
-            });
+            gsap.fromTo(
+              els,
+              { y: 16, autoAlpha: 0.001 },
+              {
+                y: 0,
+                autoAlpha: 1,
+                duration: 0.5,
+                stagger: 0.04,
+                ease: 'power3.out',
+                overwrite: true,
+              }
+            );
           },
         });
       }
     },
-    { scope: scopeRef }
+    { scope: scopeRef, dependencies: deps }
   );
 };
