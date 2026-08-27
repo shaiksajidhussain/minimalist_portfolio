@@ -1,21 +1,18 @@
-import CurvedLoop from './CurvedLoop';
+import { useRef } from 'react';
+import { useTextReveal } from '../hooks/useTextReveal.jsx';
 
 const Footer = () => {
+  const sectionRef = useRef(null);
+  useTextReveal(sectionRef);
+
   return (
-    <footer className="relative bg-white dark:bg-zinc-900 py-20 overflow-hidden border-t border-gray-200 dark:border-zinc-800">
-      <div className="relative z-10">
-        <CurvedLoop 
-          marqueeText="Made by Sajid Hussain ✦"
-          speed={2}
-          curveAmount={400}
-          direction="left"
-          interactive={true}
-          className="text-gray-900 dark:text-white"
-        />
+    <footer ref={sectionRef} className="relative border-t border-white/40 py-10 px-4">
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-zinc-500">
+        <p data-reveal-copy>© {new Date().getFullYear()} Shaik Sajid Hussain</p>
+        <p data-reveal-copy>Built for the work, not the noise.</p>
       </div>
     </footer>
   );
 };
 
 export default Footer;
-

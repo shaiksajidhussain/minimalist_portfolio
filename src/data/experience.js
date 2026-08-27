@@ -1,0 +1,75 @@
+export const EXPERIENCE = [
+  {
+    kicker: '01',
+    company: 'QubicGen',
+    role: 'MERN Stack Developer → Team Lead',
+    duration: 'Jan 2024 — Ongoing',
+    points: [
+      'Started as a MERN Stack Developer and progressed to Team Lead, managing a team of 7 junior developers',
+      'Delivered QubicGen Portfolio, QMES, LMS, and Vidynatra',
+      'Built the company site in React with Express and MongoDB',
+      'Ran KT sessions and mentored junior developers',
+    ],
+    technologies: ['React', 'Next.js', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'Figma'],
+  },
+  {
+    kicker: '02',
+    company: 'Freelance / Consulting',
+    role: 'Full-Stack Developer',
+    duration: '2023 — Present',
+    points: [
+      'Shipped portfolio and product sites for AJ Supplements, Feed Formulate, Bhavani Chits, and Project Genie',
+      'Built dashboards with access control for financial data',
+      'Handled SEO, responsive UI, and overlapping client timelines',
+    ],
+    technologies: ['React', 'Next.js', 'Node.js', 'MongoDB', 'Express', 'SEO'],
+  },
+  {
+    kicker: '03',
+    company: 'Inspire Leap',
+    role: 'Full-Stack Developer',
+    duration: '2024',
+    points: [
+      'Built a portfolio with an integrated dashboard',
+      'Delivered an LMS portal with access control',
+      'Owned development, deploy, and ongoing maintenance',
+    ],
+    technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'REST API'],
+  },
+  {
+    kicker: '04',
+    company: 'Melody Mocktails',
+    role: 'MERN Stack Developer',
+    duration: 'Jun 2024 — Dec 2024',
+    points: [
+      'Delivered three projects in a four-month engagement',
+      'Built MERN apps with Figma, Tailwind, and Bootstrap',
+      'Balanced the work alongside other client commitments',
+    ],
+    technologies: ['Next.js', 'React', 'Express', 'MongoDB', 'Jira', 'Bitbucket'],
+  },
+  {
+    kicker: '05',
+    company: 'SRIC',
+    role: 'Frontend Developer Intern',
+    duration: '2022',
+    points: [
+      "Designed and built SRIC's public website",
+      'Integrated a secure database for user information',
+      'Shipped responsive React and Material UI screens',
+    ],
+    technologies: ['React', 'Material UI', 'HTML', 'CSS', 'JavaScript'],
+  },
+  {
+    kicker: '06',
+    company: 'Skilync',
+    role: 'Web Designer Intern',
+    duration: 'Jun 2022 — Aug 2022',
+    points: [
+      'Hands-on web design and rapid prototyping',
+      'Worked in FlutterFlow for product mocks',
+      'Explored cloud-based delivery for web apps',
+    ],
+    technologies: ['FlutterFlow', 'Cloud'],
+  },
+];

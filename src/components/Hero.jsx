@@ -1,41 +1,97 @@
-import { motion } from 'framer-motion';
-import { FiArrowRight, FiChevronDown, FiEye } from 'react-icons/fi';
-import BlurText from './BlurText';
-import CountUp from './CountUp';
-import SplitText from './SplitText';
-import { Pointer } from './ui/pointer';
-import { useEffect, useState, useRef } from 'react';
-import { useScroll, useTransform } from 'framer-motion';
+import { FiPause, FiPlay } from 'react-icons/fi';
+import { useEffect, useRef, useState } from 'react';
+import { useLetterPop } from '../hooks/useLetterPop';
+import { gsap, useGSAP } from '../lib/gsap';
+import LetterHeadline from './LetterHeadline';
 import config from '../config/api';
 
+const TRACK_SRC = '/Code.mp3';
+
+const formatTime = (seconds) => {
+  if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
+const PHOTO =
+  'https://res.cloudinary.com/dgus6y6lm/image/upload/v1766677763/Sajid_Professional_vncuym.png';
+
+const ROTATING_WORDS = ['Codes', 'Builds'];
+
+const RotatingWords = ({ words, className }) => {
+  const slotRef = useRef(null);
+
+  useGSAP(
+    () => {
+      const lines = slotRef.current
+        ? Array.from(slotRef.current.querySelectorAll('.hero-word-line'))
+        : [];
+      if (lines.length < 2) return;
+
+      gsap.set(lines, { autoAlpha: 0, yPercent: 40 });
+      gsap.set(lines[0], { autoAlpha: 1, yPercent: 0 });
+
+      let index = 0;
+      const swap = () => {
+        const current = lines[index];
+        index = (index + 1) % lines.length;
+        const next = lines[index];
+
+        gsap
+          .timeline()
+          .to(current, {
+            yPercent: -40,
+            autoAlpha: 0,
+            duration: 0.4,
+            ease: 'power3.in',
+          })
+          .fromTo(
+            next,
+            { yPercent: 40, autoAlpha: 0 },
+            { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' },
+            0.05
+          );
+      };
+
+      const id = window.setInterval(swap, 2000);
+      return () => window.clearInterval(id);
+    },
+    { scope: slotRef }
+  );
+
+  return (
+    <div ref={slotRef} className="hero-line hero-rotating-slot">
+      {words.map((word) => (
+        <LetterHeadline key={word} text={word} className={`hero-word-line ${className}`} />
+      ))}
+    </div>
+  );
+};
+
 const Hero = () => {
+  const rootRef = useRef(null);
+  const cassetteRef = useRef(null);
+  const photoRef = useRef(null);
+  const audioRef = useRef(null);
+  const playingRef = useRef(false);
+  const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [viewCount, setViewCount] = useState(0);
   const [resumeUrl, setResumeUrl] = useState(null);
-  const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end center'],
-  });
-
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.75]);
-  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.3]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  useLetterPop(rootRef);
 
   useEffect(() => {
     const fetchAndIncrementViews = async () => {
       try {
-        // Increment views
         const response = await fetch(`${config.views}/hero`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
         });
         const data = await response.json();
         setViewCount(data.count);
-      } catch (error) {
-        console.error('Error fetching views:', error);
-        // Fallback to a default value
+      } catch {
         setViewCount(2700);
       }
     };
@@ -44,374 +100,306 @@ const Hero = () => {
       try {
         const response = await fetch(`${config.baseUrl}/resumes`);
         const resumes = await response.json();
-        if (resumes && resumes.length > 0) {
-          setResumeUrl(resumes[0].url);
-        }
-      } catch (error) {
-        console.error('Error fetching resume:', error);
+        if (resumes?.length) setResumeUrl(resumes[0].url);
+      } catch {
+        /* ignore */
       }
     };
 
     fetchAndIncrementViews();
     fetchResume();
+
+    return () => {
+      audioRef.current?.pause();
+    };
   }, []);
 
-  const scrollToSection = (href) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const toggleTrack = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.paused) {
+      try {
+        await audio.play();
+      } catch {
+        /* autoplay block or missing file */
+      }
+    } else {
+      audio.pause();
     }
   };
 
-  return (
-    <motion.section 
-      ref={heroRef}
-      id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 overflow-hidden"
-      style={{
-        scale,
-        opacity,
-        y,
-      }}
-    >
-      {/* 3D Geometric Shapes Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Light Source */}
-        <div className="absolute top-20 right-20 w-32 h-32 bg-orange-500/30 rounded-full blur-3xl animate-pulse" />
-        
-        {/* Cube 1 - Large center */}
-        <motion.div
-          initial={{ opacity: 0, rotateX: -20, rotateY: 20 }}
-          animate={{ 
-            opacity: [0.3, 0.5, 0.3],
-            rotateX: [-20, -25, -20],
-            rotateY: [20, 25, 20],
-          }}
-          transition={{ 
+  const progress = duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0;
+
+  useGSAP(
+    (_, contextSafe) => {
+      const mm = gsap.matchMedia();
+
+      mm.add(
+        {
+          reduceMotion: '(prefers-reduced-motion: reduce)',
+          motionOk: '(prefers-reduced-motion: no-preference)',
+        },
+        (context) => {
+          const { reduceMotion } = context.conditions;
+
+          if (reduceMotion) {
+            gsap.set(['.hero-intro', '.hero-line', '.hero-cassette', '.hero-photo', '.hero-sun', '.cloud-svg', '.hero-plane'], {
+              autoAlpha: 1,
+              y: 0,
+              x: 0,
+              scale: 1,
+              rotation: 0,
+            });
+            return;
+          }
+
+          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+          tl.from('.hero-sun', { autoAlpha: 0, scale: 0.6, duration: 0.7 }, 0)
+            .from('.hero-intro', { y: 16, autoAlpha: 0, duration: 0.5 }, 0.1)
+            .from('.hero-line', { y: 48, autoAlpha: 0, duration: 0.85, stagger: 0.12 }, 0.15)
+            .from('.hero-cassette', { y: 24, autoAlpha: 0, scale: 0.92, duration: 0.6 }, 0.35)
+            .fromTo(
+              '.hero-photo',
+              { y: 80, autoAlpha: 0, rotation: 12 },
+              { y: 0, autoAlpha: 1, rotation: -6, duration: 0.9 },
+              0.28
+            )
+            .from('.cloud-svg', { y: 60, autoAlpha: 0, duration: 0.9 }, 0.2)
+            .from('.hero-plane', { autoAlpha: 0, duration: 0.3 }, 0.7);
+
+          const path = rootRef.current?.querySelector('#plane-path');
+          const plane = rootRef.current?.querySelector('.hero-plane');
+          if (path && plane) {
+            gsap.to(plane, {
+              motionPath: {
+                path,
+                align: path,
+                alignOrigin: [0.5, 0.5],
+                autoRotate: true,
+              },
+              duration: 3.2,
+              ease: 'power1.inOut',
+              delay: 0.8,
+            });
+          }
+
+          gsap.to('.hero-sun', {
+            rotation: 8,
+            yoyo: true,
+            repeat: -1,
             duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64"
-          style={{
-            transformStyle: 'preserve-3d',
-            perspective: '1000px',
-          }}
-        >
-          <div 
-            className="absolute inset-0"
-            style={{
-              transform: 'rotateX(45deg) rotateY(-45deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            {/* Front face */}
-            <div 
-              className="absolute w-full h-full bg-zinc-700/40 dark:bg-zinc-600/40 border border-zinc-600/50 dark:border-zinc-500/50"
-              style={{
-                transform: 'translateZ(64px)',
-                boxShadow: '0 0 30px rgba(249, 115, 22, 0.2)',
-              }}
-            />
-            {/* Top face */}
-            <div 
-              className="absolute w-full h-full bg-orange-500/20 dark:bg-orange-500/30 border border-orange-500/30"
-              style={{
-                transform: 'rotateX(90deg) translateZ(64px)',
-              }}
-            />
-            {/* Right face */}
-            <div 
-              className="absolute w-full h-full bg-zinc-800/40 dark:bg-zinc-700/40 border border-zinc-600/50"
-              style={{
-                transform: 'rotateY(90deg) translateZ(64px)',
-              }}
-            />
-          </div>
-        </motion.div>
+            ease: 'sine.inOut',
+          });
 
-        {/* Cube 2 - Top right */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ 
-            opacity: [0.2, 0.4, 0.2],
-            y: [0, -20, 0],
-          }}
-          transition={{ 
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-          className="absolute top-32 right-32 w-32 h-32"
-          style={{
-            transformStyle: 'preserve-3d',
-          }}
-        >
-          <div 
-            className="absolute inset-0"
-            style={{
-              transform: 'rotateX(30deg) rotateY(-30deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            <div 
-              className="absolute w-full h-full bg-zinc-700/30 dark:bg-zinc-600/30 border border-zinc-600/40"
-              style={{
-                transform: 'translateZ(32px)',
-                boxShadow: '0 0 20px rgba(249, 115, 22, 0.15)',
-              }}
-            />
-            <div 
-              className="absolute w-full h-full bg-orange-500/15 dark:bg-orange-500/25 border border-orange-500/20"
-              style={{
-                transform: 'rotateX(90deg) translateZ(32px)',
-              }}
-            />
-            <div 
-              className="absolute w-full h-full bg-zinc-800/30 dark:bg-zinc-700/30 border border-zinc-600/40"
-              style={{
-                transform: 'rotateY(90deg) translateZ(32px)',
-              }}
-            />
-          </div>
-        </motion.div>
+          gsap.to('.cloud-svg', {
+            y: 48,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: rootRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 0.8,
+            },
+          });
 
-        {/* Cube 3 - Bottom left */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ 
-            opacity: [0.2, 0.35, 0.2],
-            x: [0, 15, 0],
-          }}
-          transition={{ 
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-          className="absolute bottom-32 left-32 w-40 h-40"
-          style={{
-            transformStyle: 'preserve-3d',
-          }}
-        >
-          <div 
-            className="absolute inset-0"
-            style={{
-              transform: 'rotateX(-30deg) rotateY(30deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            <div 
-              className="absolute w-full h-full bg-zinc-700/25 dark:bg-zinc-600/25 border border-zinc-600/30"
-              style={{
-                transform: 'translateZ(40px)',
-                boxShadow: '0 0 25px rgba(249, 115, 22, 0.1)',
-              }}
-            />
-            <div 
-              className="absolute w-full h-full bg-orange-500/10 dark:bg-orange-500/20 border border-orange-500/15"
-              style={{
-                transform: 'rotateX(90deg) translateZ(40px)',
-              }}
-            />
-            <div 
-              className="absolute w-full h-full bg-zinc-800/25 dark:bg-zinc-700/25 border border-zinc-600/30"
-              style={{
-                transform: 'rotateY(90deg) translateZ(40px)',
-              }}
-            />
-          </div>
-        </motion.div>
+          const cassette = cassetteRef.current;
+          const photo = photoRef.current;
+          const reels = cassette?.querySelectorAll('.cassette-reel');
 
-        {/* Additional smaller cubes */}
-        <motion.div
-          animate={{ 
-            opacity: [0.1, 0.25, 0.1],
-            rotate: [0, 360],
-          }}
-          transition={{ 
-            opacity: { duration: 5, repeat: Infinity },
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" }
-          }}
-          className="absolute top-1/4 right-1/4 w-24 h-24"
-          style={{
-            transformStyle: 'preserve-3d',
-          }}
-        >
-          <div 
-            className="absolute inset-0"
-            style={{
-              transform: 'rotateX(45deg) rotateY(45deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            <div 
-              className="absolute w-full h-full bg-zinc-600/20 dark:bg-zinc-500/20 border border-zinc-500/20"
-              style={{
-                transform: 'translateZ(24px)',
-              }}
-            />
-            <div 
-              className="absolute w-full h-full bg-orange-500/10 dark:bg-orange-500/15"
-              style={{
-                transform: 'rotateX(90deg) translateZ(24px)',
-              }}
-            />
-            <div 
-              className="absolute w-full h-full bg-zinc-700/20 dark:bg-zinc-600/20"
-              style={{
-                transform: 'rotateY(90deg) translateZ(24px)',
-              }}
-            />
-          </div>
-        </motion.div>
+          const hoverIn = contextSafe(() => {
+            gsap.to(cassette, { scale: 1.04, duration: 0.28, ease: 'power2.out' });
+            if (!playingRef.current) {
+              gsap.to(reels, { rotation: '+=28', duration: 0.45, ease: 'power2.out', stagger: 0.04 });
+            }
+          });
+          const hoverOut = contextSafe(() => {
+            gsap.to(cassette, { scale: 1, duration: 0.28, ease: 'power2.out' });
+          });
+
+          const photoIn = contextSafe(() => {
+            gsap.to(photo, { scale: 1.05, rotation: -2, duration: 0.35, ease: 'power2.out' });
+          });
+          const photoOut = contextSafe(() => {
+            gsap.to(photo, { scale: 1, rotation: -6, duration: 0.35, ease: 'power2.out' });
+          });
+
+          cassette?.addEventListener('mouseenter', hoverIn);
+          cassette?.addEventListener('mouseleave', hoverOut);
+          photo?.addEventListener('mouseenter', photoIn);
+          photo?.addEventListener('mouseleave', photoOut);
+
+          return () => {
+            cassette?.removeEventListener('mouseenter', hoverIn);
+            cassette?.removeEventListener('mouseleave', hoverOut);
+            photo?.removeEventListener('mouseenter', photoIn);
+            photo?.removeEventListener('mouseleave', photoOut);
+          };
+        }
+      );
+
+      return () => mm.revert();
+    },
+    { scope: rootRef }
+  );
+
+  return (
+    <section
+      ref={rootRef}
+      id="hero"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-40"
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(180deg, #7eb8e6 0%, #a9d4f0 42%, #d5eaf8 78%, #f4efe6 100%)',
+        }}
+      />
+      <div className="hero-grain" />
+
+      <div
+        className="hero-sun pointer-events-none absolute top-10 right-[7%] w-24 h-24 sm:w-36 sm:h-36 rounded-full"
+        style={{
+          background: 'repeating-linear-gradient(-32deg, #f0c93a 0 11px, #fff4c4 11px 15px)',
+        }}
+        aria-hidden
+      />
+
+      <p className="hidden lg:block absolute left-6 top-[42%] font-mono text-[11px] tracking-[0.28em] uppercase text-white/80 -rotate-90 origin-center">
+        Code / Product / Craft
+      </p>
+
+      <svg
+        className="pointer-events-none absolute inset-0 w-full h-full z-[1]"
+        viewBox="0 0 1440 900"
+        fill="none"
+        aria-hidden
+      >
+        <path
+          id="plane-path"
+          d="M120 520 C 280 430, 420 610, 620 500 S 980 390, 1180 470"
+          stroke="#1c1917"
+          strokeWidth="1.4"
+          strokeDasharray="6 8"
+          opacity="0.35"
+        />
+      </svg>
+
+      <div
+        className="hero-plane absolute z-[2] w-8 h-8 text-[#e7b8a4]"
+        aria-hidden
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2.5 11.4 21 3.2l-6.2 18.2-4.1-6.3-6.2-3.7Z" />
+        </svg>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 max-w-6xl mx-auto w-full">
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
-          {/* Text Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex-1 text-center lg:text-left"
+      <div className="relative z-10 w-full max-w-5xl mx-auto text-center">
+        <p className="hero-intro font-mono text-[11px] sm:text-xs tracking-[0.14em] uppercase text-white mb-6">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#f0c93a] mr-2 align-middle" />
+          Hello, I&apos;m Shaik Sajid Hussain. A —
+        </p>
+
+        <h1 className="sr-only">Developer who Codes</h1>
+
+        <LetterHeadline
+          text="Developer who"
+          className="hero-line font-serif leading-[0.9] tracking-tight whitespace-nowrap text-[8.2vw] sm:text-[9.5vw] lg:text-[7.2rem]"
+        />
+
+        <div className="relative z-20 my-3 sm:my-4">
+          <audio
+            ref={audioRef}
+            src={TRACK_SRC}
+            preload="metadata"
+            onPlay={() => {
+              playingRef.current = true;
+              setPlaying(true);
+            }}
+            onPause={() => {
+              playingRef.current = false;
+              setPlaying(false);
+            }}
+            onEnded={() => {
+              playingRef.current = false;
+              setPlaying(false);
+              setCurrentTime(0);
+            }}
+            onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
+            onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
+          />
+          <button
+            ref={cassetteRef}
+            type="button"
+            onClick={toggleTrack}
+            className="hero-cassette group mx-auto flex items-center gap-3 sm:gap-4 liquid-card rounded-full text-zinc-950 pl-2 pr-2 py-2 max-w-[92vw] sm:max-w-md"
+            aria-label={playing ? 'Pause track' : 'Play From idea to launch'}
           >
-            <BlurText
-              text="SHAIK SAJID HUSSAIN"
-              delay={120}
-              animateBy="words"
-              direction="top"
-              className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight uppercase whitespace-nowrap"
-              style={{ 
-                textShadow: '0 0 40px rgba(0, 0, 0, 0.3)',
-                letterSpacing: '0.05em'
-              }}
-            />
-            
-            <BlurText
-              text="FREELANCE FULL-STACK DEVELOPER"
-              delay={100}
-              animateBy="words"
-              direction="top"
-              className="text-xl sm:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300 mb-8 uppercase tracking-wider font-medium"
-            />
-                    <BlurText
-      text="I build fast, scalable, and modern web applications for startups and businesses."
-              delay={120}
-              animateBy="words"
-              direction="top"
-              className="text-sm sm:text-2xl lg:text-sm text-gray-600 dark:text-gray-300 mb-8  tracking-wider font-medium"
-            />
+            <span className={`cassette-reel w-12 h-12 sm:w-14 sm:h-14 rounded-full shrink-0 ${playing ? 'is-spinning' : ''}`} />
 
-   
-
-            {/* View Count */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.8 }}
-              className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-12"
-            >
-              <FiEye size={16} />
-              <span>
-                <CountUp
-                  from={0}
-                  to={viewCount}
-                  separator=","
-                  direction="up"
-                  duration={2}
-                  className="font-semibold text-gray-600 dark:text-gray-300"
-                />
-                {' '}views
+            <span className="flex-1 min-w-0 text-left py-1">
+              <span className="block text-xs sm:text-sm font-medium truncate">
+                From idea to launch
               </span>
-            </motion.div>
-          </motion.div>
+              <span className="mt-1.5 flex items-center gap-2">
+                <span className="font-mono text-[10px] text-zinc-500 tabular-nums">
+                  {formatTime(currentTime)}
+                </span>
+                <span className="flex-1 h-px bg-zinc-400/70 relative">
+                  <span
+                    className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-zinc-950"
+                    style={{ left: `${progress}%` }}
+                  />
+                </span>
+                <span className="font-mono text-[10px] text-zinc-500">
+                  {viewCount.toLocaleString()}
+                </span>
+              </span>
+            </span>
 
-          {/* Image Section */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="flex-1 flex items-center justify-center"
-          >
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
-              <Pointer>
-                {/* Image Border/Frame */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-orange-500/10 rounded-2xl p-1">
-                  <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-800 dark:from-zinc-800 dark:to-zinc-900 rounded-xl flex items-center justify-center overflow-hidden border border-orange-500/20">
-                    {/* Placeholder for Image - Replace with actual image */}
-                    <img
-                      src="https://res.cloudinary.com/dgus6y6lm/image/upload/v1766677763/Sajid_Professional_vncuym.png"
-                      alt="Profile"
-                      className="w-full h-full object-cover object-top rounded-xl"
-                      loading="eager"
-                      decoding="async"
-                      style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
-                    />
-                  </div>
-                </div>
-              </Pointer>
-              
-              {/* Decorative Elements */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-orange-500/10 rounded-full blur-xl"></div>
-              <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-orange-500/5 rounded-full blur-xl"></div>
-            </div>
-          </motion.div>
+            <span className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-zinc-950 text-[#f4efe6] flex items-center justify-center shrink-0">
+              {playing ? <FiPause size={16} /> : <FiPlay size={16} className="ml-0.5" />}
+            </span>
+
+            <span className={`cassette-reel hidden sm:block w-12 h-12 sm:w-14 sm:h-14 rounded-full shrink-0 ${playing ? 'is-spinning' : ''}`} />
+          </button>
         </div>
 
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        <RotatingWords
+          words={ROTATING_WORDS}
+          className="font-serif leading-[0.9] tracking-tight whitespace-nowrap text-[12vw] sm:text-[11vw] lg:text-[8rem]"
+        />
+
+        {resumeUrl && (
+          <button
+            onClick={() => window.open(resumeUrl, '_blank')}
+            className="hero-intro mt-8 font-mono text-[11px] tracking-[0.16em] uppercase text-white/70 hover:text-white"
           >
-            <button
-              onClick={() => scrollToSection('#contact')}
-              className="px-8 py-3 rounded-full font-semibold transition-all flex items-center gap-2 group relative overflow-hidden backdrop-blur-md bg-gray-900/80 dark:bg-white/20 border border-gray-800/50 dark:border-white/30 text-white dark:text-white shadow-lg hover:bg-gray-800/90 dark:hover:bg-white/30 hover:shadow-xl hover:scale-105 active:scale-95"
-              style={{
-                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.1)'
-              }}
-            >
-              <span className="relative z-10">Hire Me</span>
-              <FiArrowRight className="group-hover:translate-x-1 transition-transform relative z-10" />
-            </button>
-            <button
-              onClick={() => scrollToSection('#projects')}
-              className="px-8 py-3 rounded-full font-semibold transition-all flex items-center gap-2 relative overflow-hidden backdrop-blur-md bg-white/20 dark:bg-black/20 border-2 border-gray-300/50 dark:border-white/40 text-gray-900 dark:text-white shadow-lg hover:bg-white/30 dark:hover:bg-white/25 hover:border-gray-400/70 dark:hover:border-white/60 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!resumeUrl}
-              onClick={() => resumeUrl && window.open(resumeUrl, '_blank')}
-              style={{
-                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(0, 0, 0, 0.1)'
-              }}
-            >
-              <span className="relative z-10">View Resume</span>
-            </button>
-          </motion.div>
-     
+            View resume
+          </button>
+        )}
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 10, 0] }}
-        transition={{ 
-          opacity: { delay: 1.2 },
-          y: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-        }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+      <div
+        ref={photoRef}
+        className="hero-photo absolute z-20 right-[6%] bottom-[16%] sm:bottom-[18%] w-28 h-36 sm:w-40 sm:h-52 rounded-2xl overflow-hidden border-[6px] border-[#f4efe6] shadow-[0_18px_40px_rgba(28,25,23,0.18)]"
       >
-        <button
-          onClick={() => scrollToSection('#services')}
-          className="w-12 h-12 rounded-full border-2 border-purple-500 dark:border-purple-400 flex items-center justify-center text-purple-500 dark:text-purple-400 hover:bg-purple-500/10 dark:hover:bg-purple-400/10 transition-colors"
-        >
-          <FiChevronDown size={24} />
-        </button>
-      </motion.div>
-    </motion.section>
+        <img src={PHOTO} alt="Shaik Sajid Hussain" className="w-full h-full object-cover object-top" />
+      </div>
+
+      <svg
+        className="cloud-svg pointer-events-none absolute bottom-0 left-0 w-full h-[32vh] min-h-[180px] z-10 text-[#f4efe6]"
+        viewBox="0 0 1440 280"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <path
+          fill="currentColor"
+          d="M0 280V118c90-48 170-4 270 10 130 18 210-52 350-34 160 20 230 88 390 70 140-16 200-86 330-72 70 8 70 40 100 28v160H0Z"
+        />
+      </svg>
+    </section>
   );
 };
 
 export default Hero;
-

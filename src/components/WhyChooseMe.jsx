@@ -1,84 +1,58 @@
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Carousel, Card } from './ui/apple-cards-carousel';
-import { useTheme } from '../context/ThemeContext';
+import { RevealHeading, useTextReveal } from '../hooks/useTextReveal.jsx';
+import SnapRail from './SnapRail';
+
+const reasons = [
+  {
+    title: '3+ Years Experience',
+    description: 'Real-world SaaS & production experience with a proven track record.',
+  },
+  {
+    title: 'Performance Focused',
+    description: 'Lighthouse audits, SEO, and speed-critical development as a default.',
+  },
+  {
+    title: 'Clean & Scalable Code',
+    description: 'Maintainable architecture built for growth, not just the first launch.',
+  },
+  {
+    title: 'Strong Communication',
+    description: 'Fast response times and transparent updates throughout the project.',
+  },
+  {
+    title: 'Advanced Features',
+    description: 'Payments, real-time systems, and backends that can actually scale.',
+  },
+];
 
 const WhyChooseMe = () => {
-  const { colors } = useTheme();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
-  const reasons = [
-    {
-      category: "Experience",
-      title: '3+ Years Experience',
-      description: 'Real-world SaaS & production experience with proven track record',
-    },
-    {
-      category: "Performance",
-      title: 'Performance Focused',
-      description: 'Lighthouse audits, SEO optimization, and speed-critical development',
-    },
-    {
-      category: "Code Quality",
-      title: 'Clean & Scalable Code',
-      description: 'Maintainable architecture built for growth and future improvements',
-    },
-    {
-      category: "Communication",
-      title: 'Strong Communication',
-      description: 'Fast response times and transparent project updates throughout',
-    },
-    {
-      category: "Features",
-      title: 'Advanced Features',
-      description: 'Payment integrations, real-time systems, and scalable backends',
-    }
-  ];
-
-  const cards = reasons.map((reason, index) => (
-    <Card key={index} card={reason} index={index} primaryColor={colors.primary} />
-  ));
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
+  const sectionRef = useRef(null);
+  useTextReveal(sectionRef);
 
   return (
-    <section id="why-choose-me" className="py-20 px-4 sm:px-6 lg:px-8 relative" style={{ backgroundColor: 'var(--bg-color)' }}>
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-        >
-          <motion.div
-            variants={itemVariants}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Why Choose Me
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300">
-              What sets me apart in the market
-            </p>
-          </motion.div>
+    <section ref={sectionRef} id="why-choose-me" className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <RevealHeading className="text-4xl sm:text-5xl font-semibold text-zinc-900 mb-4">
+            Why Choose Me
+          </RevealHeading>
+          <p className="text-lg text-zinc-500" data-reveal-copy>
+            What sets me apart in the market
+          </p>
+        </div>
 
-          <Carousel items={cards} />
-        </motion.div>
+        <SnapRail cols="md:grid-cols-2 lg:grid-cols-3">
+          {reasons.map((reason) => (
+            <article
+              key={reason.title}
+              className="liquid-card snap-center shrink-0 w-[min(82vw,340px)] min-h-[200px] p-6 md:w-auto md:min-w-0"
+              data-reveal-block
+            >
+              <h3 className="text-lg font-semibold text-zinc-900 mb-2">{reason.title}</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">{reason.description}</p>
+            </article>
+          ))}
+        </SnapRail>
       </div>
     </section>
   );
