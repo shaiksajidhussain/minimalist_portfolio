@@ -23,7 +23,6 @@ import config from '../config/api';
 const PortfolioHome = () => {
   const lenis = useLenis();
   const [selectedProject, setSelectedProject] = useState(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [allProjects, setAllProjects] = useState([]);
 
   useEffect(() => {
@@ -42,15 +41,14 @@ const PortfolioHome = () => {
   }, []);
 
   const handleProjectClick = (project) => {
-    setScrollPosition(window.scrollY);
     setSelectedProject(project);
-    lenis?.scrollTo(0, { immediate: true });
+    lenis?.stop();
   };
 
   const handleCloseProject = () => {
     setSelectedProject(null);
     requestAnimationFrame(() => {
-      lenis?.scrollTo(scrollPosition, { immediate: true });
+      lenis?.start();
     });
   };
 
@@ -59,7 +57,6 @@ const PortfolioHome = () => {
     const currentIndex = allProjects.findIndex((p) => p.name === selectedProject.name);
     const nextIndex = currentIndex < allProjects.length - 1 ? currentIndex + 1 : 0;
     setSelectedProject(allProjects[nextIndex]);
-    lenis?.scrollTo(0, { immediate: true });
   };
 
   const handlePreviousProject = () => {
@@ -67,25 +64,7 @@ const PortfolioHome = () => {
     const currentIndex = allProjects.findIndex((p) => p.name === selectedProject.name);
     const prevIndex = currentIndex > 0 ? currentIndex - 1 : allProjects.length - 1;
     setSelectedProject(allProjects[prevIndex]);
-    lenis?.scrollTo(0, { immediate: true });
   };
-
-  if (selectedProject) {
-    return (
-      <div className="min-h-screen relative">
-        <LiquidField />
-        <div className="relative z-10">
-          <ProjectDetail
-            project={selectedProject}
-            allProjects={allProjects}
-            onClose={handleCloseProject}
-            onNext={handleNextProject}
-            onPrevious={handlePreviousProject}
-          />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative min-h-screen text-zinc-900">
@@ -93,11 +72,11 @@ const PortfolioHome = () => {
       <div className="relative z-10">
         <Navbar />
         <HeroStack />
+        <About />
         <Services />
         <WhoIWorkWith />
         <Expertise />
         <Projects onProjectClick={handleProjectClick} projects={allProjects} />
-        <About />
         <HowIWork />
         <WhyChooseMe />
         <Experience />
@@ -108,6 +87,21 @@ const PortfolioHome = () => {
         <Contact />
         <Footer />
       </div>
+
+      {selectedProject ? (
+        <div
+          className="fixed inset-0 z-[80] overflow-y-auto overscroll-contain bg-[#f4efe6]"
+          data-lenis-prevent
+        >
+          <ProjectDetail
+            project={selectedProject}
+            allProjects={allProjects}
+            onClose={handleCloseProject}
+            onNext={handleNextProject}
+            onPrevious={handlePreviousProject}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

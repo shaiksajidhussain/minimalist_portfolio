@@ -1,91 +1,71 @@
-import { useState, useEffect, useRef } from 'react';
-import { FiExternalLink, FiGithub, FiArrowRight } from 'react-icons/fi';
-import { useTheme } from '../context/ThemeContext';
+import { useEffect, useState } from 'react';
+import { FiArrowUpRight } from 'react-icons/fi';
 import config from '../config/api';
-import { RevealHeading, useTextReveal } from '../hooks/useTextReveal.jsx';
+import { GOLD } from '../data/skills';
+
+const FILTERS = ['All', 'Web Development', 'App Development', 'Freelancing', 'Personal Projects'];
+
+const defaultProjects = [
+  {
+    name: 'SaaS Application',
+    category: 'Web Development',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop',
+    liveLink: '#',
+    githubLink: '#',
+    description: 'A comprehensive SaaS platform with subscription management, user authentication, and payment integration.',
+    tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+  },
+  {
+    name: 'LMS Platform',
+    category: 'Web Development',
+    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=800&fit=crop',
+    liveLink: '#',
+    githubLink: '#',
+    description: 'Learning management system with course management and student tracking.',
+    tech: ['Next.js', 'PostgreSQL', 'Prisma', 'AWS'],
+  },
+  {
+    name: 'School Management',
+    category: 'Web Development',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
+    liveLink: '#',
+    githubLink: '#',
+    description: 'Complete school management solution with fee collection and attendance.',
+    tech: ['React', 'Express.js', 'MySQL', 'Razorpay'],
+  },
+  {
+    name: 'Corporate Website',
+    category: 'Web Development',
+    image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=1200&h=800&fit=crop',
+    liveLink: '#',
+    githubLink: '#',
+    description: 'Modern corporate website with SEO optimization.',
+    tech: ['React', 'Tailwind CSS'],
+  },
+  {
+    name: 'E-Commerce Platform',
+    category: 'Web Development',
+    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=800&fit=crop',
+    liveLink: '#',
+    githubLink: '#',
+    description: 'Full-featured e-commerce with payment processing and order tracking.',
+    tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+  },
+  {
+    name: 'Analytics Dashboard',
+    category: 'App Development',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
+    liveLink: '#',
+    githubLink: '#',
+    description: 'Real-time analytics dashboard with interactive charts and reporting.',
+    tech: ['React', 'Chart.js', 'Node.js', 'PostgreSQL'],
+  },
+];
 
 const Projects = ({ onProjectClick, projects: incomingProjects }) => {
-  const { colors } = useTheme();
   const [activeFilter, setActiveFilter] = useState('All');
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const sectionRef = useRef(null);
-  useTextReveal(sectionRef, [loading]);
-
-  const defaultProjects = [
-    {
-      name: 'SaaS Application',
-      category: 'Web Development',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      description: 'A comprehensive SaaS platform with subscription management, user authentication, and payment integration.',
-      client: 'Tech Startup',
-      result: '500+ Users, 95% Uptime',
-      testimonial: '"Exceeded all expectations. Delivered on time!"',
-      tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    },
-    {
-      name: 'LMS Platform',
-      category: 'Web Development',
-      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      description: 'Learning management system with course management and student tracking.',
-      client: 'Education Institute',
-      result: '2000+ Students Enrolled',
-      testimonial: '"Best decision for our institution"',
-      tech: ['Next.js', 'PostgreSQL', 'Prisma', 'AWS'],
-    },
-    {
-      name: 'School Management',
-      category: 'Web Development',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      description: 'Complete school management solution with fee collection and attendance.',
-      client: 'ABC School',
-      result: '5000+ Records Managed',
-      testimonial: '"Streamlined our entire operation"',
-      tech: ['React', 'Express.js', 'MySQL', 'Razorpay'],
-    },
-    {
-      name: 'Corporate Website',
-      category: 'Web Development',
-      image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      description: 'Modern corporate website with SEO optimization.',
-      client: 'Fortune 500',
-      result: '300% Traffic Increase',
-      testimonial: '"Professional and polished"',
-      tech: ['React', 'Tailwind CSS'],
-    },
-    {
-      name: 'E-Commerce Platform',
-      category: 'Web Development',
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      description: 'Full-featured e-commerce with payment processing and order tracking.',
-      client: 'Online Retailer',
-      result: '$500K Revenue Boost',
-      testimonial: '"Transformed our sales"',
-      tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    },
-    {
-      name: 'Analytics Dashboard',
-      category: 'App Development',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
-      liveLink: '#',
-      githubLink: '#',
-      description: 'Real-time analytics dashboard with interactive charts and reporting.',
-      client: 'Data Analytics Co',
-      result: '10K+ Data Points/Day',
-      testimonial: '"Insights at our fingertips"',
-      tech: ['React', 'Chart.js', 'Node.js', 'PostgreSQL'],
-    },
-  ];
 
   useEffect(() => {
     if (incomingProjects?.length) {
@@ -109,20 +89,6 @@ const Projects = ({ onProjectClick, projects: incomingProjects }) => {
     fetchProjects();
   }, [incomingProjects]);
 
-  const filters = ['All', 'Web Development', 'App Development', 'Freelancing', 'Personal Projects'];
-
-  const getMasonryClass = (index) => {
-    const pattern = [
-      'md:col-span-2 md:row-span-2',
-      'md:col-span-1 md:row-span-1',
-      'md:col-span-1 md:row-span-1',
-      'md:col-span-1 md:row-span-2',
-      'md:col-span-2 md:row-span-1',
-      'md:col-span-1 md:row-span-1',
-    ];
-    return pattern[index % pattern.length];
-  };
-
   const projectsToDisplay = projects.length > 0 ? projects : defaultProjects;
   const filteredProjects =
     activeFilter === 'All'
@@ -132,30 +98,33 @@ const Projects = ({ onProjectClick, projects: incomingProjects }) => {
         );
 
   return (
-    <section ref={sectionRef} id="projects" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-14">
-          <RevealHeading className="font-serif text-4xl sm:text-5xl text-[#1c1917] mb-4">
-            Featured Projects
-          </RevealHeading>
-          <p className="text-lg text-zinc-500 max-w-2xl mx-auto" data-reveal-copy>
-            Showcasing real-world solutions that transformed businesses
+    <section id="projects" className="relative z-10 bg-[#f4efe6] py-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-12 max-w-2xl">
+          <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3">
+            Gallery
+          </p>
+          <h2 className="font-serif text-5xl sm:text-7xl text-[#1c1917] tracking-tight mb-4">
+            On the wall
+          </h2>
+          <p className="text-zinc-500">
+            A staggered set of shipped work — posters you can actually read.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
-          {filters.map((filter) => {
+        <div className="flex flex-wrap gap-2 mb-14">
+          {FILTERS.map((filter) => {
             const isActive = activeFilter === filter;
             return (
               <button
                 key={filter}
+                type="button"
                 onClick={() => setActiveFilter(filter)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`rounded-full px-4 py-2 text-xs sm:text-sm font-medium transition-colors ${
                   isActive
-                    ? 'text-zinc-950'
+                    ? 'bg-[#1c1917] text-[#f4efe6]'
                     : 'liquid-card !rounded-full text-zinc-600 hover:border-[#d4af37]/50'
                 }`}
-                style={isActive ? { backgroundColor: colors.primary } : undefined}
               >
                 {filter}
               </button>
@@ -164,81 +133,55 @@ const Projects = ({ onProjectClick, projects: incomingProjects }) => {
         </div>
 
         {loading ? (
-          <p className="text-center text-zinc-500 py-20">Loading projects...</p>
+          <p className="text-zinc-500 py-16">Loading projects...</p>
         ) : filteredProjects.length === 0 ? (
-          <p className="text-center text-zinc-500 py-20">No projects found in this category.</p>
+          <p className="text-zinc-500 py-16">No projects found in this category.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-5 auto-rows-max">
-            {filteredProjects.map((project, index) => (
-              <div
-                key={`${project.name}-${index}`}
-                className={`group relative overflow-hidden liquid-card cursor-pointer h-80 ${getMasonryClass(index)}`}
-                onClick={() => onProjectClick(project)}
-              >
-                <img
-                  src={project.image || project.image1}
-                  alt={project.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/70 transition-colors" />
+          <div className="columns-1 md:columns-2 gap-6">
+            {filteredProjects.map((project, index) => {
+              const image = project.image || project.image1;
+              const tall = index % 3 === 1;
 
-                <div className="absolute inset-0 p-6 flex flex-col justify-between z-10">
-                  <div>
-                    <span
-                      className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-medium border"
-                      style={{
-                        backgroundColor: `${colors.primary}33`,
-                        color: colors.primary,
-                        borderColor: `${colors.primary}66`,
-                      }}
-                    >
-                      {project.category}
-                    </span>
-                    <h3 className="text-xl font-semibold text-white line-clamp-2">{project.name}</h3>
-                  </div>
-
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity space-y-3">
-                    {project.description && (
-                      <p className="text-sm text-zinc-200 line-clamp-2">{project.description}</p>
+              return (
+                <button
+                  key={`${project.name}-${index}`}
+                  type="button"
+                  onClick={() => onProjectClick(project)}
+                  className="group mb-6 w-full break-inside-avoid text-left liquid-card overflow-hidden"
+                >
+                  <div className={`relative overflow-hidden ${tall ? 'h-80 sm:h-96' : 'h-64 sm:h-72'}`}>
+                    {image ? (
+                      <img
+                        src={image}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-[#ead7a0]/50" />
                     )}
-                    <div className="flex gap-2">
-                      {project.githubLink && (
-                        <a
-                          href={project.githubLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 rounded-lg bg-white/15 hover:bg-white/25"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <FiGithub size={16} className="text-white" />
-                        </a>
-                      )}
-                      {project.liveLink && (
-                        <a
-                          href={project.liveLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 rounded-lg bg-white/15 hover:bg-white/25"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <FiExternalLink size={16} className="text-white" />
-                        </a>
-                      )}
-                      <button
-                        className="flex-1 px-3 py-2 rounded-lg text-zinc-950 text-sm font-semibold flex items-center justify-center gap-1"
-                        style={{ backgroundColor: colors.primary }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onProjectClick(project);
-                        }}
-                      >
-                        View <FiArrowRight size={14} />
-                      </button>
+                    <span
+                      className="absolute top-4 left-4 font-mono text-[11px] tracking-[0.2em] px-2.5 py-1 rounded-full bg-[#f4efe6]/92 text-[#1c1917]"
+                    >
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <div className="p-5 sm:p-6">
+                    <p className="font-mono text-[11px] tracking-[0.2em] uppercase mb-2" style={{ color: GOLD }}>
+                      {project.category}
+                    </p>
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-serif text-2xl sm:text-3xl text-[#1c1917] tracking-tight">
+                        {project.name}
+                      </h3>
+                      <FiArrowUpRight
+                        size={18}
+                        className="shrink-0 mt-1 text-zinc-300 transition-colors group-hover:text-[#d4af37]"
+                      />
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                </button>
+              );
+            })}
           </div>
         )}
       </div>

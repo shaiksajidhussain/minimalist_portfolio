@@ -1,267 +1,293 @@
-import { FiArrowLeft, FiArrowRight, FiChevronRight, FiExternalLink, FiGithub, FiX, FiMaximize2 } from 'react-icons/fi';
-import { useTheme } from '../context/ThemeContext';
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { FiArrowLeft, FiArrowRight, FiExternalLink, FiGithub, FiMaximize2, FiX } from 'react-icons/fi';
 import config from '../config/api';
 
+const formatCopy = (value) => {
+  if (!value) return '';
+  return String(value)
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+};
+
+const techList = (project) => {
+  if (Array.isArray(project.tech)) return project.tech;
+  if (typeof project.tech === 'string') {
+    return project.tech.split(',').map((item) => item.trim()).filter(Boolean);
+  }
+  if (Array.isArray(project.technologies)) return project.technologies;
+  return [];
+};
+
 const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) => {
-  const { colors } = useTheme();
+  const overlayRef = useRef(null);
   const [projectData, setProjectData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fullscreenImage, setFullscreenImage] = useState(null);
-  
+
   useEffect(() => {
-    const fetchProjectDetails = async () => {
-      if (!project || !project._id) {
+    let cancelled = false;
+
+    const load = async () => {
+      setLoading(true);
+      if (!project?._id) {
+        setProjectData(project);
         setLoading(false);
         return;
       }
-      
+
       try {
         const response = await fetch(`${config.baseUrl}/projects/${project._id}`);
         const data = await response.json();
-        setProjectData(data);
-      } catch (error) {
-        console.error('Error fetching project details:', error);
-        // Fallback to passed project data
-        setProjectData(project);
+        if (!cancelled) setProjectData(data);
+      } catch {
+        if (!cancelled) setProjectData(project);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
-    
-    fetchProjectDetails();
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, [project]);
-  
-  if (!project || loading) return null;
-  
+
+  useEffect(() => {
+    overlayRef.current?.scrollTo({ top: 0 });
+    overlayRef.current?.parentElement?.scrollTo({ top: 0 });
+  }, [project?.name, project?._id]);
+
+  useEffect(() => {
+    const onKey = (event) => {
+      if (event.key === 'Escape') {
+        if (fullscreenImage) setFullscreenImage(null);
+        else onClose();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [fullscreenImage, onClose]);
+
+  if (!project || loading) {
+    return (
+      <div className="flex min-h-full items-center justify-center bg-[#f4efe6]">
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-500">
+          Loading project...
+        </p>
+      </div>
+    );
+  }
+
   const displayProject = projectData || project;
+  const heroImage = displayProject.image || displayProject.image1;
   const galleryImages = [
     displayProject.image1,
     displayProject.image2,
     displayProject.image3,
     displayProject.image4,
-  ].filter(Boolean);
-
-  const currentIndex = allProjects.findIndex(p => p.name === project.name);
-  const nextProject = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : allProjects[0];
+  ].filter((image) => image && image !== heroImage);
+  const tech = techList(displayProject);
+  const currentIndex = allProjects.findIndex((item) => item.name === project.name);
+  const nextProject =
+    currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : allProjects[0];
+  const copy = formatCopy(displayProject.description);
 
   return (
-    <div className="min-h-screen bg-zinc-950">
-      {fullscreenImage && (
+    <div ref={overlayRef} className="min-h-full bg-[#f4efe6] text-[#1c1917]" data-lenis-prevent>
+      {fullscreenImage ? (
         <div
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-[#1c1917]/92 p-4"
+          data-lenis-prevent
           onClick={() => setFullscreenImage(null)}
         >
           <button
+            type="button"
             onClick={() => setFullscreenImage(null)}
-            className="absolute top-8 right-8 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            className="absolute right-6 top-6 rounded-full border border-white/20 p-2 text-white hover:bg-white/10"
+            aria-label="Close fullscreen"
           >
-            <FiX size={28} className="text-white" />
+            <FiX size={24} />
           </button>
           <img
             src={fullscreenImage}
-            alt="Fullscreen view"
-            className="max-w-full max-h-[90vh] object-contain rounded-lg"
-            onClick={(e) => e.stopPropagation()}
+            alt=""
+            className="max-h-[90vh] max-w-full object-contain"
+            onClick={(event) => event.stopPropagation()}
           />
         </div>
-      )}
+      ) : null}
 
-      <div className="fixed left-8 top-8 z-50">
-        <button
-          onClick={onClose}
-          className="w-12 h-12 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center hover:bg-zinc-700 transition-colors"
-        >
-          <FiArrowLeft size={20} className="text-white" />
-        </button>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
-        <div>
-          <p className="text-sm text-zinc-500 mb-4">
-            {displayProject.category}
+      <div className="mx-auto max-w-5xl px-6 pb-28 pt-10 sm:px-10 sm:pt-12">
+        <div className="mb-10 flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-[#1c1917]"
+          >
+            <FiArrowLeft size={16} />
+            Back to work
+          </button>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#d4af37]">
+            {String(Math.max(currentIndex, 0) + 1).padStart(2, '0')}
+            {allProjects.length ? ` / ${String(allProjects.length).padStart(2, '0')}` : ''}
           </p>
+        </div>
 
-          <h1 className="text-4xl sm:text-5xl font-semibold text-white mb-4">
-            {displayProject.name}
-          </h1>
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
+          {displayProject.category || 'Work'}
+        </p>
+        <h1 className="mt-4 font-serif text-4xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+          {displayProject.name}
+        </h1>
 
-          <nav className="flex items-center gap-2 text-sm text-zinc-500 mb-12">
-            <button onClick={onClose} className="hover:text-white transition-colors">
-              Home
-            </button>
-            <FiChevronRight size={14} />
-            <button onClick={onClose} className="hover:text-white transition-colors">
-              Portfolio
-            </button>
-            <FiChevronRight size={14} />
-            <span className="text-white">{displayProject.name}</span>
-          </nav>
-
-          <div className="mb-12">
+        {heroImage ? (
+          <figure className="work-frame relative mt-10">
             <div
-              className="mb-6 rounded-lg overflow-hidden relative group cursor-pointer"
-              onClick={() => setFullscreenImage(displayProject.image)}
+              className="gold-plate pointer-events-none absolute inset-y-8 left-12 -right-4 sm:-right-6"
+              aria-hidden
+            />
+            <button
+              type="button"
+              onClick={() => setFullscreenImage(heroImage)}
+              className="group relative block w-full overflow-hidden rounded-[1.2rem] border-[10px] border-[#fffcf7] shadow-[0_24px_60px_rgba(28,25,23,0.12)]"
             >
               <img
-                src={displayProject.image}
+                src={heroImage}
                 alt={displayProject.name}
-                className="w-full h-auto object-cover max-h-96"
+                className="aspect-[16/10] w-full bg-[#ead7a0]/40 object-cover"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
-                <div className="hidden group-hover:flex flex-col items-center gap-3">
-                  <FiMaximize2 size={32} className="text-white" />
-                  <span className="text-white font-medium">View Fullscreen</span>
-                </div>
-              </div>
-            </div>
+              <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#1c1917]/0 opacity-0 transition-opacity group-hover:bg-[#1c1917]/25 group-hover:opacity-100">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[#fffcf7] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-[#1c1917]">
+                  <FiMaximize2 size={14} />
+                  Fullscreen
+                </span>
+              </span>
+            </button>
+          </figure>
+        ) : null}
 
-            {galleryImages.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-zinc-500 uppercase tracking-wide">
-                  Project Gallery
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {galleryImages.map((image, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setFullscreenImage(image)}
-                      className="rounded-lg overflow-hidden border border-white/10 relative group"
-                    >
-                      <img
-                        src={image}
-                        alt={`${displayProject.name} - ${index + 1}`}
-                        className="w-full h-40 object-cover"
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
-                        <div className="hidden group-hover:flex flex-col items-center gap-2">
-                          <FiMaximize2 size={24} className="text-white" />
-                          <span className="text-white text-sm font-medium">Fullscreen</span>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+        <div className="mt-14 grid grid-cols-12 gap-x-10 gap-y-10">
+          <div className="col-span-12 lg:col-span-8">
+            <h2 className="font-serif text-3xl tracking-tight sm:text-4xl">About this project</h2>
+            {copy ? (
+              <p className="mt-6 whitespace-pre-wrap text-[1.1rem] leading-[1.7] text-[#1c1917]/80">
+                {copy}
+              </p>
+            ) : null}
+
+            {displayProject.testimonial ? (
+              <blockquote className="mt-10 border-t border-[#1c1917]/10 pt-8 font-serif text-2xl italic leading-snug text-[#1c1917]">
+                “{displayProject.testimonial}”
+              </blockquote>
+            ) : null}
           </div>
 
-          <div className="mb-12">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-6">
-              About This Project
-            </h2>
-            <p className="text-lg text-zinc-400 leading-relaxed mb-8">
-              {displayProject.description}
-            </p>
-
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
-              {displayProject.client && (
+          <aside className="col-span-12 lg:col-span-4">
+            <dl className="space-y-6 border-t border-[#1c1917]/10 pt-6 lg:border-t-0 lg:pt-0">
+              {displayProject.client ? (
                 <div>
-                  <h3 className="text-sm font-semibold text-zinc-500 mb-2 uppercase tracking-wide">
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
                     Client
-                  </h3>
-                  <p className="text-lg text-white">{displayProject.client}</p>
+                  </dt>
+                  <dd className="mt-2 font-serif text-2xl">{displayProject.client}</dd>
                 </div>
-              )}
-
-              {displayProject.tech && displayProject.tech.length > 0 && (
+              ) : null}
+              {displayProject.result ? (
                 <div>
-                  <h3 className="text-sm font-semibold text-zinc-500 mb-2 uppercase tracking-wide">
-                    Technologies
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {displayProject.tech.map((tech, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 rounded-full text-sm"
-                        style={{ backgroundColor: `${colors.primary}22`, color: colors.primary }}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {displayProject.result && (
-                <div>
-                  <h3 className="text-sm font-semibold text-zinc-500 mb-2 uppercase tracking-wide">
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
                     Result
-                  </h3>
-                  <p className="text-lg text-emerald-400 font-semibold">{displayProject.result}</p>
+                  </dt>
+                  <dd className="mt-2 text-[1.05rem] text-[#1c1917]">{displayProject.result}</dd>
                 </div>
-              )}
-
-              {displayProject.category && (
+              ) : null}
+              {tech.length ? (
                 <div>
-                  <h3 className="text-sm font-semibold text-zinc-500 mb-2 uppercase tracking-wide">
-                    Category
-                  </h3>
-                  <p className="text-lg text-white">{displayProject.category}</p>
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+                    Stack
+                  </dt>
+                  <dd className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#d4af37]">
+                    {tech.join(' · ')}
+                  </dd>
                 </div>
-              )}
-            </div>
+              ) : null}
+            </dl>
 
-            {displayProject.testimonial && (
-              <div className="border border-white/10 rounded-lg p-6 mb-8 bg-zinc-900/40">
-                <p className="text-lg text-zinc-300 italic">"{displayProject.testimonial}"</p>
-              </div>
-            )}
-
-            <div className="flex flex-wrap gap-4">
-              {displayProject.liveLink && (
+            <div className="mt-8 flex flex-col gap-3">
+              {displayProject.liveLink && displayProject.liveLink !== '#' ? (
                 <a
                   href={displayProject.liveLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-zinc-950 rounded-lg font-semibold hover:bg-zinc-200 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1c1917] px-5 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-[#f4efe6] transition-colors hover:bg-[#1c1917]/90"
                 >
-                  View Live
-                  <FiExternalLink size={18} />
+                  View live
+                  <FiExternalLink size={14} />
                 </a>
-              )}
-              {displayProject.githubLink && (
+              ) : null}
+              {displayProject.githubLink && displayProject.githubLink !== '#' ? (
                 <a
                   href={displayProject.githubLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 text-white rounded-lg font-semibold hover:bg-zinc-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#1c1917]/15 px-5 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-[#1c1917] transition-colors hover:border-[#d4af37]"
                 >
                   GitHub
-                  <FiGithub size={18} />
+                  <FiGithub size={14} />
                 </a>
-              )}
+              ) : null}
+            </div>
+          </aside>
+        </div>
+
+        {galleryImages.length ? (
+          <div className="mt-16 border-t border-[#1c1917]/10 pt-12">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
+              Gallery
+            </p>
+            <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+              {galleryImages.map((image, index) => (
+                <button
+                  key={`${image}-${index}`}
+                  type="button"
+                  onClick={() => setFullscreenImage(image)}
+                  className="group overflow-hidden rounded-[1.1rem] border-[8px] border-[#fffcf7] shadow-[0_16px_40px_rgba(28,25,23,0.10)]"
+                >
+                  <img
+                    src={image}
+                    alt=""
+                    className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                </button>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
+        ) : null}
 
-      <div className="fixed bottom-8 right-8 z-50">
-        <div className="bg-zinc-900 border border-white/10 rounded-lg p-4">
-          <p className="text-xs font-semibold text-zinc-500 mb-3 uppercase tracking-wide">
-            Next Project
-          </p>
-          <div className="flex items-center gap-3">
+        {allProjects.length > 1 ? (
+          <div className="mt-16 flex items-center justify-between gap-4 border-t border-[#1c1917]/10 pt-8">
             <button
+              type="button"
               onClick={onPrevious}
-              className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 transition-colors"
+              className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-500 transition-colors hover:text-[#1c1917]"
             >
-              <FiArrowLeft size={16} className="text-white" />
+              <FiArrowLeft size={14} />
+              Previous
             </button>
             <button
+              type="button"
               onClick={onNext}
-              className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 transition-colors"
+              className="inline-flex items-center gap-2 text-right font-serif text-2xl tracking-tight text-[#1c1917] transition-colors hover:text-[#d4af37] sm:text-3xl"
             >
-              <FiArrowRight size={16} className="text-white" />
-            </button>
-            <button
-              onClick={onNext}
-              className="text-sm font-medium text-white hover:underline"
-            >
-              {nextProject?.name || 'No more projects'}
+              {nextProject?.name}
+              <FiArrowRight size={18} className="shrink-0" />
             </button>
           </div>
-        </div>
+        ) : null}
       </div>
     </div>
   );

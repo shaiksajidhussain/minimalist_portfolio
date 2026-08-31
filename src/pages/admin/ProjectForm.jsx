@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLenis } from 'lenis/react';
 import { FiX } from 'react-icons/fi';
 import { getAuthToken } from '../../utils/authUtils';
 import config from '../../config/api';
@@ -25,6 +26,12 @@ const ProjectForm = ({ project, mode, onSubmit, onClose }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const lenis = useLenis();
+
+  useEffect(() => {
+    lenis?.stop();
+    return () => lenis?.start();
+  }, [lenis]);
 
   useEffect(() => {
     if (project && mode === 'edit') {
@@ -109,23 +116,33 @@ const ProjectForm = ({ project, mode, onSubmit, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-gray-900 border border-white/20 rounded-lg w-full max-w-2xl my-8 shadow-2xl">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+      data-lenis-prevent
+      onWheel={(event) => event.stopPropagation()}
+      onTouchMove={(event) => event.stopPropagation()}
+    >
+      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-white/20 bg-gray-900 shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-6 py-4">
           <h2 className="text-xl font-bold text-white">
             {mode === 'create' ? 'Create New Project' : 'Edit Project'}
           </h2>
           <button
+            type="button"
             onClick={onClose}
-            className="p-1 hover:bg-white/10 rounded-lg transition-colors"
+            className="rounded-lg p-1 transition-colors hover:bg-white/10"
           >
             <FiX size={24} className="text-white" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-96 overflow-y-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-6"
+          data-lenis-prevent
+        >
           {error && (
             <div className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
               <p className="text-red-200 text-sm">{error}</p>
@@ -329,7 +346,7 @@ const ProjectForm = ({ project, mode, onSubmit, onClose }) => {
         </form>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/10">
+        <div className="flex shrink-0 items-center justify-end gap-3 border-t border-white/10 px-6 py-4">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all"
