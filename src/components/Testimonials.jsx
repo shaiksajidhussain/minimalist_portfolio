@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { gsap, onLayoutReady, useGSAP } from '../lib/gsap';
-import { GOLD } from '../data/skills';
 import { RevealHeading, useTextReveal } from '../hooks/useTextReveal.jsx';
 
 const testimonials = [
@@ -132,7 +131,7 @@ const Testimonials = () => {
   );
 
   return (
-    <section ref={sectionRef} id="testimonials" className="relative h-screen bg-[#f4efe6]">
+    <section ref={sectionRef} id="testimonials" className="relative h-screen bg-[var(--cream)]">
       <div className="px-6 sm:px-10 pt-24 sm:pt-28 pb-4 max-w-6xl mx-auto text-center">
         <p
           className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3"
@@ -140,7 +139,7 @@ const Testimonials = () => {
         >
           Testimonials
         </p>
-        <RevealHeading className="font-serif text-5xl sm:text-7xl tracking-tight text-[#1c1917]">
+        <RevealHeading className="font-serif text-5xl sm:text-7xl tracking-tight text-[var(--ink)]">
           In their words
         </RevealHeading>
       </div>
@@ -156,32 +155,31 @@ const Testimonials = () => {
               >
               {featured && (
                 <span
-                  className="absolute left-1/2 -top-2.5 h-2.5 w-2.5 -translate-x-1/2 rounded-full"
-                  style={{ background: GOLD }}
+                  className="absolute left-1/2 -top-2.5 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-[var(--gold)]"
                   aria-hidden
                 />
               )}
 
               <p
-                className="font-serif text-5xl leading-none mb-4"
-                style={{ color: GOLD }}
+                className="mb-4 font-serif text-5xl leading-none text-[var(--gold)]"
                 aria-hidden
               >
                 “
               </p>
-              <p className="text-[#1c1917] leading-relaxed text-[15px] sm:text-base flex-1">
+              <p className="text-[var(--ink)] leading-relaxed text-[15px] sm:text-base flex-1">
                 {item.quote}
               </p>
 
               <div className="mt-6 pt-5 border-t border-zinc-200/80 flex items-center gap-3">
                 <span
-                  className="h-10 w-10 rounded-full shrink-0 flex items-center justify-center text-[11px] font-medium text-[#1c1917]"
-                  style={{ background: featured ? GOLD : '#ead7a0' }}
+                  className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center text-[11px] font-medium text-[var(--ink)] ${
+                    featured ? 'bg-[var(--gold)]' : 'bg-[var(--blob-b)]'
+                  }`}
                 >
                   {initials(item.name)}
                 </span>
                 <footer>
-                  <p className="text-sm font-semibold text-[#1c1917]">{item.name}</p>
+                  <p className="text-sm font-semibold text-[var(--ink)]">{item.name}</p>
                   <p className="text-xs text-zinc-500">{item.designation}</p>
                 </footer>
               </div>

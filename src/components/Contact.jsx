@@ -56,16 +56,16 @@ const Contact = () => {
   ];
 
   const fieldClass =
-    'w-full px-4 py-3 rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[var(--color-primary)]';
+    'w-full px-4 py-3 rounded-lg border border-[var(--line)] bg-[var(--cream)] text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--gold)]';
 
   return (
     <section ref={sectionRef} id="contact" className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-14">
-          <RevealHeading className="text-4xl sm:text-5xl font-semibold text-zinc-900 mb-4">
+          <RevealHeading className="text-4xl sm:text-5xl font-semibold text-[var(--ink)] mb-4">
             Let&apos;s Connect
           </RevealHeading>
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto" data-reveal-copy>
+          <p className="text-lg text-[var(--muted)] max-w-2xl mx-auto" data-reveal-copy>
             Have a project in mind or want to collaborate? I&apos;d love to hear from you.
           </p>
         </div>
@@ -76,7 +76,7 @@ const Contact = () => {
               <div className="p-3 rounded-xl" style={{ backgroundColor: `${colors.primary}22` }}>
                 <FiMail className="w-5 h-5" style={{ color: colors.primary }} />
               </div>
-              <h3 className="text-2xl font-semibold text-zinc-900">Get in Touch</h3>
+              <h3 className="text-2xl font-semibold text-[var(--ink)]">Get in Touch</h3>
             </div>
 
             <div className="space-y-4 mb-8">
@@ -86,14 +86,14 @@ const Contact = () => {
                   <a
                     key={info.label}
                     href={info.href}
-                    className="flex items-center gap-4 p-4 rounded-xl bg-zinc-50 hover:bg-zinc-100 transition-colors"
+                    className="flex items-center gap-4 rounded-xl bg-[var(--cream)] p-4 transition-colors hover:bg-[var(--gold-light)]"
                   >
                     <div className="p-3 rounded-lg" style={{ backgroundColor: `${colors.primary}22` }}>
                       <Icon className="w-5 h-5" style={{ color: colors.primary }} />
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-wider text-zinc-500">{info.label}</p>
-                      <p className="font-medium text-zinc-900">{info.value}</p>
+                      <p className="font-medium text-[var(--ink)]">{info.value}</p>
                     </div>
                   </a>
                 );
@@ -109,7 +109,7 @@ const Contact = () => {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full flex items-center justify-center text-zinc-950 transition-opacity hover:opacity-90"
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--ink)] transition-opacity hover:opacity-90"
                     style={{ backgroundColor: colors.primary }}
                     title={link.label}
                   >
@@ -125,13 +125,13 @@ const Contact = () => {
               <div className="p-3 rounded-xl" style={{ backgroundColor: `${colors.primary}22` }}>
                 <FiSend className="w-5 h-5" style={{ color: colors.primary }} />
               </div>
-              <h3 className="text-2xl font-semibold text-zinc-900">Send a Message</h3>
+              <h3 className="text-2xl font-semibold text-[var(--ink)]">Send a Message</h3>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="text-sm font-medium mb-2 block text-zinc-300">Your Name</label>
+                  <label className="text-sm font-medium mb-2 block text-[var(--muted)]">Your Name</label>
                   <input
                     type="text"
                     name="name"
@@ -143,7 +143,7 @@ const Contact = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-2 block text-zinc-300">Your Email</label>
+                  <label className="text-sm font-medium mb-2 block text-[var(--muted)]">Your Email</label>
                   <input
                     type="email"
                     name="email"
@@ -157,7 +157,7 @@ const Contact = () => {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block text-zinc-300">Your Message</label>
+                <label className="text-sm font-medium mb-2 block text-[var(--muted)]">Your Message</label>
                 <textarea
                   name="message"
                   value={formData.message}
@@ -178,7 +178,7 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-6 py-3 rounded-lg font-semibold text-zinc-950 flex items-center justify-center gap-2 disabled:opacity-70"
+                className="flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold text-[var(--ink)] disabled:opacity-70"
                 style={{ backgroundColor: colors.primary }}
               >
                 {loading ? 'Sending...' : 'Send Message'}

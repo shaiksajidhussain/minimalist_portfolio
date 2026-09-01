@@ -75,7 +75,7 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
 
   if (!project || loading) {
     return (
-      <div className="flex min-h-full items-center justify-center bg-[#f4efe6]">
+      <div className="flex min-h-full items-center justify-center bg-[var(--cream)]">
         <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-500">
           Loading project...
         </p>
@@ -98,10 +98,10 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
   const copy = formatCopy(displayProject.description);
 
   return (
-    <div ref={overlayRef} className="min-h-full bg-[#f4efe6] text-[#1c1917]" data-lenis-prevent>
+    <div ref={overlayRef} className="min-h-full bg-[var(--cream)] text-[var(--ink)]" data-lenis-prevent>
       {fullscreenImage ? (
         <div
-          className="fixed inset-0 z-[90] flex items-center justify-center bg-[#1c1917]/92 p-4"
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-[var(--ink)]/92 p-4"
           data-lenis-prevent
           onClick={() => setFullscreenImage(null)}
         >
@@ -127,12 +127,12 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-[#1c1917]"
+            className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-[var(--ink)]"
           >
             <FiArrowLeft size={16} />
             Back to work
           </button>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#d4af37]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--gold)]">
             {String(Math.max(currentIndex, 0) + 1).padStart(2, '0')}
             {allProjects.length ? ` / ${String(allProjects.length).padStart(2, '0')}` : ''}
           </p>
@@ -154,15 +154,15 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
             <button
               type="button"
               onClick={() => setFullscreenImage(heroImage)}
-              className="group relative block w-full overflow-hidden rounded-[1.2rem] border-[10px] border-[#fffcf7] shadow-[0_24px_60px_rgba(28,25,23,0.12)]"
+              className="group relative block w-full overflow-hidden rounded-[1.2rem] border-[10px] border-[var(--card)] shadow-[0_24px_60px_rgba(28,25,23,0.12)]"
             >
               <img
                 src={heroImage}
                 alt={displayProject.name}
-                className="aspect-[16/10] w-full bg-[#ead7a0]/40 object-cover"
+                className="aspect-[16/10] w-full bg-[var(--blob-b)]/40 object-cover"
               />
-              <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#1c1917]/0 opacity-0 transition-opacity group-hover:bg-[#1c1917]/25 group-hover:opacity-100">
-                <span className="inline-flex items-center gap-2 rounded-full bg-[#fffcf7] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-[#1c1917]">
+              <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[var(--ink)]/0 opacity-0 transition-opacity group-hover:bg-[var(--ink)]/25 group-hover:opacity-100">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[var(--card)] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
                   <FiMaximize2 size={14} />
                   Fullscreen
                 </span>
@@ -175,20 +175,20 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
           <div className="col-span-12 lg:col-span-8">
             <h2 className="font-serif text-3xl tracking-tight sm:text-4xl">About this project</h2>
             {copy ? (
-              <p className="mt-6 whitespace-pre-wrap text-[1.1rem] leading-[1.7] text-[#1c1917]/80">
+              <p className="mt-6 whitespace-pre-wrap text-[1.1rem] leading-[1.7] text-[var(--ink-soft)]">
                 {copy}
               </p>
             ) : null}
 
             {displayProject.testimonial ? (
-              <blockquote className="mt-10 border-t border-[#1c1917]/10 pt-8 font-serif text-2xl italic leading-snug text-[#1c1917]">
+              <blockquote className="mt-10 border-t border-[var(--line)] pt-8 font-serif text-2xl italic leading-snug text-[var(--ink)]">
                 “{displayProject.testimonial}”
               </blockquote>
             ) : null}
           </div>
 
           <aside className="col-span-12 lg:col-span-4">
-            <dl className="space-y-6 border-t border-[#1c1917]/10 pt-6 lg:border-t-0 lg:pt-0">
+            <dl className="space-y-6 border-t border-[var(--line)] pt-6 lg:border-t-0 lg:pt-0">
               {displayProject.client ? (
                 <div>
                   <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
@@ -202,7 +202,7 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
                   <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
                     Result
                   </dt>
-                  <dd className="mt-2 text-[1.05rem] text-[#1c1917]">{displayProject.result}</dd>
+                  <dd className="mt-2 text-[1.05rem] text-[var(--ink)]">{displayProject.result}</dd>
                 </div>
               ) : null}
               {tech.length ? (
@@ -210,7 +210,7 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
                   <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
                     Stack
                   </dt>
-                  <dd className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#d4af37]">
+                  <dd className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--gold)]">
                     {tech.join(' · ')}
                   </dd>
                 </div>
@@ -223,7 +223,7 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
                   href={displayProject.liveLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1c1917] px-5 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-[#f4efe6] transition-colors hover:bg-[#1c1917]/90"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--ink)] px-5 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--cream)] transition-colors hover:bg-[var(--ink)]/90"
                 >
                   View live
                   <FiExternalLink size={14} />
@@ -234,7 +234,7 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
                   href={displayProject.githubLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#1c1917]/15 px-5 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-[#1c1917] transition-colors hover:border-[#d4af37]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] px-5 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--gold)]"
                 >
                   GitHub
                   <FiGithub size={14} />
@@ -245,7 +245,7 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
         </div>
 
         {galleryImages.length ? (
-          <div className="mt-16 border-t border-[#1c1917]/10 pt-12">
+          <div className="mt-16 border-t border-[var(--line)] pt-12">
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
               Gallery
             </p>
@@ -255,7 +255,7 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
                   key={`${image}-${index}`}
                   type="button"
                   onClick={() => setFullscreenImage(image)}
-                  className="group overflow-hidden rounded-[1.1rem] border-[8px] border-[#fffcf7] shadow-[0_16px_40px_rgba(28,25,23,0.10)]"
+                  className="group overflow-hidden rounded-[1.1rem] border-[8px] border-[var(--card)] shadow-[0_16px_40px_rgba(28,25,23,0.10)]"
                 >
                   <img
                     src={image}
@@ -269,11 +269,11 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
         ) : null}
 
         {allProjects.length > 1 ? (
-          <div className="mt-16 flex items-center justify-between gap-4 border-t border-[#1c1917]/10 pt-8">
+          <div className="mt-16 flex items-center justify-between gap-4 border-t border-[var(--line)] pt-8">
             <button
               type="button"
               onClick={onPrevious}
-              className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-500 transition-colors hover:text-[#1c1917]"
+              className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-500 transition-colors hover:text-[var(--ink)]"
             >
               <FiArrowLeft size={14} />
               Previous
@@ -281,7 +281,7 @@ const ProjectDetail = ({ project, allProjects, onClose, onNext, onPrevious }) =>
             <button
               type="button"
               onClick={onNext}
-              className="inline-flex items-center gap-2 text-right font-serif text-2xl tracking-tight text-[#1c1917] transition-colors hover:text-[#d4af37] sm:text-3xl"
+              className="inline-flex items-center gap-2 text-right font-serif text-2xl tracking-tight text-[var(--ink)] transition-colors hover:text-[var(--gold)] sm:text-3xl"
             >
               {nextProject?.name}
               <FiArrowRight size={18} className="shrink-0" />

@@ -11,39 +11,39 @@ const About = () => {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-[#f4efe6] pt-24 sm:pt-28 lg:pt-32"
+      className="relative overflow-x-hidden bg-[var(--cream)] pt-24 sm:pt-28 lg:pt-32"
     >
-      <div className="relative mx-auto grid max-w-6xl grid-cols-12 items-start gap-x-10 gap-y-10 px-6">
-        <div className="relative z-10 col-span-12 lg:col-span-6 lg:pb-28">
-          <div className="mb-6 flex items-center justify-between gap-4">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
+      <div className="relative mx-auto grid max-w-6xl grid-cols-12 items-start gap-x-6 gap-y-10 px-5 sm:gap-x-10 sm:px-6">
+        <div className="relative z-10 col-span-12 min-w-0 lg:col-span-6 lg:pb-28">
+          <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500 sm:text-[11px] sm:tracking-[0.2em]">
               02 — About
             </p>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#d4af37]">
+            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--gold)] sm:text-[11px] sm:tracking-[0.16em]">
               Hyderabad · Remote
             </p>
           </div>
-          <h2 className="font-serif text-[2.6rem] leading-[0.95] tracking-tight text-[#1c1917] sm:text-6xl lg:text-7xl">
+          <h2 className="font-serif text-[2.15rem] leading-[1.05] tracking-tight text-[var(--ink)] sm:text-6xl lg:text-7xl">
             Still building
             <br />
             <em>what&apos;s next.</em>
           </h2>
-          <p className="mt-8 max-w-xl text-[1.15rem] leading-[1.65] text-[#1c1917] sm:text-xl">
+          <p className="mt-8 max-w-xl text-[1.05rem] leading-[1.7] break-words text-[var(--ink)] sm:text-xl sm:leading-[1.65]">
             Hello, I&apos;m Shaik Sajid Hussain. Three years across product and
             engineering — from SaaS platforms and learning systems to shipping
             React Native apps.
           </p>
-          <p className="mt-5 max-w-lg text-sm leading-relaxed text-zinc-500 sm:text-base">
+          <p className="mt-5 max-w-lg text-sm leading-relaxed break-words text-zinc-500 sm:text-base">
             React, React Native, and Node.js — performance, clean UI, and
             architecture that scales.
           </p>
-          <div className="mt-10 grid max-w-xl grid-cols-3 border-t border-[#1c1917]/10 pt-7">
+          <div className="mt-10 grid max-w-xl grid-cols-3 gap-2 border-t border-[var(--line)] pt-7 sm:gap-4">
             {STATS.map((stat) => (
-              <div key={stat.label} className="pr-4">
-                <p className="font-serif text-4xl tracking-tight text-[#1c1917] sm:text-5xl">
+              <div key={stat.label} className="min-w-0">
+                <p className="font-serif text-3xl tracking-tight text-[var(--ink)] sm:text-5xl">
                   {stat.value}
                 </p>
-                <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+                <p className="mt-2 font-mono text-[9px] uppercase leading-snug tracking-[0.1em] text-zinc-500 sm:text-[10px] sm:tracking-[0.16em]">
                   {stat.label}
                 </p>
               </div>
@@ -51,12 +51,12 @@ const About = () => {
           </div>
         </div>
 
-        <figure className="about-portrait relative z-20 col-span-12 mx-auto w-full max-w-md lg:col-span-6 lg:mx-0 lg:mt-6 lg:max-w-[26rem] lg:justify-self-end">
+        <figure className="about-portrait relative z-20 col-span-12 mx-auto w-full max-w-md min-w-0 lg:col-span-6 lg:mx-0 lg:mt-6 lg:max-w-[26rem] lg:justify-self-end">
           <div
-            className="gold-plate pointer-events-none absolute inset-y-8 -right-4 left-12 sm:-right-6"
+            className="gold-plate pointer-events-none absolute inset-y-8 left-10 right-0 sm:-right-6 sm:left-12"
             aria-hidden
           />
-          <div className="relative overflow-hidden rounded-[1.4rem] border-[10px] border-[#fffcf7] shadow-[0_24px_60px_rgba(28,25,23,0.14)]">
+          <div className="relative overflow-hidden rounded-[1.4rem] border-8 border-[var(--card)] shadow-[0_24px_60px_rgba(28,25,23,0.14)] sm:border-[10px]">
             <img
               src={PHOTO}
               alt="Shaik Sajid Hussain"
@@ -66,9 +66,9 @@ const About = () => {
         </figure>
       </div>
 
-      <div className="about-name-band relative z-[1]">
+      <div className="about-name-band relative z-[1] overflow-hidden px-2">
         <p
-          className="about-name select-none text-center font-serif leading-none text-[#1c1917]"
+          className="about-name select-none text-center font-serif leading-none text-[var(--ink)]"
           aria-hidden
         >
           Sajid

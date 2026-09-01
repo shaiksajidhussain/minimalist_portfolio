@@ -36,14 +36,14 @@ const ScrollRail = ({ id, kicker, title, children }) => {
   );
 
   return (
-    <section ref={sectionRef} id={id} className="relative h-screen overflow-hidden bg-[#f4efe6]">
+    <section ref={sectionRef} id={id} className="relative h-screen overflow-hidden bg-[var(--cream)]">
       <div className="px-6 sm:px-10 pt-24 pb-6 max-w-6xl">
         {kicker ? (
           <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3">
             {kicker}
           </p>
         ) : null}
-        <h2 className="font-serif text-5xl sm:text-7xl text-[#1c1917] tracking-tight">{title}</h2>
+        <h2 className="font-serif text-5xl sm:text-7xl text-[var(--ink)] tracking-tight">{title}</h2>
       </div>
 
       <div className="overflow-hidden pb-24">

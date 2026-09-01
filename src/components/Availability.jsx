@@ -30,10 +30,10 @@ const Availability = () => {
     <section ref={sectionRef} id="availability" className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
-          <RevealHeading className="text-4xl sm:text-5xl font-semibold text-zinc-900 mb-4">
+          <RevealHeading className="text-4xl sm:text-5xl font-semibold text-[var(--ink)] mb-4">
             Availability
           </RevealHeading>
-          <p className="text-lg text-zinc-400" data-reveal-copy>
+          <p className="text-lg text-[var(--muted)]" data-reveal-copy>
             Ready to start your next project
           </p>
         </div>
@@ -54,8 +54,8 @@ const Availability = () => {
                     <Icon className="w-6 h-6" style={{ color: colors.primary }} />
                   </div>
                 </div>
-                <h3 className="text-lg font-semibold text-zinc-900 mb-2">{detail.title}</h3>
-                <p className="text-zinc-400">{detail.description}</p>
+                <h3 className="text-lg font-semibold text-[var(--ink)] mb-2">{detail.title}</h3>
+                <p className="text-[var(--muted)]">{detail.description}</p>
               </div>
             );
           })}

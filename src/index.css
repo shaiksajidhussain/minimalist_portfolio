@@ -3,12 +3,26 @@
 @tailwind utilities;
 
 :root {
+  --cream: #f4efe6;
+  --ink: #1c1917;
+  --ink-soft: rgba(28, 25, 23, 0.8);
+  --gold: #d4af37;
+  --gold-bright: #e8c547;
+  --gold-light: #fff4c4;
+  --card: #fffcf7;
+  --line: rgba(28, 25, 23, 0.1);
+  --muted: rgba(28, 25, 23, 0.55);
+  --sky: #7eb8e6;
+  --sky-mid: #a9d4f0;
+  --sky-end: #d5eaf8;
+  --blob-a: #c5e0f4;
+  --blob-b: #ead7a0;
+  --blob-c: #f0d3c4;
   --color-primary: #e8c547;
   --color-light: #fff4b8;
   --color-dark: #1c1917;
   --bg-color: #f4efe6;
-  --sky: #8ec5ea;
-  --cream: #f4efe6;
+  --bg-image: none;
   color-scheme: light;
 }
 
@@ -20,6 +34,10 @@
 
 html {
   background-color: var(--cream);
+  background-image: var(--bg-image, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 html.lenis,
@@ -32,7 +50,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--cream);
-  color: #1c1917;
+  color: var(--ink);
 }
 
 .hero-grain {
@@ -78,8 +96,8 @@ body {
 }
 
 .hero-letter:hover {
-  color: #d4af37 !important;
-  text-shadow: 0 0 22px rgba(212, 175, 55, 0.65);
+  color: var(--gold) !important;
+  text-shadow: 0 0 22px color-mix(in srgb, var(--gold) 65%, transparent);
 }
 
 .hero-letter-space {
@@ -121,13 +139,13 @@ body {
 }
 
 .liquid-blob-a {
-  --blob: #c5e0f4;
+  --blob: var(--blob-a);
   top: -18%;
   left: -14%;
 }
 
 .liquid-blob-b {
-  --blob: #ead7a0;
+  --blob: var(--blob-b);
   top: 22%;
   right: -16%;
   animation-duration: 28s;
@@ -135,7 +153,7 @@ body {
 }
 
 .liquid-blob-c {
-  --blob: #f0d3c4;
+  --blob: var(--blob-c);
   bottom: -16%;
   left: 22%;
   animation-duration: 21s;
@@ -152,27 +170,28 @@ body {
 }
 
 .liquid-card {
-  background: rgba(255, 252, 247, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
   border-radius: 28px;
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.75) inset,
-    0 14px 40px rgba(28, 25, 23, 0.05);
+    0 1px 0 color-mix(in srgb, var(--card) 80%, white) inset,
+    0 14px 40px color-mix(in srgb, var(--ink) 8%, transparent);
 }
 
 .liquid-card.rounded-full {
   border-radius: 999px;
 }
 
-.ledger-panel.liquid-card {
-  background: #fffcf7;
+.ledger-panel.liquid-card,
+.who-panel.liquid-card {
+  background: var(--card);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.9) inset,
     0 18px 50px rgba(28, 25, 23, 0.08);
 }
 
 .ledger-panel .liquid-card {
-  background: #ffffff;
+  background: var(--card);
 }
 
 .testimonial-stage {
@@ -195,7 +214,7 @@ body {
   top: 0;
   width: 100%;
   min-height: 280px;
-  background: #fffcf7;
+  background: var(--card);
 }
 
 .svc-unfold-body {
@@ -213,7 +232,7 @@ body {
 }
 
 .svc-unfold-item.is-open .svc-unfold-kicker {
-  color: #d4af37;
+  color: var(--gold);
 }
 
 .liquid-rail {
@@ -252,7 +271,7 @@ body {
 .gold-plate,
 .about-gold-plate {
   border-radius: 4px;
-  background: repeating-linear-gradient(-32deg, #d4af37 0 10px, #e8c547 10px 14px);
+  background: repeating-linear-gradient(-32deg, var(--gold) 0 10px, var(--gold-bright) 10px 14px);
 }
 
 .about-portrait img,
@@ -267,14 +286,21 @@ body {
 }
 
 .about-name-band {
-  margin-top: -3.5rem;
-  padding-bottom: 2.5rem;
+  margin-top: -2.5rem;
+  padding-bottom: 2rem;
 }
 
 .about-name {
-  font-size: clamp(4.5rem, 13vw, 9.5rem);
+  font-size: clamp(3.25rem, 18vw, 9.5rem);
   letter-spacing: -0.05em;
   line-height: 0.8;
+}
+
+@media (min-width: 640px) {
+  .about-name-band {
+    margin-top: -3.5rem;
+    padding-bottom: 2.5rem;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -327,4 +353,168 @@ body {
   .cassette-reel.is-spinning {
     animation: none;
   }
+}
+
+.glass-cut-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.glass-cut-frame {
+  display: none;
+}
+
+html[data-theme='glass'] {
+  background-color: #1c1410;
+}
+
+html[data-theme='glass'],
+html[data-theme='glass'] body {
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-color: #1c1410;
+}
+
+html[data-theme='glass'] .liquid-field {
+  background-color: transparent;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+}
+
+html[data-theme='glass'] .liquid-field::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 248, 240, 0.12);
+}
+
+html[data-theme='glass'] .liquid-blob {
+  display: none;
+}
+
+html[data-theme='glass'] .glass-cut-frame {
+  display: block;
+  position: fixed;
+  inset: 10px;
+  z-index: 8;
+  pointer-events: none;
+  overflow: visible;
+}
+
+html[data-theme='glass'] .glass-cut-outer,
+html[data-theme='glass'] .glass-cut-inner {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.42);
+  stroke-width: 0.22;
+  vector-effect: non-scaling-stroke;
+}
+
+html[data-theme='glass'] .glass-cut-inner {
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 0.18;
+}
+
+html[data-theme='glass'] .hero-sky,
+html[data-theme='glass'] .cloud-svg {
+  opacity: 0;
+}
+
+html[data-theme='glass'] .hero-sun {
+  opacity: 0.45;
+  mix-blend-mode: screen;
+}
+
+html[data-theme='glass'] .hero-grain {
+  opacity: 0.16;
+}
+
+html[data-theme='glass'] .glass-page {
+  padding: 14px 14px 18px;
+}
+
+html[data-theme='glass'] header.fixed {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+html[data-theme='glass'] .bg-\[var\(--cream\)\] {
+  background-color: transparent !important;
+}
+
+html[data-theme='glass'] .liquid-card,
+html[data-theme='glass'] .ledger-panel.liquid-card,
+html[data-theme='glass'] .who-panel.liquid-card,
+html[data-theme='glass'] .ledger-panel .liquid-card,
+html[data-theme='glass'] .testimonial-card {
+  background: rgba(255, 252, 247, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 18px 48px rgba(20, 10, 6, 0.1);
+  backdrop-filter: blur(36px) saturate(1.1);
+  -webkit-backdrop-filter: blur(36px) saturate(1.1);
+}
+
+html[data-theme='glass'] .liquid-card.rounded-full {
+  background: rgba(255, 252, 247, 0.88);
+}
+
+html[data-theme='glass'] #about,
+html[data-theme='glass'] #why-choose-me,
+html[data-theme='glass'] #experience,
+html[data-theme='glass'] #projects,
+html[data-theme='glass'] #availability,
+html[data-theme='glass'] #faq,
+html[data-theme='glass'] #contact,
+html[data-theme='glass'] #expertise,
+html[data-theme='glass'] footer {
+  margin-inline: 4px;
+  margin-block: 10px;
+  border-radius: 36px;
+  background: rgba(255, 252, 247, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) inset;
+  backdrop-filter: blur(36px) saturate(1.1);
+  -webkit-backdrop-filter: blur(36px) saturate(1.1);
+}
+
+html[data-theme='glass'] #about,
+html[data-theme='glass'] #why-choose-me {
+  clip-path: url(#glass-cut-sheet);
+  border-radius: 0;
+}
+
+html[data-theme='glass'] .ledger-card,
+html[data-theme='glass'] .who-card {
+  background-color: transparent !important;
+}
+
+html[data-theme='glass'] header nav {
+  background: rgba(255, 250, 244, 0.28) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+}
+
+html[data-theme='glass'] #how-i-work article {
+  background: rgba(255, 252, 247, 0.86) !important;
+  border-color: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(36px) saturate(1.1);
+  -webkit-backdrop-filter: blur(36px) saturate(1.1);
+}
+
+html[data-theme='glass'] #services .max-w-4xl > p,
+html[data-theme='glass'] #skills h2,
+html[data-theme='glass'] #services h2,
+html[data-theme='glass'] #who-i-work-with h2,
+html[data-theme='glass'] #how-i-work h2,
+html[data-theme='glass'] #how-i-work header p.text-\[var\(--ink\)\],
+html[data-theme='glass'] #testimonials h2 {
+  color: #f7f1ea !important;
+  text-shadow: 0 2px 18px rgba(20, 10, 6, 0.45);
 }

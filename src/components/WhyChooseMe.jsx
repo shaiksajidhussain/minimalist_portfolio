@@ -35,43 +35,43 @@ const WhyChooseMe = () => {
   return (
     <section
       id="why-choose-me"
-      className="relative overflow-hidden bg-[#f4efe6] pt-24 pb-24 sm:pt-28 sm:pb-28 lg:pt-32 lg:pb-32"
+      className="relative overflow-x-hidden bg-[var(--cream)] pt-24 pb-24 sm:pt-28 sm:pb-28 lg:pt-32 lg:pb-32"
     >
-      <div className="mx-auto max-w-6xl px-6">
-        <header className="mb-12 max-w-2xl lg:mb-16">
-          <div className="mb-6 flex max-w-xl items-center justify-between gap-4">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
+      <div className="mx-auto max-w-6xl px-5 sm:px-6">
+        <header className="mb-12 max-w-2xl min-w-0 lg:mb-16">
+          <div className="mb-6 flex max-w-xl flex-wrap items-baseline justify-between gap-x-3 gap-y-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500 sm:text-[11px] sm:tracking-[0.2em]">
               06 — Why me
             </p>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#d4af37]">
+            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--gold)] sm:text-[11px] sm:tracking-[0.16em]">
               The short list
             </p>
           </div>
-          <h2 className="font-serif text-[2.6rem] leading-[0.95] tracking-tight text-[#1c1917] sm:text-6xl lg:text-7xl">
+          <h2 className="font-serif text-[2.15rem] leading-[1.05] tracking-tight text-[var(--ink)] sm:text-6xl lg:text-7xl">
             Why choose
             <br />
             <em>me.</em>
           </h2>
-          <p className="mt-8 max-w-xl text-[1.15rem] leading-[1.65] text-[#1c1917] sm:text-xl">
+          <p className="mt-8 max-w-xl text-[1.05rem] leading-[1.7] break-words text-[var(--ink)] sm:text-xl sm:leading-[1.65]">
             Not a pitch deck. The reasons people actually hire me to build.
           </p>
         </header>
 
-        <div className="grid grid-cols-12 items-start gap-x-10 gap-y-12">
-          <ul className="col-span-12 lg:col-span-8">
+        <div className="grid grid-cols-12 items-start gap-x-6 gap-y-12 sm:gap-x-10">
+          <ul className="col-span-12 min-w-0 lg:col-span-8">
             {reasons.map((reason) => (
               <li
                 key={reason.number}
-                className="group grid grid-cols-[3.25rem_1fr] gap-4 border-t border-[#1c1917]/10 py-7 sm:grid-cols-[4.5rem_1fr] sm:py-8"
+                className="group grid grid-cols-[2.75rem_minmax(0,1fr)] gap-3 border-t border-[var(--line)] py-7 sm:grid-cols-[4.5rem_minmax(0,1fr)] sm:gap-6 sm:py-8"
               >
-                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#d4af37]">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--gold)]">
                   {reason.number}
                 </p>
-                <div>
-                  <h3 className="font-serif text-2xl tracking-tight text-[#1c1917] sm:text-3xl">
+                <div className="min-w-0">
+                  <h3 className="font-serif text-[1.65rem] leading-snug tracking-tight text-[var(--ink)] sm:text-3xl">
                     {reason.title}
                   </h3>
-                  <p className="mt-2 max-w-xl text-[1.05rem] leading-relaxed text-zinc-600">
+                  <p className="mt-2 max-w-xl text-[1.02rem] leading-relaxed break-words text-zinc-600">
                     {reason.description}
                   </p>
                 </div>
@@ -79,19 +79,19 @@ const WhyChooseMe = () => {
             ))}
           </ul>
 
-          <aside className="relative col-span-12 lg:col-span-4 lg:mt-2">
+          <aside className="relative col-span-12 min-w-0 lg:col-span-4 lg:mt-2">
             <div
-              className="gold-plate pointer-events-none absolute inset-y-6 -right-3 left-8 sm:-right-4"
+              className="gold-plate pointer-events-none absolute inset-y-6 left-8 right-0 sm:-right-4"
               aria-hidden
             />
-            <div className="relative border-[10px] border-[#fffcf7] bg-[#fffcf7] px-6 py-8 shadow-[0_24px_60px_rgba(28,25,23,0.10)] sm:px-8 sm:py-10">
+            <div className="relative border-8 border-[var(--card)] bg-[var(--card)] px-5 py-7 shadow-[0_24px_60px_rgba(28,25,23,0.10)] sm:border-[10px] sm:px-8 sm:py-10">
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
                 In practice
               </p>
-              <p className="mt-6 font-serif text-4xl leading-[0.95] tracking-tight text-[#1c1917] sm:text-5xl">
+              <p className="mt-6 font-serif text-4xl leading-[0.95] tracking-tight text-[var(--ink)] sm:text-5xl">
                 03 years
               </p>
-              <p className="mt-3 font-serif text-2xl italic text-[#1c1917]/80">
+              <p className="mt-3 font-serif text-2xl italic leading-snug text-[var(--ink-soft)]">
                 React, RN, Node — end to end.
               </p>
               <p className="mt-6 text-sm leading-relaxed text-zinc-500">

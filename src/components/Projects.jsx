@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FiArrowUpRight } from 'react-icons/fi';
 import config from '../config/api';
-import { GOLD } from '../data/skills';
 
 const FILTERS = ['All', 'Web Development', 'App Development', 'Freelancing', 'Personal Projects'];
 
@@ -98,13 +97,13 @@ const Projects = ({ onProjectClick, projects: incomingProjects }) => {
         );
 
   return (
-    <section id="projects" className="relative z-10 bg-[#f4efe6] py-24 px-4 sm:px-6 lg:px-8">
+    <section id="projects" className="relative z-10 bg-[var(--cream)] py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="mb-12 max-w-2xl">
           <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3">
             Gallery
           </p>
-          <h2 className="font-serif text-5xl sm:text-7xl text-[#1c1917] tracking-tight mb-4">
+          <h2 className="font-serif text-5xl sm:text-7xl text-[var(--ink)] tracking-tight mb-4">
             On the wall
           </h2>
           <p className="text-zinc-500">
@@ -122,8 +121,8 @@ const Projects = ({ onProjectClick, projects: incomingProjects }) => {
                 onClick={() => setActiveFilter(filter)}
                 className={`rounded-full px-4 py-2 text-xs sm:text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-[#1c1917] text-[#f4efe6]'
-                    : 'liquid-card !rounded-full text-zinc-600 hover:border-[#d4af37]/50'
+                    ? 'bg-[var(--ink)] text-[var(--cream)]'
+                    : 'liquid-card !rounded-full text-zinc-600 hover:border-[var(--gold)]'
                 }`}
               >
                 {filter}
@@ -157,25 +156,25 @@ const Projects = ({ onProjectClick, projects: incomingProjects }) => {
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                       />
                     ) : (
-                      <div className="absolute inset-0 bg-[#ead7a0]/50" />
+                      <div className="absolute inset-0 bg-[var(--blob-b)]/50" />
                     )}
                     <span
-                      className="absolute top-4 left-4 font-mono text-[11px] tracking-[0.2em] px-2.5 py-1 rounded-full bg-[#f4efe6]/92 text-[#1c1917]"
+                      className="absolute top-4 left-4 font-mono text-[11px] tracking-[0.2em] px-2.5 py-1 rounded-full bg-[var(--cream)]/92 text-[var(--ink)]"
                     >
                       {String(index + 1).padStart(2, '0')}
                     </span>
                   </div>
                   <div className="p-5 sm:p-6">
-                    <p className="font-mono text-[11px] tracking-[0.2em] uppercase mb-2" style={{ color: GOLD }}>
+                    <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--gold)]">
                       {project.category}
                     </p>
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="font-serif text-2xl sm:text-3xl text-[#1c1917] tracking-tight">
+                      <h3 className="font-serif text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
                         {project.name}
                       </h3>
                       <FiArrowUpRight
                         size={18}
-                        className="shrink-0 mt-1 text-zinc-300 transition-colors group-hover:text-[#d4af37]"
+                        className="shrink-0 mt-1 text-zinc-300 transition-colors group-hover:text-[var(--gold)]"
                       />
                     </div>
                   </div>

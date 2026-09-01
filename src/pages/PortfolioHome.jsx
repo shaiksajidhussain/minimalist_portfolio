@@ -67,9 +67,9 @@ const PortfolioHome = () => {
   };
 
   return (
-    <div className="relative min-h-screen text-zinc-900">
+    <div className="relative min-h-screen text-[var(--ink)]">
       <LiquidField />
-      <div className="relative z-10">
+      <div className="glass-page relative z-10">
         <Navbar />
         <HeroStack />
         <About />
@@ -90,7 +90,7 @@ const PortfolioHome = () => {
 
       {selectedProject ? (
         <div
-          className="fixed inset-0 z-[80] overflow-y-auto overscroll-contain bg-[#f4efe6]"
+          className="fixed inset-0 z-[80] overflow-y-auto overscroll-contain bg-[var(--cream)]"
           data-lenis-prevent
         >
           <ProjectDetail

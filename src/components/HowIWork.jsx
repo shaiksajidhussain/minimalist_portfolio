@@ -72,7 +72,7 @@ const HowIWork = () => {
     <section
       ref={sectionRef}
       id="how-i-work"
-      className="relative h-screen overflow-hidden bg-[#f4efe6]"
+      className="relative h-screen overflow-hidden bg-[var(--cream)]"
     >
       <div className="flex h-full flex-col lg:flex-row">
         <header className="shrink-0 px-6 pt-24 sm:px-10 lg:flex lg:w-[min(42%,28rem)] lg:flex-col lg:justify-center lg:pt-0 lg:pl-10 lg:pr-8">
@@ -80,16 +80,16 @@ const HowIWork = () => {
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
               05 — Process
             </p>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#d4af37]">
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--gold)]">
               Four stages
             </p>
           </div>
-          <h2 className="font-serif text-[2.6rem] leading-[0.95] tracking-tight text-[#1c1917] sm:text-6xl lg:text-7xl">
+          <h2 className="font-serif text-[2.6rem] leading-[0.95] tracking-tight text-[var(--ink)] sm:text-6xl lg:text-7xl">
             How I
             <br />
             <em>work.</em>
           </h2>
-          <p className="mt-6 max-w-md text-[1.1rem] leading-[1.65] text-[#1c1917] sm:text-xl lg:mt-8">
+          <p className="mt-6 max-w-md text-[1.1rem] leading-[1.65] text-[var(--ink)] sm:text-xl lg:mt-8">
             A short sequence from the first conversation to a live product — no
             mystery sprint in the middle.
           </p>
@@ -106,14 +106,14 @@ const HowIWork = () => {
                   className="gold-plate pointer-events-none absolute inset-y-8 -right-3 left-10"
                   aria-hidden
                 />
-                <article className="relative flex min-h-[48vh] flex-col border-[10px] border-[#fffcf7] bg-[#fffcf7] px-7 py-8 shadow-[0_24px_60px_rgba(28,25,23,0.10)] sm:min-h-[52vh] sm:px-8 sm:py-10">
-                  <p className="font-serif text-4xl tracking-tight text-[#d4af37] sm:text-5xl">
+                <article className="relative flex min-h-[48vh] flex-col border-[10px] border-[var(--card)] bg-[var(--card)] px-7 py-8 shadow-[0_24px_60px_rgba(28,25,23,0.10)] sm:min-h-[52vh] sm:px-8 sm:py-10">
+                  <p className="font-serif text-4xl tracking-tight text-[var(--gold)] sm:text-5xl">
                     {step.number}
                   </p>
-                  <h3 className="mt-6 font-serif text-3xl tracking-tight text-[#1c1917] sm:text-4xl">
+                  <h3 className="mt-6 font-serif text-3xl tracking-tight text-[var(--ink)] sm:text-4xl">
                     {step.title}
                   </h3>
-                  <p className="mt-4 max-w-sm flex-1 text-[1.05rem] leading-relaxed text-[#1c1917]/80">
+                  <p className="mt-4 max-w-sm flex-1 text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
                     {step.description}
                   </p>
                   <p className="mt-8 font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">

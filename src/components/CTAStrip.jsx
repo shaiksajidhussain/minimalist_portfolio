@@ -14,16 +14,16 @@ const CTAStrip = () => {
     <section ref={sectionRef} className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto" data-reveal-block>
         <div className="rounded-[32px] p-10 sm:p-12 text-center liquid-card">
-          <RevealHeading className="text-3xl sm:text-4xl font-semibold text-zinc-900 mb-4">
+          <RevealHeading className="mb-4 text-3xl font-semibold text-[var(--ink)] sm:text-4xl">
             Have a project in mind?
           </RevealHeading>
-          <p className="text-lg text-zinc-500 mb-8 max-w-2xl mx-auto" data-reveal-copy>
+          <p className="mx-auto mb-8 max-w-2xl text-lg text-[var(--muted)]" data-reveal-copy>
             Let&apos;s discuss how I can help you build it — new product, feature work, or architecture.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={() => scrollToSection('#contact')}
-              className="px-7 py-3 rounded-full font-medium text-zinc-950 flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 rounded-full px-7 py-3 font-medium text-[var(--ink)]"
               style={{ backgroundColor: colors.primary }}
             >
               Let&apos;s Talk
@@ -31,7 +31,7 @@ const CTAStrip = () => {
             </button>
             <button
               onClick={() => scrollToSection('#projects')}
-              className="px-7 py-3 rounded-full font-medium border border-zinc-300 text-zinc-900 hover:bg-zinc-50"
+              className="rounded-full border border-[var(--line)] px-7 py-3 font-medium text-[var(--ink)] hover:bg-[var(--cream)]"
             >
               View My Work
             </button>

@@ -250,9 +250,9 @@ const Hero = () => {
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-40"
     >
       <div
-        className="absolute inset-0"
+        className="hero-sky absolute inset-0"
         style={{
-          background: 'linear-gradient(180deg, #7eb8e6 0%, #a9d4f0 42%, #d5eaf8 78%, #f4efe6 100%)',
+          background: 'linear-gradient(180deg, var(--sky) 0%, var(--sky-mid) 42%, var(--sky-end) 78%, var(--cream) 100%)',
         }}
       />
       <div className="hero-grain" />
@@ -260,7 +260,7 @@ const Hero = () => {
       <div
         className="hero-sun pointer-events-none absolute top-10 right-[7%] w-24 h-24 sm:w-36 sm:h-36 rounded-full"
         style={{
-          background: 'repeating-linear-gradient(-32deg, #f0c93a 0 11px, #fff4c4 11px 15px)',
+          background: 'repeating-linear-gradient(-32deg, var(--gold) 0 11px, var(--gold-light) 11px 15px)',
         }}
         aria-hidden
       />
@@ -278,7 +278,7 @@ const Hero = () => {
         <path
           id="plane-path"
           d="M120 520 C 280 430, 420 610, 620 500 S 980 390, 1180 470"
-          stroke="#1c1917"
+          stroke="var(--ink)"
           strokeWidth="1.4"
           strokeDasharray="6 8"
           opacity="0.35"
@@ -296,7 +296,7 @@ const Hero = () => {
 
       <div className="relative z-10 w-full max-w-5xl mx-auto text-center">
         <p className="hero-intro font-mono text-[11px] sm:text-xs tracking-[0.14em] uppercase text-white mb-6">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#f0c93a] mr-2 align-middle" />
+          <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-[var(--gold)] align-middle" />
           Hello, I&apos;m Shaik Sajid Hussain. A —
         </p>
 
@@ -332,7 +332,7 @@ const Hero = () => {
             ref={cassetteRef}
             type="button"
             onClick={toggleTrack}
-            className="hero-cassette group mx-auto flex items-center gap-3 sm:gap-4 liquid-card rounded-full text-zinc-950 pl-2 pr-2 py-2 max-w-[92vw] sm:max-w-md"
+            className="hero-cassette group mx-auto flex max-w-[92vw] items-center gap-3 rounded-full py-2 pl-2 pr-2 text-[var(--ink)] liquid-card sm:max-w-md sm:gap-4"
             aria-label={playing ? 'Pause track' : 'Play From idea to launch'}
           >
             <span className={`cassette-reel w-12 h-12 sm:w-14 sm:h-14 rounded-full shrink-0 ${playing ? 'is-spinning' : ''}`} />
@@ -347,7 +347,7 @@ const Hero = () => {
                 </span>
                 <span className="flex-1 h-px bg-zinc-400/70 relative">
                   <span
-                    className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-zinc-950"
+                    className="absolute top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--ink)]"
                     style={{ left: `${progress}%` }}
                   />
                 </span>
@@ -357,7 +357,7 @@ const Hero = () => {
               </span>
             </span>
 
-            <span className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-zinc-950 text-[#f4efe6] flex items-center justify-center shrink-0">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--cream)] sm:h-12 sm:w-12">
               {playing ? <FiPause size={16} /> : <FiPlay size={16} className="ml-0.5" />}
             </span>
 
@@ -382,13 +382,13 @@ const Hero = () => {
 
       <div
         ref={photoRef}
-        className="hero-photo absolute z-20 right-[6%] bottom-[16%] sm:bottom-[18%] w-28 h-36 sm:w-40 sm:h-52 rounded-2xl overflow-hidden border-[6px] border-[#f4efe6] shadow-[0_18px_40px_rgba(28,25,23,0.18)]"
+        className="hero-photo absolute z-20 right-[6%] bottom-[16%] sm:bottom-[18%] w-28 h-36 sm:w-40 sm:h-52 rounded-2xl overflow-hidden border-[6px] border-[var(--cream)] shadow-[0_18px_40px_rgba(28,25,23,0.18)]"
       >
         <img src={PHOTO} alt="Shaik Sajid Hussain" className="w-full h-full object-cover object-top" />
       </div>
 
       <svg
-        className="cloud-svg pointer-events-none absolute bottom-0 left-0 w-full h-[32vh] min-h-[180px] z-10 text-[#f4efe6]"
+        className="cloud-svg pointer-events-none absolute bottom-0 left-0 w-full h-[32vh] min-h-[180px] z-10 text-[var(--cream)]"
         viewBox="0 0 1440 280"
         preserveAspectRatio="none"
         aria-hidden

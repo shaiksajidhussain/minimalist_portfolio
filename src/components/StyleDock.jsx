@@ -36,7 +36,7 @@ const StyleDock = ({ styles, styleId, onChange, visible, offset = 1 }) => {
               type="button"
               onClick={() => onChange(style.id)}
               className={`flex-1 rounded-full px-2 sm:px-3 py-2 text-[10px] sm:text-xs tracking-wide transition-colors ${
-                active ? 'bg-[#d4af37] text-zinc-950' : 'text-zinc-300 hover:text-white'
+                active ? 'bg-[var(--gold)] text-zinc-950' : 'text-zinc-300 hover:text-white'
               }`}
             >
               <span className="font-mono mr-1">{String(index + offset).padStart(2, '0')}</span>

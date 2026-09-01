@@ -2,7 +2,7 @@ import WhoSplit from './who/WhoSplit';
 
 const WhoIWorkWith = () => {
   return (
-    <div id="who-i-work-with" className="relative">
+    <div id="who-i-work-with" className="relative bg-[var(--cream)]">
       <WhoSplit />
     </div>
   );

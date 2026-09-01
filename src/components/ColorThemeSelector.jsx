@@ -51,7 +51,7 @@ const ColorThemeSelector = () => {
                   className={`w-10 h-10 rounded-full transition-all transform hover:scale-110 border-2 ${
                     colorTheme === key ? 'border-gray-800 dark:border-white ring-2 ring-offset-2 ring-gray-400 dark:ring-offset-zinc-800' : 'border-transparent'
                   }`}
-                  style={{ backgroundColor: value.primary }}
+                  style={{ backgroundColor: value.swatch }}
                   title={value.name}
                 />
               ))}

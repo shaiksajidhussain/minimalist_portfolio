@@ -1,7 +1,8 @@
-import { FiMail, FiMapPin, FiMenu, FiSun, FiX } from 'react-icons/fi';
+import { FiMail, FiMapPin, FiMenu, FiX } from 'react-icons/fi';
 import { useRef, useState, useEffect } from 'react';
 import { useSmoothScroll } from '../hooks/useSmoothScroll';
 import { gsap, useGSAP } from '../lib/gsap';
+import ThemeSwitcher from './ThemeSwitcher';
 
 const navItems = [
   { name: 'Work', href: '#projects' },
@@ -55,8 +56,8 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 pt-4">
-      <div className="relative max-w-7xl mx-auto h-12 flex items-center justify-center">
-        <p className="hidden md:flex absolute left-0 items-center gap-1.5 text-[11px] tracking-[0.18em] uppercase text-zinc-800/70 font-mono">
+      <div className="relative mx-auto flex h-12 max-w-7xl items-center justify-center pr-10 md:pr-0">
+        <p className="absolute left-0 hidden items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--ink-soft)] md:flex">
           <FiMapPin size={12} />
           Andhra Pradesh, IN
         </p>
@@ -65,8 +66,8 @@ const Navbar = () => {
           ref={navRef}
           className={`flex items-center gap-2 sm:gap-3 rounded-full pl-1.5 pr-1.5 py-1 border ${
             isScrolled
-              ? 'bg-white/80 border-white/80 shadow-[0_12px_40px_rgba(28,25,23,0.08)]'
-              : 'bg-white/45 border-white/55'
+              ? 'border-[var(--line)] bg-[var(--card)]/85 shadow-[0_12px_40px_rgba(28,25,23,0.08)]'
+              : 'border-[var(--line)] bg-[var(--card)]/55'
           }`}
         >
           <button
@@ -86,7 +87,7 @@ const Navbar = () => {
               <button
                 key={item.name}
                 onClick={() => handleNavClick(item.href)}
-                className="nav-link px-3 py-1.5 rounded-full text-sm text-zinc-800 hover:bg-white/60"
+                className="nav-link rounded-full px-3 py-1.5 text-sm text-[var(--ink)] hover:bg-[var(--cream)]/70"
               >
                 {item.name}
               </button>
@@ -95,26 +96,24 @@ const Navbar = () => {
 
           <button
             onClick={() => handleNavClick('#contact')}
-            className="nav-link hidden sm:inline-flex items-center gap-2 rounded-full bg-zinc-950 text-white text-sm font-medium px-3.5 py-1.5"
+            className="nav-link hidden items-center gap-2 rounded-full bg-[var(--ink)] px-3.5 py-1.5 text-sm font-medium text-[var(--cream)] sm:inline-flex"
           >
             Work with me
-            <span className="w-6 h-6 rounded-full bg-white text-zinc-950 flex items-center justify-center">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--cream)] text-[var(--ink)]">
               <FiMail size={12} />
             </span>
           </button>
 
           <button
             onClick={() => setIsMobileMenuOpen((open) => !open)}
-            className="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-zinc-900"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--ink)] md:hidden"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <FiX size={18} /> : <FiMenu size={18} />}
           </button>
         </nav>
 
-        <span className="hidden md:flex absolute right-0 w-8 h-8 rounded-full border border-zinc-800/20 items-center justify-center text-zinc-800">
-          <FiSun size={14} />
-        </span>
+        <ThemeSwitcher className="absolute right-0" />
       </div>
 
       {isMobileMenuOpen && (
@@ -123,14 +122,14 @@ const Navbar = () => {
             <button
               key={item.name}
               onClick={() => handleNavClick(item.href)}
-              className="block w-full text-left px-4 py-2.5 text-sm text-zinc-800 rounded-xl hover:bg-zinc-100"
+              className="block w-full rounded-xl px-4 py-2.5 text-left text-sm text-[var(--ink)] hover:bg-[var(--cream)]"
             >
               {item.name}
             </button>
           ))}
           <button
             onClick={() => handleNavClick('#contact')}
-            className="mt-1 w-full px-4 py-2.5 rounded-xl bg-zinc-950 text-white text-sm font-medium"
+            className="mt-1 w-full rounded-xl bg-[var(--ink)] px-4 py-2.5 text-sm font-medium text-[var(--cream)]"
           >
             Work with me
           </button>

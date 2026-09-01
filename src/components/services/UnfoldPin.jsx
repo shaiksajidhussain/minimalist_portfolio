@@ -43,12 +43,12 @@ const UnfoldPin = () => {
   );
 
   return (
-    <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[#f4efe6]">
+    <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[var(--cream)]">
       <div className="max-w-4xl mx-auto px-6 sm:px-10 pt-24 h-full flex flex-col">
         <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3">
           Services
         </p>
-        <h2 className="font-serif text-5xl sm:text-7xl text-[#1c1917] tracking-tight mb-8">
+        <h2 className="font-serif text-5xl sm:text-7xl text-[var(--ink)] tracking-tight mb-8">
           What I do
         </h2>
 
@@ -59,7 +59,7 @@ const UnfoldPin = () => {
               className={`svc-unfold-item liquid-card px-5 py-4 mb-3 ${index === 0 ? 'is-open' : ''}`}
             >
               <div className="flex items-baseline justify-between gap-4">
-                <h3 className="font-serif text-2xl sm:text-3xl text-[#1c1917]">{item.title}</h3>
+                <h3 className="font-serif text-2xl sm:text-3xl text-[var(--ink)]">{item.title}</h3>
                 <span className="svc-unfold-kicker font-mono text-[11px] shrink-0 text-stone-400">
                   {item.kicker}
                 </span>

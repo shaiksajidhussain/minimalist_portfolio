@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { gsap, useGSAP } from '../../lib/gsap';
-import { GOLD } from '../../data/skills';
 import { EXPERTISE } from '../../data/expertise';
 import { RevealHeading, useTextReveal } from '../../hooks/useTextReveal.jsx';
 
@@ -35,7 +34,7 @@ const ExpSplit = () => {
         <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3" data-reveal-copy>
           Focus
         </p>
-        <RevealHeading className="font-serif text-5xl sm:text-7xl text-[#1c1917] tracking-tight">
+        <RevealHeading className="font-serif text-5xl sm:text-7xl text-[var(--ink)] tracking-tight">
           My expertise
         </RevealHeading>
       </div>
@@ -45,12 +44,12 @@ const ExpSplit = () => {
           return (
             <article key={item.title} className="exp-split-row liquid-card grid md:grid-cols-[140px_1fr] gap-8 p-8 sm:p-10">
               <div className="exp-split-mark">
-                <p className="font-serif text-5xl mb-4" style={{ color: GOLD }}>{item.kicker}</p>
-                <Icon size={32} color={GOLD} />
+                <p className="mb-4 font-serif text-5xl text-[var(--gold)]">{item.kicker}</p>
+                <Icon size={32} className="text-[var(--gold)]" />
               </div>
               <div className="exp-split-copy">
                 <p className="font-mono text-sm text-zinc-500 mb-2">{item.subtitle}</p>
-                <h3 className="font-serif text-3xl sm:text-5xl text-[#1c1917] mb-4">{item.title}</h3>
+                <h3 className="font-serif text-3xl sm:text-5xl text-[var(--ink)] mb-4">{item.title}</h3>
                 <p className="text-zinc-600 text-lg leading-relaxed max-w-2xl">{item.description}</p>
               </div>
             </article>

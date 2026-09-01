@@ -59,10 +59,10 @@ const FAQ = () => {
     <section ref={sectionRef} id="faq" className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <RevealHeading className="text-4xl sm:text-5xl font-semibold text-zinc-900 mb-4">
+          <RevealHeading className="text-4xl sm:text-5xl font-semibold text-[var(--ink)] mb-4">
             Frequently Asked Questions
           </RevealHeading>
-          <p className="text-lg text-zinc-400" data-reveal-copy>
+          <p className="text-lg text-[var(--muted)]" data-reveal-copy>
             Everything you need to know about working with me
           </p>
         </div>
@@ -76,7 +76,7 @@ const FAQ = () => {
                   onClick={() => setExpandedIndex(isOpen ? null : index)}
                   className="w-full text-left p-5 flex items-center justify-between gap-4"
                 >
-                  <h3 className="text-base font-medium text-zinc-900">{faq.question}</h3>
+                  <h3 className="text-base font-medium text-[var(--ink)]">{faq.question}</h3>
                   <FiChevronDown
                     size={20}
                     className={`shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
@@ -84,7 +84,7 @@ const FAQ = () => {
                   />
                 </button>
                 {isOpen && (
-                  <div className="px-5 pb-5 text-sm text-zinc-400 leading-relaxed">{faq.answer}</div>
+                  <div className="px-5 pb-5 text-sm text-[var(--muted)] leading-relaxed">{faq.answer}</div>
                 )}
               </div>
             );
@@ -92,11 +92,11 @@ const FAQ = () => {
         </div>
 
         <div className="mt-12 text-center p-8 liquid-card" data-reveal-block>
-          <h3 className="text-xl font-semibold text-zinc-900 mb-3">Still have questions?</h3>
-          <p className="text-zinc-400 mb-6">Get in touch for a personalized discussion about your project.</p>
+          <h3 className="text-xl font-semibold text-[var(--ink)] mb-3">Still have questions?</h3>
+          <p className="text-[var(--muted)] mb-6">Get in touch for a personalized discussion about your project.</p>
           <button
             onClick={() => scrollToSection('#contact')}
-            className="inline-block px-7 py-3 rounded-full font-medium text-zinc-950"
+            className="inline-block rounded-full px-7 py-3 font-medium text-[var(--ink)]"
             style={{ backgroundColor: colors.primary }}
           >
             Contact Me Today

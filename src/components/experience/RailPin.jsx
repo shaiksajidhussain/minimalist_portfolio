@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { gsap, onLayoutReady, useGSAP } from '../../lib/gsap';
-import { GOLD } from '../../data/skills';
 import { EXPERIENCE } from '../../data/experience';
 import { RevealHeading, useTextReveal } from '../../hooks/useTextReveal.jsx';
 
@@ -38,12 +37,12 @@ const RailPin = () => {
   );
 
   return (
-    <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[#f4efe6]">
+    <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[var(--cream)]">
       <div className="px-6 sm:px-10 pt-24 pb-6 max-w-6xl">
         <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-zinc-500 mb-3" data-reveal-copy>
           Experience
         </p>
-        <RevealHeading className="font-serif text-5xl sm:text-7xl text-[#1c1917] tracking-tight">
+        <RevealHeading className="font-serif text-5xl sm:text-7xl text-[var(--ink)] tracking-tight">
           Work
         </RevealHeading>
       </div>
@@ -56,10 +55,10 @@ const RailPin = () => {
               className="liquid-card w-[min(84vw,420px)] shrink-0 p-7 sm:p-8 min-h-[52vh]"
               data-reveal-block
             >
-              <p className="font-mono text-[11px] tracking-[0.28em] mb-4" style={{ color: GOLD }}>
+              <p className="mb-4 font-mono text-[11px] tracking-[0.28em] text-[var(--gold)]">
                 {item.kicker}
               </p>
-              <h3 className="font-serif text-3xl sm:text-4xl text-[#1c1917] mb-2">{item.company}</h3>
+              <h3 className="font-serif text-3xl sm:text-4xl text-[var(--ink)] mb-2">{item.company}</h3>
               <p className="text-zinc-500 mb-1">{item.role}</p>
               <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-400 mb-6">
                 {item.duration}
@@ -67,7 +66,7 @@ const RailPin = () => {
               <ul className="space-y-2 text-sm text-zinc-600 leading-relaxed">
                 {item.points.slice(0, 3).map((point) => (
                   <li key={point} className="flex gap-2">
-                    <span style={{ color: GOLD }}>–</span>
+                    <span className="text-[var(--gold)]">–</span>
                     {point}
                   </li>
                 ))}
