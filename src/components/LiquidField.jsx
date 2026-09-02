@@ -1,6 +1,11 @@
 const LiquidField = () => {
   return (
     <div className="liquid-field" aria-hidden>
+      <div className="ink-glow">
+        <div className="ink-glow-beam" />
+        <div className="ink-glow-base" />
+        <div className="ink-glow-grain" />
+      </div>
       <div className="liquid-blob liquid-blob-a" />
       <div className="liquid-blob liquid-blob-b" />
       <div className="liquid-blob liquid-blob-c" />

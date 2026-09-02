@@ -45,12 +45,75 @@ html.lenis body {
   height: auto;
 }
 
-body {
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--cream);
-  color: var(--ink);
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+
+.has-custom-cursor input,
+.has-custom-cursor textarea,
+.has-custom-cursor select {
+  cursor: text !important;
+}
+
+.site-cursor {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.has-custom-cursor.cursor-on .site-cursor {
+  display: block;
+}
+
+.site-cursor-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--cream) 55%, transparent);
+}
+
+.site-cursor-ring {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  opacity: 0.4;
+}
+
+.has-custom-cursor.cursor-hover .site-cursor-ring {
+  border-color: var(--gold);
+  opacity: 0.9;
+}
+
+.has-custom-cursor.cursor-hover .site-cursor-dot {
+  transform-origin: center;
+}
+
+@media (pointer: coarse) {
+  .site-cursor {
+    display: none !important;
+  }
+}
+
+html.dark .text-zinc-600,
+html[data-theme='ink'] .text-zinc-600 {
+  color: var(--ink-soft) !important;
+}
+
+html.dark .text-zinc-300,
+html.dark .text-zinc-400,
+html.dark .text-zinc-500,
+html.dark .text-stone-400,
+html[data-theme='ink'] .text-zinc-300,
+html[data-theme='ink'] .text-zinc-400,
+html[data-theme='ink'] .text-zinc-500,
+html[data-theme='ink'] .text-stone-400 {
+  color: var(--muted) !important;
 }
 
 .hero-grain {
@@ -124,6 +187,87 @@ body {
   background-color: var(--cream);
   contain: paint;
   transform: translateZ(0);
+}
+
+.ink-glow {
+  display: none;
+}
+
+html[data-theme='ink'] .liquid-field {
+  background-color: #05060a;
+  contain: none;
+}
+
+html[data-theme='ink'] .ink-glow {
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+
+html[data-theme='ink'] .liquid-blob {
+  display: none;
+}
+
+.ink-glow-beam {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 38% 42% at 50% 6%, rgba(255, 255, 255, 0.4) 0%, transparent 52%),
+    radial-gradient(ellipse 72% 55% at 50% 18%, rgba(120, 165, 255, 0.34) 0%, transparent 60%),
+    radial-gradient(ellipse 90% 70% at 50% 48%, rgba(70, 100, 200, 0.2) 0%, transparent 68%),
+    radial-gradient(ellipse 80% 48% at 50% 88%, rgba(90, 130, 220, 0.22) 0%, transparent 64%);
+}
+
+.ink-glow-base {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(80, 120, 210, 0.16) 0%, transparent 70%);
+}
+
+.ink-glow-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.28;
+  background-image: radial-gradient(rgba(200, 220, 255, 0.5) 0.7px, transparent 0.8px);
+  background-size: 3px 3px;
+  mask-image: radial-gradient(ellipse 75% 90% at 50% 40%, #000 10%, transparent 85%);
+}
+
+html[data-theme='ink'] .bg-\[var\(--cream\)\] {
+  background-color: transparent !important;
+}
+
+html[data-theme='ink'] #hero {
+  background-color: transparent;
+}
+
+html[data-theme='ink'] .hero-sky,
+html[data-theme='ink'] .hero-grain,
+html[data-theme='ink'] .hero-sun,
+html[data-theme='ink'] .cloud-svg {
+  opacity: 0;
+}
+
+html[data-theme='ink'] .liquid-card,
+html[data-theme='ink'] .ledger-panel.liquid-card,
+html[data-theme='ink'] .who-panel.liquid-card,
+html[data-theme='ink'] .ledger-panel .liquid-card,
+html[data-theme='ink'] .testimonial-card {
+  background: #12141c;
+  border-color: rgba(255, 255, 255, 0.1);
+  isolation: isolate;
+}
+
+html[data-theme='ink'] .ledger-panel,
+html[data-theme='ink'] .who-panel,
+html[data-theme='ink'] .testimonial-card {
+  overflow: hidden;
+  background: #12141c;
+}
+
+html[data-theme='ink'] #how-i-work article {
+  background: #12141c !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .liquid-blob {

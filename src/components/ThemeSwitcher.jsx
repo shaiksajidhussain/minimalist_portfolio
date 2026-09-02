@@ -43,7 +43,7 @@ const ThemeSwitcher = ({ className = '' }) => {
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-10 z-50 flex max-w-[220px] flex-wrap items-center justify-end gap-1.5 rounded-[22px] border border-[var(--line)] bg-[var(--card)] p-1.5 shadow-[0_12px_32px_rgba(28,25,23,0.12)] backdrop-blur-xl">
+        <div className="absolute right-0 top-10 z-50 grid min-w-[220px] grid-cols-3 gap-2 rounded-[22px] border border-[var(--line)] bg-[var(--card)] p-2.5 shadow-[0_12px_32px_rgba(28,25,23,0.12)]">
           {Object.entries(themes).map(([id, theme]) => {
             const active = id === colorTheme;
             return (
@@ -54,13 +54,22 @@ const ThemeSwitcher = ({ className = '' }) => {
                   changeColorTheme(id);
                   setOpen(false);
                 }}
-                className={`h-6 w-6 rounded-full border-2 shadow-[0_0_0_1px_rgba(255,255,255,0.45)] transition-transform ${
-                  active ? 'scale-110 border-[var(--ink)]' : 'border-transparent hover:scale-105'
+                className={`flex flex-col items-center gap-1.5 rounded-xl px-1 py-1.5 ${
+                  active ? 'bg-[var(--line)]' : 'hover:bg-[var(--line)]'
                 }`}
-                style={{ backgroundColor: theme.swatch }}
                 title={theme.name}
                 aria-label={theme.name}
-              />
+              >
+                <span
+                  className={`h-6 w-6 rounded-full border-2 shadow-[0_0_0_1px_rgba(255,255,255,0.45)] ${
+                    active ? 'border-[var(--ink)]' : 'border-transparent'
+                  }`}
+                  style={{ backgroundColor: theme.swatch }}
+                />
+                <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--ink)]">
+                  {theme.name}
+                </span>
+              </button>
             );
           })}
         </div>

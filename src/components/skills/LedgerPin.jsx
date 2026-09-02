@@ -70,7 +70,7 @@ const LedgerPin = () => {
                   >
                     <Icon
                       size={28}
-                      className="mb-3 text-zinc-500 transition-colors group-hover:text-[var(--gold)]"
+                      className="mb-3 text-[var(--muted)] transition-colors group-hover:text-[var(--gold)]"
                     />
                     <p className="text-sm font-medium text-[var(--ink)]">{skill.name}</p>
                   </div>

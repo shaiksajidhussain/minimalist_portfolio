@@ -31,27 +31,27 @@ export const COLOR_THEMES = {
   },
   ink: {
     name: 'Ink',
-    swatch: '#1c1917',
+    swatch: '#6b8fd4',
     vars: {
-      '--cream': '#141311',
+      '--cream': '#08090d',
       '--ink': '#f4efe6',
       '--ink-soft': 'rgba(244, 239, 230, 0.78)',
       '--gold': '#e0c066',
       '--gold-bright': '#f0d37a',
-      '--gold-light': '#3a3420',
-      '--card': '#1c1b18',
+      '--gold-light': '#2a2618',
+      '--card': '#12141c',
       '--line': 'rgba(244, 239, 230, 0.12)',
-      '--muted': 'rgba(244, 239, 230, 0.55)',
-      '--sky': '#1b2836',
-      '--sky-mid': '#243444',
-      '--sky-end': '#1a222b',
-      '--blob-a': '#24384a',
-      '--blob-b': '#3d3420',
-      '--blob-c': '#3a2a28',
+      '--muted': 'rgba(244, 239, 230, 0.78)',
+      '--sky': '#10141c',
+      '--sky-mid': '#0e1218',
+      '--sky-end': '#0a0c10',
+      '--blob-a': '#1a2438',
+      '--blob-b': '#1c1a14',
+      '--blob-c': '#16141c',
       '--color-primary': '#e0c066',
-      '--color-light': '#3a3420',
+      '--color-light': '#2a2618',
       '--color-dark': '#f4efe6',
-      '--bg-color': '#141311',
+      '--bg-color': '#08090d',
       '--bg-image': 'none',
       '--scheme': 'dark',
     },
@@ -169,7 +169,7 @@ export const COLOR_THEMES = {
 const ThemeContext = createContext();
 
 const applyTheme = (id) => {
-  const theme = COLOR_THEMES[id] || COLOR_THEMES.cream;
+  const theme = COLOR_THEMES[id] || COLOR_THEMES.ink;
   const root = document.documentElement;
   Object.entries(theme.vars).forEach(([key, value]) => {
     root.style.setProperty(key, value);
@@ -190,9 +190,10 @@ export const useTheme = () => {
 
 export const ThemeProvider = ({ children }) => {
   const [colorTheme, setColorTheme] = useState(() => {
-    if (typeof window === 'undefined') return 'cream';
+    if (typeof window === 'undefined') return 'ink';
     const stored = window.localStorage.getItem('colorTheme');
-    return COLOR_THEMES[stored] ? stored : 'cream';
+    if (!COLOR_THEMES[stored] || stored === 'cream') return 'ink';
+    return stored;
   });
 
   useLayoutEffect(() => {
