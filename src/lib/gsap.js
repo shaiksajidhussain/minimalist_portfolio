@@ -19,6 +19,17 @@ ScrollTrigger.config({
 export const nodes = (...vals) =>
   vals.flatMap((value) => gsap.utils.toArray(value)).filter((el) => el && el.nodeType === 1);
 
+const layoutListeners = new Set();
+
+export const onScrollLayout = (listener) => {
+  layoutListeners.add(listener);
+  return () => layoutListeners.delete(listener);
+};
+
+const notifyScrollLayout = () => {
+  layoutListeners.forEach((listener) => listener());
+};
+
 export const onLayoutReady = (fn) => {
   let cancelled = false;
   let done = false;
@@ -30,7 +41,9 @@ export const onLayoutReady = (fn) => {
     done = true;
     raf1 = window.requestAnimationFrame(() => {
       raf2 = window.requestAnimationFrame(() => {
-        if (!cancelled) fn();
+        if (cancelled) return;
+        fn();
+        notifyScrollLayout();
       });
     });
   };

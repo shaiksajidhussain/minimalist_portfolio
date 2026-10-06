@@ -139,6 +139,7 @@ export const COLOR_THEMES = {
   },
   glass: {
     name: 'Glass',
+    hidden: true,
     swatch: '#e8d4c4',
     vars: {
       '--cream': '#f4efe6',
@@ -166,6 +167,12 @@ export const COLOR_THEMES = {
   },
 };
 
+const VISIBLE_THEMES = Object.fromEntries(
+  Object.entries(COLOR_THEMES).filter(([, theme]) => !theme.hidden)
+);
+
+const isSelectableTheme = (id) => Boolean(VISIBLE_THEMES[id]);
+
 const ThemeContext = createContext();
 
 const applyTheme = (id) => {
@@ -192,7 +199,7 @@ export const ThemeProvider = ({ children }) => {
   const [colorTheme, setColorTheme] = useState(() => {
     if (typeof window === 'undefined') return 'ink';
     const stored = window.localStorage.getItem('colorTheme');
-    if (!COLOR_THEMES[stored] || stored === 'cream') return 'ink';
+    if (!isSelectableTheme(stored) || stored === 'cream') return 'ink';
     return stored;
   });
 
@@ -203,11 +210,11 @@ export const ThemeProvider = ({ children }) => {
   }, [colorTheme]);
 
   const changeColorTheme = useCallback((id) => {
-    if (COLOR_THEMES[id]) setColorTheme(id);
+    if (isSelectableTheme(id)) setColorTheme(id);
   }, []);
 
   const cycleTheme = useCallback(() => {
-    const ids = Object.keys(COLOR_THEMES);
+    const ids = Object.keys(VISIBLE_THEMES);
     const next = ids[(ids.indexOf(colorTheme) + 1) % ids.length];
     setColorTheme(next);
   }, [colorTheme]);
@@ -231,7 +238,7 @@ export const ThemeProvider = ({ children }) => {
       changeColorTheme,
       cycleTheme,
       colors,
-      themes: COLOR_THEMES,
+      themes: VISIBLE_THEMES,
     }),
     [colorTheme, changeColorTheme, cycleTheme, colors]
   );

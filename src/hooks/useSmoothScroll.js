@@ -10,7 +10,7 @@ export const useSmoothScroll = () => {
     if (!element) return;
 
     if (lenis) {
-      lenis.scrollTo(element, { offset: -72, duration: 0.9, ...options });
+      lenis.scrollTo(element, { offset: -72, duration: 1.35, ...options });
       return;
     }
 

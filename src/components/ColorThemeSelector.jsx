@@ -41,7 +41,9 @@ const ColorThemeSelector = () => {
               Choose theme
             </div>
             <div className="grid grid-cols-5 gap-2">
-              {Object.entries(COLOR_THEMES).map(([key, value]) => (
+              {Object.entries(COLOR_THEMES)
+                .filter(([, value]) => !value.hidden)
+                .map(([key, value]) => (
                 <button
                   key={key}
                   onClick={() => {
