@@ -1,12 +1,12 @@
 // API Configuration
 const API_CONFIG = {
   dev: {
-    baseUrl: 'https://portfolio-backend-ten-inky.vercel.app/api',
-    views: 'https://portfolio-backend-ten-inky.vercel.app/api/views',
+    baseUrl: 'https://portfolio-backend-woad-eight.vercel.app/api',
+    views: 'https://portfolio-backend-woad-eight.vercel.app/api/views',
   },
   prod: {
-    baseUrl: 'https://portfolio-backend-ten-inky.vercel.app/api',
-    views: 'https://portfolio-backend-ten-inky.vercel.app/api/views',
+    baseUrl: 'https://portfolio-backend-woad-eight.vercel.app/api',
+    views: 'https://portfolio-backend-woad-eight.vercel.app/api/views',
   },
 };
 
