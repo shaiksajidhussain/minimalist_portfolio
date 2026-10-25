@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Add a Sitemap line with your production origin after VITE_SITE_URL is set.
