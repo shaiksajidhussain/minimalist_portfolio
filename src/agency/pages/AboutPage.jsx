@@ -6,7 +6,7 @@ import { usePageMeta } from '../usePageMeta';
 const AboutPage = () => {
   usePageMeta({
     title: 'About | Sajid',
-    description: 'Sajid is an independent digital studio for websites, applications, and practical growth work.',
+    description: 'Sajid designs websites, applications, and practical growth work for founders and growing companies.',
     path: '/about',
   });
 
@@ -14,13 +14,13 @@ const AboutPage = () => {
     <Layout>
       <header className="wrap page-hero">
         <p className="kicker">About</p>
-        <BlurHeading as="h1" className="page-title" text="A studio for products that have to earn their place." />
+        <BlurHeading as="h1" className="page-title" text="Products that have to earn their place." />
       </header>
       <section className="wrap split" style={{ paddingBottom: '5rem' }}>
         <div className="prose">
           <p>
             Sajid works with founders, startups, and growing companies that need a website, a
-            web or mobile application, or a clearer commercial presence. The studio is independent.
+            web or mobile application, or a clearer commercial presence. The practice is independent.
             We do not publish a roster of people we have not named, and we do not borrow awards.
           </p>
           <p>

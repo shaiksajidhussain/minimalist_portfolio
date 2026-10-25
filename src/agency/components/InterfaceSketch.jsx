@@ -50,7 +50,8 @@ const InterfaceSketch = () => {
 
       const orbit = root.current.querySelector('.orbit-path');
       const plane = root.current.querySelector('.plane-shape');
-      if (orbit) {
+      const orbitData = orbit?.getAttribute('d');
+      if (orbit && orbitData) {
         gsap.to(orbit, {
           strokeDashoffset: -640,
           duration: 22,
@@ -58,10 +59,10 @@ const InterfaceSketch = () => {
           ease: 'none',
         });
       }
-      if (orbit && plane) {
+      if (orbitData && plane) {
         gsap.to(plane, {
           motionPath: {
-            path: orbit,
+            path: orbitData,
             align: orbit,
             alignOrigin: [0.5, 0.5],
             autoRotate: true,
@@ -80,7 +81,7 @@ const InterfaceSketch = () => {
   return (
     <div className="interface-sketch" ref={root} aria-hidden="true">
       <svg className="hero-svg" viewBox="150 30 600 560" fill="none">
-        <ellipse className="orbit-path" id={orbitId} cx="400" cy="360" rx="250" ry="92" />
+        <path className="orbit-path" id={orbitId} d="M150 360A250 92 0 1 1 650 360A250 92 0 1 1 150 360" />
         <g className="float-card">
           <rect className="draw sketch-line" x="438" y="58" width="228" height="108" rx="18" />
           <line className="draw accent-stroke" x1="462" y1="88" x2="560" y2="88" />

@@ -5,6 +5,7 @@ import { BRAND, NAV } from '../content';
 import { LookProvider } from '../look';
 import { siteUrl } from '../usePageMeta';
 import ThemeMenu from './ThemeMenu';
+import FontMenu from './FontMenu';
 import '../agency.css';
 
 const ScrollToTop = () => {
@@ -37,7 +38,7 @@ const Nav = () => {
   }, [open]);
 
   return (
-    <header className="nav">
+    <header className={open ? 'nav is-open' : 'nav'}>
       <Link to="/" className="wordmark" onClick={() => setOpen(false)}>
         {BRAND.name}
       </Link>
@@ -49,15 +50,23 @@ const Nav = () => {
         ))}
       </nav>
       <div className="nav-tools">
+        <FontMenu />
         <ThemeMenu />
         <button
           type="button"
           className="menu-button"
           aria-expanded={open}
           aria-controls="mobile-nav"
+          aria-label={open ? 'Close menu' : 'Open menu'}
           onClick={() => setOpen((value) => !value)}
         >
-          {open ? 'Close' : 'Menu'}
+          {open ? (
+            <svg className="menu-x" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3.2 3.2l9.6 9.6M12.8 3.2l-9.6 9.6" />
+            </svg>
+          ) : (
+            'Menu'
+          )}
         </button>
       </div>
       {open ? (
@@ -80,7 +89,7 @@ const Footer = () => (
       <p>Websites, applications, and the marketing that points the right people at them.</p>
     </div>
     <div>
-      <strong>Studio</strong>
+      <strong>Pages</strong>
       <ul>
         {NAV.map((item) => (
           <li key={item.to}>

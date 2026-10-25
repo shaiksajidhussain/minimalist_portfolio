@@ -1,15 +1,13 @@
 .agency {
-  --font-geist-sans: "Geist", "Geist Fallback";
   --max: 1180px;
   min-height: 100vh;
   background: transparent;
   color: var(--text);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-geist-sans, "Geist"), var(--font-fallback, ui-sans-serif, system-ui, sans-serif);
 }
 
 html[data-site='agency'],
 html[data-site='agency'] body {
-  --font-geist-sans: "Geist", "Geist Fallback";
   --bg: #080d18;
   --bg-2: #101827;
   --text: #f7f9fc;
@@ -39,7 +37,7 @@ html[data-site='agency'] body {
     var(--bg);
   background-attachment: fixed;
   color: var(--text);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-geist-sans, "Geist"), var(--font-fallback, ui-sans-serif, system-ui, sans-serif);
 }
 
 html[data-agency-theme='copper'],
@@ -586,6 +584,8 @@ html[data-agency-theme='nocturne'] body {
 }
 
 .nav-tools {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -677,7 +677,30 @@ html[data-agency-theme='nocturne'] body {
   background: var(--fill-soft);
 }
 
+.font-panel {
+  width: min(280px, 86vw);
+}
+
+.font-options {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.font-option {
+  width: 100%;
+  justify-content: flex-start;
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+}
+
+.font-trigger {
+  letter-spacing: -0.03em;
+  text-transform: none;
+}
+
 .wordmark {
+  position: relative;
+  z-index: 2;
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: -0.03em;
@@ -704,7 +727,23 @@ html[data-agency-theme='nocturne'] body {
   color: var(--text);
   border: 0;
   min-height: 44px;
+  min-width: 44px;
   padding: 0 0.2rem;
+  justify-content: center;
+}
+
+.menu-x {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.nav.is-open {
+  background: var(--nav);
 }
 
 .mobile-panel {
@@ -2252,7 +2291,8 @@ button.mark-switch:focus-visible {
 }
 
 @media (max-width: 960px) {
-  .nav-links {
+  .nav-links,
+  .font-menu {
     display: none;
   }
 
@@ -2265,10 +2305,10 @@ button.mark-switch:focus-visible {
     display: grid;
     position: fixed;
     inset: 0;
-    z-index: 30;
+    z-index: 1;
     align-content: center;
     gap: 1.1rem;
-    padding: 5rem 8vw;
+    padding: 6.5rem 8vw 2.5rem;
     background: color-mix(in srgb, var(--bg) 96%, transparent);
   }
 
@@ -2312,13 +2352,19 @@ button.mark-switch:focus-visible {
 
   .hero {
     min-height: auto;
-    padding-top: 7rem;
+    padding-top: 6.25rem;
   }
 
   .hero-visual {
-    height: 420px;
-    min-height: 0;
-    margin-top: 1rem;
+    order: -1;
+    height: min(58vh, 420px);
+    min-height: 280px;
+    margin-top: 0;
+  }
+
+  .hero-copy {
+    order: 1;
+    padding-top: 0.5rem;
   }
 
   .work-grid.is-feature .work-card:first-child {
@@ -2328,6 +2374,10 @@ button.mark-switch:focus-visible {
   .work-rail {
     min-height: 0;
     overflow: visible;
+  }
+
+  .work-scroller {
+    display: none;
   }
 
   .work-head {

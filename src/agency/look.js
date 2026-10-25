@@ -206,8 +206,25 @@ export const MARKS = [
   { id: 'glass', name: 'Glass' },
 ];
 
+const SANS = 'ui-sans-serif, system-ui, sans-serif';
+const SERIF = 'ui-serif, Georgia, serif';
+
+export const FONTS = [
+  { id: 'geist', name: 'Geist', family: '"Geist"', fallback: SANS },
+  { id: 'inter', name: 'Inter', family: '"Inter"', fallback: SANS },
+  { id: 'outfit', name: 'Outfit', family: '"Outfit"', fallback: SANS },
+  { id: 'sora', name: 'Sora', family: '"Sora"', fallback: SANS },
+  { id: 'space', name: 'Space Grotesk', family: '"Space Grotesk"', fallback: SANS },
+  { id: 'syne', name: 'Syne', family: '"Syne"', fallback: SANS },
+  { id: 'instrument', name: 'Instrument Sans', family: '"Instrument Sans"', fallback: SANS },
+  { id: 'plex', name: 'IBM Plex Sans', family: '"IBM Plex Sans"', fallback: SANS },
+  { id: 'fraunces', name: 'Fraunces', family: '"Fraunces"', fallback: SERIF },
+  { id: 'serif', name: 'Instrument Serif', family: '"Instrument Serif"', fallback: SERIF },
+];
+
 const THEME_IDS = THEMES.map((item) => item.id);
 const MARK_IDS = MARKS.map((item) => item.id);
+const FONT_IDS = FONTS.map((item) => item.id);
 
 const stored = (key, fallback, allowed) => {
   if (typeof window === 'undefined') return fallback;
@@ -220,23 +237,30 @@ const LookContext = createContext(null);
 export const LookProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => stored('agency-palette', 'ocean', THEME_IDS));
   const [mark, setMark] = useState(() => stored('agency-graphic', 'orbit', MARK_IDS));
+  const [font, setFont] = useState(() => stored('agency-type', 'geist', FONT_IDS));
 
   useLayoutEffect(() => {
     const root = document.documentElement;
+    const face = FONTS.find((item) => item.id === font) || FONTS[0];
     root.dataset.site = 'agency';
     root.dataset.agencyTheme = theme;
+    root.style.setProperty('--font-geist-sans', face.family);
+    root.style.setProperty('--font-fallback', face.fallback);
     window.localStorage.setItem('agency-palette', theme);
     window.localStorage.setItem('agency-graphic', mark);
+    window.localStorage.setItem('agency-type', font);
     return () => {
       delete root.dataset.site;
       delete root.dataset.agencyTheme;
+      root.style.removeProperty('--font-geist-sans');
+      root.style.removeProperty('--font-fallback');
     };
-  }, [theme, mark]);
+  }, [theme, mark, font]);
 
   const value = useMemo(() => {
     const palette = THEMES.find((item) => item.id === theme) || THEMES[0];
-    return { theme, mark, palette, setTheme, setMark };
-  }, [theme, mark]);
+    return { theme, mark, font, palette, setTheme, setMark, setFont };
+  }, [theme, mark, font]);
 
   return createElement(LookContext.Provider, { value }, children);
 };

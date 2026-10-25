@@ -62,7 +62,7 @@ export const categoryOf = (project) => {
 export const projectKind = (project) => {
   const client = String(project?.client || '').trim();
   const category = String(project?.category || '').toLowerCase();
-  if (!client || /personal/i.test(client) || category.includes('personal')) return 'Studio demonstration';
+  if (!client || /personal/i.test(client) || category.includes('personal')) return 'Personal project';
   return 'Client project';
 };
 

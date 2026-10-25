@@ -62,7 +62,7 @@ const HomePage = () => {
         <div className="hero-copy">
           <p className="status">
             <i />
-            Studio open for new projects
+            Open for new projects
           </p>
           <p className="kicker">{BRAND.label}</p>
           <BlurHeading
@@ -91,7 +91,6 @@ const HomePage = () => {
       <section className="section">
         <div className="wrap split reveal">
           <div>
-            <p className="kicker">Studio</p>
             <BlurHeading as="h2" text="The work has to survive contact with a real business." />
           </div>
           <div className="prose">
@@ -115,7 +114,7 @@ const HomePage = () => {
           </div>
           <div>
             <p className="prose">
-              Client projects and studio demonstrations stay labeled apart.
+              Client projects and personal builds stay labeled apart.
             </p>
             <div className="actions">
               <Link className="btn btn-ghost" to="/work">

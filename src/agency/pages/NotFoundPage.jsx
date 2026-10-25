@@ -14,7 +14,7 @@ const NotFoundPage = () => {
     <Layout>
       <header className="wrap page-hero">
         <p className="kicker">404</p>
-        <BlurHeading as="h1" className="page-title" text="That page is not in the studio." />
+        <BlurHeading as="h1" className="page-title" text="That page is not on this site." />
         <div className="actions">
           <Link className="btn btn-solid" to="/">
             Back home

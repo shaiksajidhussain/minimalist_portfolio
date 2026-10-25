@@ -16,7 +16,7 @@ const WorkPage = () => {
 
   usePageMeta({
     title: 'Work | Sajid',
-    description: 'Selected websites, applications, and studio demonstrations from Sajid.',
+    description: 'Selected websites, applications, and personal builds from Sajid.',
     path: '/work',
   });
 
@@ -26,7 +26,7 @@ const WorkPage = () => {
         <p className="kicker">Work</p>
         <BlurHeading as="h1" className="page-title" text="Case studies and live products." />
         <p className="lede reveal-after">
-          Commissioned work is marked as a client project. Personal builds stay labeled as studio demonstrations.
+          Commissioned work is marked as a client project. Personal builds stay labeled as personal projects.
         </p>
         {categories.length > 2 ? (
           <div className="filters reveal-after" role="toolbar" aria-label="Filter projects">
