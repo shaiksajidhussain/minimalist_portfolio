@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Layout from '../components/Layout';
 import BlurHeading from '../components/BlurHeading';
+import InterfaceSketch from '../components/InterfaceSketch';
 import { BRAND, BUDGETS, SERVICES } from '../content';
 import config from '../../config/api';
 import { usePageMeta } from '../usePageMeta';
@@ -81,12 +82,15 @@ const ContactPage = () => {
 
   return (
     <Layout>
-      <header className="wrap page-hero">
-        <p className="kicker">Contact</p>
-        <BlurHeading as="h1" className="page-title" text="Tell us what the first release has to do." />
-        <p className="lede">
-          Name, email, and a short note are enough. Phone, service, and budget can wait if you do not have them yet.
-        </p>
+      <header className="wrap page-hero services-hero">
+        <div>
+          <p className="kicker">Contact</p>
+          <BlurHeading as="h1" className="page-title" text="Tell us what the first release has to do." />
+          <p className="lede">
+            Name, email, and a short note are enough. Phone, service, and budget can wait if you do not have them yet.
+          </p>
+        </div>
+        <InterfaceSketch variant="contact" />
       </header>
       <div className="wrap split" style={{ paddingBottom: '5rem' }}>
         <form className={`form${status === 'sending' ? ' is-sending' : ''}${status === 'sent' ? ' is-sent' : ''}`} onSubmit={onSubmit} noValidate>

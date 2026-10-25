@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import BlurHeading from '../components/BlurHeading';
+import InterfaceSketch from '../components/InterfaceSketch';
 import { usePageMeta } from '../usePageMeta';
 
 const AboutPage = () => {
@@ -12,9 +13,12 @@ const AboutPage = () => {
 
   return (
     <Layout>
-      <header className="wrap page-hero">
-        <p className="kicker">About</p>
-        <BlurHeading as="h1" className="page-title" text="Products that have to earn their place." />
+      <header className="wrap page-hero services-hero">
+        <div>
+          <p className="kicker">About</p>
+          <BlurHeading as="h1" className="page-title" text="Products that have to earn their place." />
+        </div>
+        <InterfaceSketch variant="about" />
       </header>
       <section className="wrap split" style={{ paddingBottom: '5rem' }}>
         <div className="prose">

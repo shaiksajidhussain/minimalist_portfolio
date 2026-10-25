@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import BlurHeading from '../components/BlurHeading';
+import InterfaceSketch from '../components/InterfaceSketch';
 import { useProjects } from '../projects';
 import { usePageMeta } from '../usePageMeta';
 
@@ -22,26 +23,29 @@ const WorkPage = () => {
 
   return (
     <Layout>
-      <header className="wrap page-hero">
-        <p className="kicker">Work</p>
-        <BlurHeading as="h1" className="page-title" text="Case studies and live products." />
-        <p className="lede reveal-after">
-          Commissioned work is marked as a client project. Personal builds stay labeled as personal projects.
-        </p>
-        {categories.length > 2 ? (
-          <div className="filters reveal-after" role="toolbar" aria-label="Filter projects">
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                aria-pressed={filter === category}
-                onClick={() => setFilter(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        ) : null}
+      <header className="wrap page-hero services-hero">
+        <div>
+          <p className="kicker">Work</p>
+          <BlurHeading as="h1" className="page-title" text="Case studies and live products." />
+          <p className="lede reveal-after">
+            Commissioned work is marked as a client project. Personal builds stay labeled as personal projects.
+          </p>
+          {categories.length > 2 ? (
+            <div className="filters reveal-after" role="toolbar" aria-label="Filter projects">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  aria-pressed={filter === category}
+                  onClick={() => setFilter(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </div>
+        <InterfaceSketch variant="work" />
       </header>
       <div className="wrap" style={{ paddingBottom: '5rem' }}>
         {status === 'loading' ? <p className="prose">Loading projects…</p> : null}

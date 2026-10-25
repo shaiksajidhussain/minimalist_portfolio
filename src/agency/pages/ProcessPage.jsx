@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import BlurHeading from '../components/BlurHeading';
+import InterfaceSketch from '../components/InterfaceSketch';
 import { PROCESS } from '../content';
 import { usePageMeta } from '../usePageMeta';
 
@@ -16,24 +17,31 @@ const ProcessPage = () => {
 
   useEffect(() => {
     const nodes = PROCESS.map((step) => document.getElementById(`step-${step.number}`)).filter(Boolean);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible?.target?.dataset?.step) setActive(visible.target.dataset.step);
-      },
-      { rootMargin: '-35% 0px -45% 0px', threshold: [0.2, 0.5] }
-    );
-    nodes.forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
+    const update = () => {
+      const mark = window.innerHeight * 0.42;
+      let current = nodes[0];
+      nodes.forEach((node) => {
+        if (node.getBoundingClientRect().top <= mark) current = node;
+      });
+      if (current?.dataset?.step) setActive(current.dataset.step);
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
   }, []);
 
   return (
     <Layout>
-      <header className="wrap page-hero">
-        <p className="kicker">Process</p>
-        <BlurHeading as="h1" className="page-title" lines={['Six steps. No mystery', 'sprint in the middle.']} />
+      <header className="wrap page-hero services-hero">
+        <div>
+          <p className="kicker">Process</p>
+          <BlurHeading as="h1" className="page-title" lines={['Six steps. No mystery', 'sprint in the middle.']} />
+        </div>
+        <InterfaceSketch variant="process" active={active} />
       </header>
       <div className="wrap process-layout" style={{ paddingBottom: '4rem' }}>
         <nav className="process-index" aria-label="Process steps">
@@ -45,7 +53,12 @@ const ProcessPage = () => {
         </nav>
         <div>
           {PROCESS.map((step) => (
-            <section key={step.number} id={`step-${step.number}`} className="step" data-step={step.number}>
+            <section
+              key={step.number}
+              id={`step-${step.number}`}
+              className={active === step.number ? 'step is-current' : 'step'}
+              data-step={step.number}
+            >
               <p className="kicker">{step.number}</p>
               <h2>{step.title}</h2>
               <p className="lede">{step.text}</p>

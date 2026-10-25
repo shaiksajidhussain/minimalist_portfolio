@@ -31,7 +31,7 @@ const ServicesPage = () => {
       </header>
       {SERVICES.map((service) => (
         <article key={service.id} id={service.id} className="wrap service-block">
-          <div>
+          <div className="service-copy">
             <p className="kicker">{service.number}</p>
             <BlurHeading as="h2" text={service.title} />
             <p className="prose">{service.summary}</p>
@@ -47,6 +47,7 @@ const ServicesPage = () => {
             </div>
           </div>
           <dl className="spec">
+            <span className="spec-line" aria-hidden="true" />
             <div>
               <dt>The problem</dt>
               <dd className="prose">{service.problem}</dd>

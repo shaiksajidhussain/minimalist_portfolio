@@ -2029,9 +2029,16 @@ button.mark-switch:focus-visible {
 .service-block {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.8fr);
-  gap: 2.5rem;
+  gap: 2.5rem 3.5rem;
+  align-items: start;
   padding: 3.5rem 0;
   border-top: 1px solid var(--line);
+}
+
+.service-copy {
+  position: sticky;
+  top: 6.5rem;
+  align-self: start;
 }
 
 .service-block h2 {
@@ -2042,14 +2049,35 @@ button.mark-switch:focus-visible {
 }
 
 .spec {
+  position: relative;
   display: grid;
-  gap: 1.1rem;
-  padding: 1.25rem 0 0;
+  gap: 0;
+  margin: 0;
+  padding: 0 0 0 1.35rem;
+}
+
+.spec-line {
+  position: absolute;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  left: 0;
+  width: 1px;
+  transform-origin: top center;
+  transform: scaleY(0);
+  background: linear-gradient(var(--accent), color-mix(in srgb, var(--accent) 12%, transparent));
+  pointer-events: none;
+  animation: line-grow linear both;
+  animation-timeline: view();
+  animation-range: cover 8% cover 92%;
 }
 
 .spec div {
-  padding-top: 1rem;
+  min-height: 42vh;
+  padding: 1.15rem 0 2rem;
   border-top: 1px solid var(--line);
+  animation: role-in linear both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 68%;
 }
 
 .spec dt {
@@ -2130,7 +2158,8 @@ button.mark-switch:focus-visible {
 
 .process-index {
   position: sticky;
-  top: 1.5rem;
+  top: 6.5rem;
+  align-self: start;
   display: grid;
   align-content: start;
   gap: 0.35rem;
@@ -2138,17 +2167,33 @@ button.mark-switch:focus-visible {
 
 .process-index a {
   color: var(--muted);
-  padding: 0.35rem 0;
+  padding: 0.45rem 0 0.45rem 0.85rem;
+  border-left: 2px solid transparent;
 }
 
 .process-index a.is-active {
   color: var(--text);
+  border-left-color: var(--accent);
 }
 
 .step {
   min-height: 52vh;
-  padding: 3rem 0;
+  padding: 3rem 0 3rem 1rem;
   border-top: 1px solid var(--line);
+  box-shadow: inset 2px 0 0 transparent;
+  transition: box-shadow 240ms ease;
+}
+
+.step.is-current {
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.step.is-current .kicker {
+  color: var(--accent);
+}
+
+.step-hot {
+  fill: var(--accent);
 }
 
 .step h2 {
@@ -2319,7 +2364,9 @@ button.mark-switch:focus-visible {
   .mark-svg .beam-bar,
   .role-rail,
   .role-card,
-  .role-line-draw {
+  .role-line-draw,
+  .spec div,
+  .spec-line {
     animation: none;
     opacity: 1;
     stroke-dashoffset: 0;
@@ -2330,7 +2377,8 @@ button.mark-switch:focus-visible {
     transform: rotate(-4deg);
   }
 
-  .role-line-draw {
+  .role-line-draw,
+  .spec-line {
     transform: scaleY(1);
   }
 }
@@ -2377,6 +2425,10 @@ button.mark-switch:focus-visible {
   .record-list > li,
   .role-list > li {
     grid-template-columns: 1fr;
+  }
+
+  .services-hero .interface-sketch {
+    min-height: 280px;
   }
 
   .role-list::before,
@@ -2456,11 +2508,13 @@ button.mark-switch:focus-visible {
   .gallery,
   .side-card,
   .process-index,
-  .pin-copy {
+  .pin-copy,
+  .service-copy {
     position: static;
   }
 
-  .step {
+  .step,
+  .spec div {
     min-height: 0;
   }
 }
