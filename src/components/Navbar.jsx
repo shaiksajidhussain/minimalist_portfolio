@@ -59,7 +59,7 @@ const Navbar = () => {
       <div className="relative mx-auto flex h-12 max-w-7xl items-center justify-center pr-10 md:pr-0">
         <p className="absolute left-0 hidden items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--ink-soft)] md:flex">
           <FiMapPin size={12} />
-          Andhra Pradesh, IN
+          Hyderabad, IN
         </p>
 
         <nav

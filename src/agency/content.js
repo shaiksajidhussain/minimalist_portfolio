@@ -4,7 +4,7 @@ export const BRAND = {
   email: 'sanjusazid0@gmail.com',
   phone: '+91 7893160318',
   phoneHref: 'tel:+917893160318',
-  region: 'Andhra Pradesh, India',
+  region: 'Hyderabad, India',
   socials: [
     { label: 'GitHub', href: 'https://github.com/shaiksajidhussain' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/shaiksajidhussain' },

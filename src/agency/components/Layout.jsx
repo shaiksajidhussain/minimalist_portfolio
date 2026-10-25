@@ -135,7 +135,7 @@ const Layout = ({ children }) => {
       areaServed: 'Worldwide',
       address: {
         '@type': 'PostalAddress',
-        addressRegion: 'Andhra Pradesh',
+        addressRegion: 'Hyderabad',
         addressCountry: 'IN',
       },
     });

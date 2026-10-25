@@ -45,7 +45,7 @@ const Contact = () => {
   const contactInfo = [
     { icon: FiMail, label: 'Email', value: 'sanjusazid0@gmail.com', href: 'mailto:sanjusazid0@gmail.com' },
     { icon: FiPhone, label: 'Phone', value: '+91 7893160318', href: 'tel:+917893160318' },
-    { icon: FiMapPin, label: 'Location', value: 'Andhra Pradesh, India', href: '#' },
+    { icon: FiMapPin, label: 'Location', value: 'Hyderabad, India', href: '#' },
   ];
 
   const socialLinks = [
