@@ -8,7 +8,6 @@ import { usePageMeta } from '../usePageMeta';
 const EMPTY = {
   name: '',
   email: '',
-  company: '',
   phone: '',
   service: '',
   budget: '',
@@ -23,7 +22,7 @@ const ContactPage = () => {
 
   usePageMeta({
     title: 'Contact | Sajid',
-    description: 'Start a project with Sajid. Share your name, email, company, phone, budget, and what the project needs to do.',
+    description: 'Start a project with Sajid. Share your name, email, phone, budget, and what the project needs to do.',
     path: '/contact',
   });
 
@@ -54,7 +53,6 @@ const ContactPage = () => {
       name: form.name.trim(),
       email: form.email.trim(),
       message: [
-        form.company.trim() && `Company: ${form.company.trim()}`,
         form.phone.trim() && `Phone: ${form.phone.trim()}`,
         form.service && `Service: ${form.service}`,
         form.budget && `Budget: ${form.budget}`,
@@ -87,11 +85,11 @@ const ContactPage = () => {
         <p className="kicker">Contact</p>
         <BlurHeading as="h1" className="page-title" text="Tell us what the first release has to do." />
         <p className="lede">
-          Name, email, and a short note are enough. Company, phone, service, and budget can wait if you do not have them yet.
+          Name, email, and a short note are enough. Phone, service, and budget can wait if you do not have them yet.
         </p>
       </header>
       <div className="wrap split" style={{ paddingBottom: '5rem' }}>
-        <form className="form" onSubmit={onSubmit} noValidate>
+        <form className={`form${status === 'sending' ? ' is-sending' : ''}${status === 'sent' ? ' is-sent' : ''}`} onSubmit={onSubmit} noValidate>
           <label className="field">
             <span>Name</span>
             <input name="name" value={form.name} onChange={update} autoComplete="name" aria-invalid={Boolean(errors.name)} />
@@ -101,10 +99,6 @@ const ContactPage = () => {
             <span>Work email</span>
             <input name="email" type="email" value={form.email} onChange={update} autoComplete="email" aria-invalid={Boolean(errors.email)} />
             {errors.email ? <span className="field-error">{errors.email}</span> : null}
-          </label>
-          <label className="field">
-            <span>Company name, optional</span>
-            <input name="company" value={form.company} onChange={update} autoComplete="organization" />
           </label>
           <label className="field">
             <span>Phone number, optional</span>
@@ -138,8 +132,8 @@ const ContactPage = () => {
             <textarea name="details" value={form.details} onChange={update} aria-invalid={Boolean(errors.details)} />
             {errors.details ? <span className="field-error">{errors.details}</span> : null}
           </label>
-          <button className="btn btn-solid" type="submit" disabled={status === 'sending'}>
-            {status === 'sending' ? 'Sending…' : 'Send the brief'}
+          <button className="btn btn-solid" type="submit" disabled={status === 'sending' || status === 'sent'}>
+            <span className="send-label">{status === 'sending' ? 'Sending…' : status === 'sent' ? 'Sent' : 'Send the brief'}</span>
           </button>
           {message ? (
             <p className={`banner ${status === 'error' ? 'is-error' : ''}`} role="status">

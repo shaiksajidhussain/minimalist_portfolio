@@ -2203,6 +2203,49 @@ button.mark-switch:focus-visible {
 .banner {
   padding: 0.9rem 1rem;
   border: 1px solid var(--line);
+  animation: banner-in 420ms ease;
+}
+
+.form .btn-solid {
+  overflow: hidden;
+}
+
+.form .send-label {
+  display: inline-block;
+  transition: transform 280ms ease, opacity 280ms ease;
+}
+
+.form.is-sending .send-label,
+.form.is-sent .send-label {
+  animation: send-shift 420ms ease;
+}
+
+.form.is-sent .btn-solid {
+  background: color-mix(in srgb, var(--accent-strong) 82%, white);
+  border-color: transparent;
+  color: white;
+}
+
+@keyframes banner-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes send-shift {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .banner.is-error {
@@ -2266,6 +2309,8 @@ button.mark-switch:focus-visible {
     stroke-dashoffset: 0;
   }
 
+  .banner,
+  .form .send-label,
   .hero-arrive,
   .mark-svg .stroke,
   .mark-svg .fill,
